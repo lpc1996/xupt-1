@@ -68,6 +68,10 @@ public class DataPane extends JPanel {
         idTable.setModel(model);
     }
 
+    public String getSelectedId(){
+        return (String)idTable.getValueAt(idTable.getSelectedRow(),0);
+    }
+
     public static void main(String[] argv){
         JFrame jFrame = new JFrame();
         jFrame.setSize(900,700);
