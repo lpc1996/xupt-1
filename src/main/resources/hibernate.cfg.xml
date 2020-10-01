@@ -9,9 +9,13 @@
     <property name="connection.username">xupt_admin</property>
     <property name="connection.password">xx1602614lpc</property>
 
+    <!-- DB schema will be updated if needed -->
+     <property name="hibernate.hbm2ddl.auto">update</property>
+    <property name="format_sql">true</property>
+    <property name="show_sql">true</property>
     <mapping class="com.entity.BaseInfoEntity"/>
-      <mapping class="com.entity.CollegeEntity"/>
-      <mapping class="com.entity.CourseEntity"/>
+    <mapping class="com.entity.CollegeEntity"/>
+    <mapping class="com.entity.CourseEntity"/>
     <mapping class="com.entity.DepartmentEntity"/>
     <mapping class="com.entity.LoginEntity"/>
     <mapping class="com.entity.MajorEntity"/>
@@ -27,7 +31,6 @@
     <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 
-    <!-- DB schema will be updated if needed -->
-    <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
+
   </session-factory>
 </hibernate-configuration>
