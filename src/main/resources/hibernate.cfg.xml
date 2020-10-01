@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="connection.url">jdbc:mysql://localhost:3306/xupt?serverTimezone=UTC</property>
+    <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+    <property name="connection.username">xupt_admin</property>
+    <property name="connection.password">xx1602614lpc</property>
+
+    <mapping class="com.entity.BaseInfoEntity"/>
+      <mapping class="com.entity.CollegeEntity"/>
+      <mapping class="com.entity.CourseEntity"/>
+    <mapping class="com.entity.DepartmentEntity"/>
+    <mapping class="com.entity.LoginEntity"/>
+    <mapping class="com.entity.MajorEntity"/>
+    <mapping class="com.entity.OfferingCoursesEntity"/>
+    <mapping class="com.entity.ResultEntity"/>
+    <mapping class="com.entity.SchoolTremEntity"/>
+    <mapping class="com.entity.SchoolYearEntity"/>
+    <mapping class="com.entity.SemesterEntity"/>
+    <mapping class="com.entity.StudentEntity"/>
+    <mapping class="com.entity.StudentCourseEntity"/>
+    <mapping class="com.entity.TeacherEntity"/>
+    <mapping class="com.entity.TeamEntity"/>
+    <!-- <property name="connection.username"/> -->
+    <!-- <property name="connection.password"/> -->
+
+    <!-- DB schema will be updated if needed -->
+    <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
+  </session-factory>
+</hibernate-configuration>
