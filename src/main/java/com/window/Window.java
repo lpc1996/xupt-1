@@ -77,7 +77,7 @@ public class Window extends JFrame {
      * 给insert按钮注册监听器
      * @param action 监听器对象
      */
-    public void setInsertAction(ActionListener action){
+    protected void setInsertAction(ActionListener action){
         insertBtn.addActionListener(action);
     }
 
@@ -85,7 +85,7 @@ public class Window extends JFrame {
      * 给update按钮注册监听器
      * @param action 监听器对象
      */
-    public void setUpdateAction(ActionListener action) {
+    protected void setUpdateAction(ActionListener action) {
         updateBtn.addActionListener(action);
     }
 
@@ -93,7 +93,7 @@ public class Window extends JFrame {
      * 给delete按钮注册监听器
      * @param action 监听器对象
      */
-    public void setDeleteAction(ActionListener action) {
+    protected void setDeleteAction(ActionListener action) {
         deleteBtn.addActionListener(action);
     }
 
@@ -101,14 +101,14 @@ public class Window extends JFrame {
      * 给refresh注册监听器
      * @param action 监听器对象
      */
-    public void setRefreshAction(ActionListener action) {
+    protected void setRefreshAction(ActionListener action) {
         refreshBtn.addActionListener(action);
     }
 
     /**
      * 给searchBtn注册监听器
      */
-    public void setSearchAction(){
+    private void setSearchAction(){
         searchBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -137,8 +137,8 @@ public class Window extends JFrame {
      * 将model中的数据显示在表格中
      * @param model 表格数据
      */
-    public void setTableModel(DefaultTableModel model){
-//        dataPane.setTableModel(model);
+    protected void setTableModel(DefaultTableModel model){
+        dataPane.setData(model);
     }
 
     /**
@@ -153,7 +153,7 @@ public class Window extends JFrame {
      * 获取选中行的索引
      * @return 如果有一行被选中返回选中行的索引，如果没有一行被选中，返回-1
      */
-    public int getSelectRow(){
+    protected int getSelectRow(){
         return getSelectRow();
     }
 
@@ -163,23 +163,15 @@ public class Window extends JFrame {
      * @param cloumn
      * @return
      */
-    public Object getValueAt(int row,int cloumn){
+    protected Object getValueAt(int row,int cloumn){
         return getValueAt(row,cloumn);
-    }
-
-    /**
-     * 设置列宽
-     * @param width 要设置的列宽
-     */
-    public void setColumnWidth(int width){
-        setColumnWidth(width);
     }
 
     /**
      * 设置选中行
      * @param row 要选中的行的位置
      */
-    public void setSelectedRow(int row){
+    protected void setSelectedRow(int row){
         setSelectedRow(row);
     }
 
