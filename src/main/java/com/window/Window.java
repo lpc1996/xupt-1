@@ -3,6 +3,7 @@ package com.window;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
@@ -12,6 +13,8 @@ import java.awt.event.ActionListener;
 public class Window extends JFrame {
 
     private DataPane dataPane;
+    private JTextField searchField;
+    private JButton searchBtn;
     private JButton insertBtn;
     private JButton updateBtn;
     private JButton deleteBtn;
@@ -26,13 +29,15 @@ public class Window extends JFrame {
         setTitle(title);
         this.setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        setContentPane(createContentPane());
     }
 
     protected JPanel createContentPane(){
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
 
-        dataPane = new DataPane(new Dimension(getWidth()-30,getHeight()-80));
+        dataPane = new DataPane(new Dimension(getWidth()-30,getHeight()-130));
         contentPane.add(dataPane);
 
         contentPane.add(createBtnPane());
@@ -42,18 +47,25 @@ public class Window extends JFrame {
 
     private JPanel createBtnPane(){
         JPanel btnPane = new JPanel();
-        btnPane.setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
-        btnPane.setPreferredSize(new Dimension(getWidth()-30,50));
+        btnPane.setLayout(new FlowLayout(FlowLayout.LEFT,5,5));
+        btnPane.setPreferredSize(new Dimension(getWidth()-30,80));
+
+        searchField = new JTextField();
+        searchField.setPreferredSize(new Dimension(getWidth()-130,35));
+        searchBtn = new JButton("搜索");
+        searchBtn.setPreferredSize(new Dimension(80,35));
 
         insertBtn = new JButton("添加");
-        insertBtn.setPreferredSize(new Dimension(80,30));
+        insertBtn.setPreferredSize(new Dimension(80,35));
         updateBtn = new JButton("修改");
-        updateBtn.setPreferredSize(new Dimension(80,30));
+        updateBtn.setPreferredSize(new Dimension(80,35));
         deleteBtn = new JButton("删除");
-        deleteBtn.setPreferredSize(new Dimension(80,30));
+        deleteBtn.setPreferredSize(new Dimension(80,35));
         refreshBtn = new JButton("刷新");
-        refreshBtn.setPreferredSize(new Dimension(80,30));
+        refreshBtn.setPreferredSize(new Dimension(80,35));
 
+        btnPane.add(searchField);
+        btnPane.add(searchBtn);
         btnPane.add(insertBtn);
         btnPane.add(updateBtn);
         btnPane.add(deleteBtn);
@@ -61,20 +73,63 @@ public class Window extends JFrame {
         return btnPane;
     }
 
+    /**
+     * 给insert按钮注册监听器
+     * @param action 监听器对象
+     */
     public void setInsertAction(ActionListener action){
         insertBtn.addActionListener(action);
     }
 
+    /**
+     * 给update按钮注册监听器
+     * @param action 监听器对象
+     */
     public void setUpdateAction(ActionListener action) {
         updateBtn.addActionListener(action);
     }
 
+    /**
+     * 给delete按钮注册监听器
+     * @param action 监听器对象
+     */
     public void setDeleteAction(ActionListener action) {
         deleteBtn.addActionListener(action);
     }
 
+    /**
+     * 给refresh注册监听器
+     * @param action 监听器对象
+     */
     public void setRefreshAction(ActionListener action) {
         refreshBtn.addActionListener(action);
+    }
+
+    /**
+     * 给searchBtn注册监听器
+     */
+    public void setSearchAction(){
+        searchBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(searchField.getText().length() == 0 || " ".equals(searchField.getText())) {
+                    JOptionPane.showMessageDialog(null,"不能匹配空字符串");
+                    return;
+                }
+                String string = searchField.getText();
+                int i = 0;
+                for(; i<dataPane.getRowCount(); i++){
+                    if( ((String)dataPane.getValueAt(i)).equals(string) ){
+                        dataPane.setSelectedRow(i);
+                        break;
+                    }
+                }
+                if(i == dataPane.getRowCount()){
+                    JOptionPane.showMessageDialog(null,"找不到字符串:"+string+"，请重新输入正确的线索！");
+                    return;
+                }
+            }
+        });
     }
 
     /**
@@ -126,5 +181,10 @@ public class Window extends JFrame {
      */
     public void setSelectedRow(int row){
         setSelectedRow(row);
+    }
+
+    public static void main(String[] argv){
+        Window window = new Window(new Dimension(1000,800));
+        window.setVisible(true);
     }
 }

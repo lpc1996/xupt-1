@@ -4,6 +4,8 @@ import com.entity.BaseInfoEntity;
 import com.settings.Config;
 import com.settings.Setting;
 import com.window.LoginJDialog;
+import com.window.Window;
+
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
@@ -31,10 +33,11 @@ public class Main {
     }
 
     public static void main( String[] args ) {
-        loginJDialog = new LoginJDialog();
+//        loginJDialog = new LoginJDialog();
         InitGlobalFont(font);
-        loginJDialog.setVisible(true);
-
+//        loginJDialog.setVisible(true);
+        com.window.Window window = new Window(new Dimension(1000,800));
+        window.setVisible(true);
     }
 
     public static void reLogin(){

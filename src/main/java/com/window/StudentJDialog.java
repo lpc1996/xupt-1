@@ -1,5 +1,7 @@
 package com.window;
 
 public class StudentJDialog {
-    public
+    public StudentJDialog(){
+
+    }
 }

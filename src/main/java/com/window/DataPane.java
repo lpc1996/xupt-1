@@ -1,14 +1,8 @@
 package com.window;
 
-import com.image.Image;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * 用表格显示数据
@@ -19,8 +13,6 @@ public class DataPane extends JPanel {
 
     private JTable idTable;
     private JTabbedPane showPane;
-    private JTextField searchText;
-    private JButton searchBtn;
 
     public DataPane(Dimension size) {
         setSize(size);
@@ -34,18 +26,11 @@ public class DataPane extends JPanel {
 
     private JPanel createIdTable(){
         JPanel idPane = new JPanel();
-        idPane.setPreferredSize(new Dimension(150,getHeight()-40));
+        idPane.setPreferredSize(new Dimension(150,getHeight()));
         idPane.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
         idPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        searchText = new JTextField();
-        searchText.setPreferredSize(new Dimension(113,35) );
-        idPane.add(searchText);
-        searchBtn = new JButton();
-        searchBtn.setPreferredSize(new Dimension(35,35));
-        searchBtn.setIcon(new ImageIcon(new Image().getSearch_4()) );
-        idPane.add(searchBtn);
         JScrollPane js = new JScrollPane();
-        js.setPreferredSize(new Dimension(148,getHeight()-77));
+        js.setPreferredSize(new Dimension(148,getHeight()-2));
         idTable = new JTable();
         js.setViewportView(idTable);
         idPane.add(js);
@@ -54,22 +39,55 @@ public class DataPane extends JPanel {
 
     private JTabbedPane createShowPane(){
         JTabbedPane showPane = new JTabbedPane(JTabbedPane.TOP);
-        showPane.setPreferredSize(new Dimension(getWidth()-150-32,getHeight()-39));
+        showPane.setPreferredSize(new Dimension(getWidth()-150-15,getHeight()-2));
 
         return showPane;
     }
 
-    public void createTab(Component tab,String title){
+    /**
+     *向选项卡面板添加一个标题为title，组件为tab的选项卡
+     * @param tab 要添加的选项卡
+     * @param title 要添加的选项卡的标题
+     */
+    public void addTab(Component tab,String title){
         showPane.addTab(title,tab);
         repaint();
     }
 
+    /**
+     * 向表中填入数据
+     * @param model 要填入表格的数据集合
+     */
     public void setData(DefaultTableModel model){
         idTable.setModel(model);
     }
 
+    /**
+     * 获取喜欢中行的数据
+     * @return 如果有选中行则返回该行的数据，否则返回null
+     */
     public String getSelectedId(){
         return (String)idTable.getValueAt(idTable.getSelectedRow(),0);
+    }
+
+    /**
+     * 设置选中行
+     * @param row 行号
+     */
+    public void setSelectedRow(int row){
+        idTable.setRowSelectionInterval(row,row);
+    }
+
+    /**
+     * 获取表格的行数
+     * @return 返回表格行数
+     */
+    public int getRowCount(){
+        return idTable.getRowCount();
+    }
+
+    public Object getValueAt(int row){
+        return idTable.getValueAt(row,0);
     }
 
     public static void main(String[] argv){
@@ -79,7 +97,7 @@ public class DataPane extends JPanel {
         jFrame.add(dataPane);
 
         JPanel j = new JPanel();
-        dataPane.createTab(j,"测试");
+        dataPane.addTab(j,"测试");
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
     }
