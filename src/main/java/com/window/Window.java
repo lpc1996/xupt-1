@@ -1,5 +1,7 @@
 package com.window;
 
+import com.entity.StudentEntity;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -12,13 +14,14 @@ import java.awt.event.ActionListener;
  */
 public class Window extends JFrame {
 
-    private DataPane dataPane;
     private JTextField searchField;
     private JButton searchBtn;
     private JButton insertBtn;
     private JButton updateBtn;
     private JButton deleteBtn;
     private JButton refreshBtn;
+    private JTable idTable;
+    private JTabbedPane dataPane;
 
     public Window(Dimension size){
         this(size,null);
@@ -37,12 +40,42 @@ public class Window extends JFrame {
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
 
-        dataPane = new DataPane(new Dimension(getWidth()-30,getHeight()-130));
-        contentPane.add(dataPane);
+//        showPane = new DataPane(new Dimension(getWidth()-30,getHeight()-130));
+        dataPane = createdataPane();
+//        contentPane.add(dataPane);
+
+        JPanel showPane = new JPanel();
+        showPane.setPreferredSize(new Dimension(getWidth()-30,getHeight()-130));
+        showPane.setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
+        showPane.add(createIdTable());
+        showPane.add(dataPane);
+//        showPane.setBorder(BorderFactory.createTitledBorder(""));
+
+        contentPane.add(showPane);
 
         contentPane.add(createBtnPane());
 
         return contentPane;
+    }
+
+    private JScrollPane createIdTable(){
+//        JPanel idPane = new JPanel();
+//        idPane.setPreferredSize(new Dimension(150,getHeight()-130));
+//        idPane.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
+//        idPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        JScrollPane js = new JScrollPane();
+        js.setPreferredSize(new Dimension(148,getHeight()-140));
+        idTable = new JTable();
+        js.setViewportView(idTable);
+//        idPane.add(js);
+        return js;
+    }
+
+    private JTabbedPane createdataPane(){
+        JTabbedPane dataPane = new JTabbedPane(JTabbedPane.TOP);
+        dataPane.setPreferredSize(new Dimension(getWidth()-150-48,getHeight()-140));
+
+        return dataPane;
     }
 
     private JPanel createBtnPane(){
@@ -118,13 +151,13 @@ public class Window extends JFrame {
                 }
                 String string = searchField.getText();
                 int i = 0;
-                for(; i<dataPane.getRowCount(); i++){
-                    if( ((String)dataPane.getValueAt(i)).equals(string) ){
-                        dataPane.setSelectedRow(i);
+                for(; i<getRowCount(); i++){
+                    if( ((String)getValueAt(i)).equals(string) ){
+                        setSelectedRow(i);
                         break;
                     }
                 }
-                if(i == dataPane.getRowCount()){
+                if(i == getRowCount()){
                     JOptionPane.showMessageDialog(null,"找不到字符串:"+string+"，请重新输入正确的线索！");
                     return;
                 }
@@ -138,7 +171,7 @@ public class Window extends JFrame {
      * @param model 表格数据
      */
     protected void setTableModel(DefaultTableModel model){
-        dataPane.setData(model);
+        idTable.setModel(model);
     }
 
     /**
@@ -154,17 +187,16 @@ public class Window extends JFrame {
      * @return 如果有一行被选中返回选中行的索引，如果没有一行被选中，返回-1
      */
     protected int getSelectRow(){
-        return getSelectRow();
+        return idTable.getSelectedRow();
     }
 
     /**
      * 获取row行column列的单元格的数据
-     * @param row
-     * @param cloumn
-     * @return
+     * @param row 要获取数据所在行的位置
+     * @return 返回第row行的第0列的数据
      */
-    protected Object getValueAt(int row,int cloumn){
-        return getValueAt(row,cloumn);
+    protected Object getValueAt(int row){
+        return idTable.getValueAt(row,0);
     }
 
     /**
@@ -172,11 +204,19 @@ public class Window extends JFrame {
      * @param row 要选中的行的位置
      */
     protected void setSelectedRow(int row){
-        setSelectedRow(row);
+        idTable.setRowSelectionInterval(row,row);
+    }
+
+    /**
+     * 获取表格行数
+     * @return 返回表格行数
+     */
+    protected int getRowCount(){
+        return idTable.getRowCount();
     }
 
     public static void main(String[] argv){
-        Window window = new Window(new Dimension(1000,800));
+        Window window = new Window(new Dimension(1000,600));
         window.setVisible(true);
     }
 }
