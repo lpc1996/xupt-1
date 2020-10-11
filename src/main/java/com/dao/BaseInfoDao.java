@@ -2,8 +2,6 @@ package com.dao;
 
 import com.entity.BaseInfoEntity;
 import org.hibernate.HibernateError;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -78,6 +76,10 @@ public class BaseInfoDao extends Dao<BaseInfoEntity>{
      */
     @Override
     public boolean update(String id, BaseInfoEntity data) {
+        StringBuilder hql = new StringBuilder();
+        hql.append("update ").append(BaseInfoDao.class.getName()).append(" base ").append(" set base.uName=?");
+        boolean result = false;
+
         return false;
     }
 
@@ -89,7 +91,15 @@ public class BaseInfoDao extends Dao<BaseInfoEntity>{
      */
     @Override
     public boolean insert(BaseInfoEntity data) {
-        return false;
+        boolean result = false;
+        try {
+            save(data);
+            result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = false;
+        }
+        return result;
     }
 
     public static void main(String[] argv){

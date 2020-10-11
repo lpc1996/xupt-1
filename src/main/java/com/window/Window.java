@@ -1,18 +1,21 @@
 package com.window;
 
-import com.entity.StudentEntity;
-
+import com.dao.BaseInfoDao;
+import com.entity.BaseInfoEntity;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
 
 /**
  * @author 濃霧-遠方
  * @date 2020/07/03
  */
-public class Window extends JFrame {
+public abstract class Window <T> extends JFrame {
 
     private JTextField searchField;
     private JButton searchBtn;
@@ -22,16 +25,22 @@ public class Window extends JFrame {
     private JButton refreshBtn;
     private JTable idTable;
     private JTabbedPane dataPane;
+    private boolean judge;
 
     public Window(Dimension size){
-        this(size,null);
+        this(size,null,false);
     }
 
-    public Window(Dimension size,String title) {
+    public Window(Dimension size,boolean x){
+        this(size,null,x);
+    }
+
+    public Window(Dimension size,String title,boolean x) {
         setSize(size);
         setTitle(title);
         this.setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        judge = x;
 
         setContentPane(createContentPane());
     }
@@ -40,16 +49,13 @@ public class Window extends JFrame {
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
 
-//        showPane = new DataPane(new Dimension(getWidth()-30,getHeight()-130));
         dataPane = createdataPane();
-//        contentPane.add(dataPane);
 
         JPanel showPane = new JPanel();
         showPane.setPreferredSize(new Dimension(getWidth()-30,getHeight()-130));
         showPane.setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
         showPane.add(createIdTable());
         showPane.add(dataPane);
-//        showPane.setBorder(BorderFactory.createTitledBorder(""));
 
         contentPane.add(showPane);
 
@@ -59,21 +65,17 @@ public class Window extends JFrame {
     }
 
     private JScrollPane createIdTable(){
-//        JPanel idPane = new JPanel();
-//        idPane.setPreferredSize(new Dimension(150,getHeight()-130));
-//        idPane.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
-//        idPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         JScrollPane js = new JScrollPane();
-        js.setPreferredSize(new Dimension(148,getHeight()-140));
+        js.setPreferredSize(new Dimension(100,getHeight()-140));
         idTable = new JTable();
+        idTable.addMouseListener(createJTableAction());
         js.setViewportView(idTable);
-//        idPane.add(js);
         return js;
     }
 
     private JTabbedPane createdataPane(){
         JTabbedPane dataPane = new JTabbedPane(JTabbedPane.TOP);
-        dataPane.setPreferredSize(new Dimension(getWidth()-150-48,getHeight()-140));
+        dataPane.setPreferredSize(new Dimension(getWidth()-150,getHeight()-140));
 
         return dataPane;
     }
@@ -87,6 +89,7 @@ public class Window extends JFrame {
         searchField.setPreferredSize(new Dimension(getWidth()-130,35));
         searchBtn = new JButton("搜索");
         searchBtn.setPreferredSize(new Dimension(80,35));
+        setSearchAction();
 
         insertBtn = new JButton("添加");
         insertBtn.setPreferredSize(new Dimension(80,35));
@@ -145,22 +148,27 @@ public class Window extends JFrame {
         searchBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(searchField.getText().length() == 0 || " ".equals(searchField.getText())) {
-                    JOptionPane.showMessageDialog(null,"不能匹配空字符串");
-                    return;
-                }
-                String string = searchField.getText();
-                int i = 0;
-                for(; i<getRowCount(); i++){
-                    if( ((String)getValueAt(i)).equals(string) ){
-                        setSelectedRow(i);
-                        break;
+            if(searchField.getText().length() == 0 || " ".equals(searchField.getText())) {
+                JOptionPane.showMessageDialog(null,"不能匹配空字符串");
+                return;
+            }
+            String string = searchField.getText();
+            int i = 0;
+            for(; i<getRowCount(); i++){
+                if( ((String)getValueAt(i)).equals(string) ){
+                    setSelectedRow(i);
+                    if(judge){
+                        setOperationId(string,1);
                     }
+                    setOperationId(string,0);
+                    break;
                 }
-                if(i == getRowCount()){
-                    JOptionPane.showMessageDialog(null,"找不到字符串:"+string+"，请重新输入正确的线索！");
-                    return;
-                }
+            }
+            if(i == getRowCount()){
+                JOptionPane.showMessageDialog(null,"找不到字符串:"+string+"，请重新输入正确的线索！");
+                return;
+            }
+
             }
         });
     }
@@ -173,14 +181,6 @@ public class Window extends JFrame {
     protected void setTableModel(DefaultTableModel model){
         idTable.setModel(model);
     }
-
-    /**
-     * 获取选中的行数
-     * @return 被选中的行数
-     */
-//    public int getSelectRowCount(){
-//        return dataPane.getSelectRowCount();
-//    }
 
     /**
      * 获取选中行的索引
@@ -215,8 +215,194 @@ public class Window extends JFrame {
         return idTable.getRowCount();
     }
 
-    public static void main(String[] argv){
-        Window window = new Window(new Dimension(1000,600));
-        window.setVisible(true);
+    /**
+     * 给选项卡面板添加标题为title内容为operationPane面板的选项卡
+     * @param title 标题
+     * @param operationPane 要添加的组件
+     */
+    protected void setOperationPane(String title,OperationPane operationPane){
+        dataPane.add(title,operationPane);
     }
+
+    private void setOperationId(String id,int index){
+        OperationPane operationPane = (OperationPane) dataPane.getComponentAt(index);
+        operationPane.InitData(id);
+    }
+
+    protected OperationPane<BaseInfoEntity> createBaseInfoOpeartionPane(Dimension size,List<BaseInfoEntity> list){
+        OperationPane<BaseInfoEntity> baseInfoEntity = new OperationPane<BaseInfoEntity>(size,list) {
+
+            private JComboBox<String> uTypeBox;
+            private JTextField telField;
+            private JTextField idCardNumField;
+            private JComboBox idCardTypeBox;
+            private JTextField nativePlaceField;
+            private JTextField ageField;
+            private JComboBox sexBox;
+            private JTextField formarNameField;
+            private JTextField nameField;
+            private JTextField idField;
+
+
+            @Override
+            public void InitData(String id) {
+                BaseInfoEntity baseInfoEntity = null;
+                for(int i=0; i < list.size(); i++){
+                    baseInfoEntity = list.get(i);
+                    if(baseInfoEntity.getuId().equals(id)) {
+                        idField.setText(baseInfoEntity.getuId());
+                        nameField.setText(baseInfoEntity.getuName());
+                        formarNameField.setText(baseInfoEntity.getFormarName());
+                        sexBox.setSelectedItem(baseInfoEntity.getSex());
+                        ageField.setText(baseInfoEntity.getAge()+"");
+                        nativePlaceField.setText(baseInfoEntity.getNativePlace());
+                        idCardTypeBox.setSelectedItem(baseInfoEntity.getIdcardType());
+                        idCardNumField.setText(baseInfoEntity.getIdcardNum());
+                        uTypeBox.setSelectedItem(baseInfoEntity.getuType());
+                        telField.setText(baseInfoEntity.getTel());
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public BaseInfoEntity getData() {
+                BaseInfoEntity baseInfoEntity = new BaseInfoEntity();
+                baseInfoEntity.setuId(idField.getText());
+                baseInfoEntity.setuName(nameField.getText());
+                baseInfoEntity.setFormarName(formarNameField.getText());
+                baseInfoEntity.setSex(sexBox.getSelectedItem()+"");
+                try {
+                    baseInfoEntity.setAge(Integer.parseInt(ageField.getText()));
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null,"请输入正确的年龄");
+                }
+                baseInfoEntity.setNativePlace(nativePlaceField.getText());
+                baseInfoEntity.setIdcardType(idCardTypeBox.getSelectedItem()+"");
+                baseInfoEntity.setIdcardNum(idCardNumField.getText());
+                baseInfoEntity.setuType(uTypeBox.getSelectedItem()+"");
+                baseInfoEntity.setTel(telField.getText());
+                return baseInfoEntity;
+            }
+
+            @Override
+            public void setNull() {
+                idField.setText(null);
+                nameField.setText(null);
+                formarNameField.setText(null);
+                sexBox.setSelectedIndex(-1);
+                ageField.setText(null);
+                nativePlaceField.setText(null);
+                idCardTypeBox.setSelectedIndex(-1);
+                idCardNumField.setText(null);
+                uTypeBox.setSelectedIndex(-1);
+                telField.setText(null);
+            }
+
+            @Override
+            protected void InitPane() {
+                JLabel idLab = new JLabel("学/工号*：");
+                idLab.setPreferredSize(labSize);
+                idField = new JTextField();
+                idField.setPreferredSize(fieldSize);
+                add(idLab);
+                add(idField);
+                JLabel nameLab = new JLabel("姓名*：");
+                nameLab.setPreferredSize(labSize);
+                nameField = new JTextField();
+                nameField.setPreferredSize(fieldSize);
+                add(nameLab);
+                add(nameField);
+                JLabel formarNameLab = new JLabel("曾用名：");
+                formarNameLab.setPreferredSize(labSize);
+                formarNameField = new JTextField();
+                formarNameField.setPreferredSize(fieldSize);
+                add(formarNameLab);
+                add(formarNameField);
+                JLabel sexLab = new JLabel("性别*：");
+                sexLab.setPreferredSize(labSize);
+                sexBox = new JComboBox();
+                sexBox.setPreferredSize(fieldSize);
+                add(sexLab);
+                add(sexBox);
+                JLabel ageLab = new JLabel("年龄：");
+                ageLab.setPreferredSize(labSize);
+                ageField = new JTextField();
+                ageField.setPreferredSize(fieldSize);
+                add(ageLab);
+                add(ageField);
+                JLabel nativePlaceLab = new JLabel("籍贯*：");
+                nativePlaceLab.setPreferredSize(labSize);
+                nativePlaceField = new JTextField();
+                nativePlaceField.setPreferredSize(fieldSize);
+                add(nativePlaceLab);
+                add(nativePlaceField);
+                JLabel idCardTypeLab = new JLabel("证件类型*：");
+                idCardTypeLab.setPreferredSize(labSize);
+                idCardTypeBox = new JComboBox();
+                idCardTypeBox.setPreferredSize(fieldSize);;
+                add(idCardTypeLab);
+                add(idCardTypeBox);
+                JLabel idCardNumLab = new JLabel("证件号码*：");
+                idCardNumLab.setPreferredSize(labSize);
+                idCardNumField = new JTextField();
+                idCardNumField.setPreferredSize(fieldSize);
+                add(idCardNumLab);
+                add(idCardNumField);
+                JLabel uTypeLab = new JLabel("用户类型*：");
+                uTypeLab.setPreferredSize(labSize);
+                uTypeBox = new JComboBox<String>();
+                uTypeBox.setPreferredSize(fieldSize);
+                add(uTypeLab);
+                add(uTypeBox);
+                JLabel telLab = new JLabel("电话号码：");
+                telLab.setPreferredSize(labSize);
+                telField = new JTextField();
+                telField.setPreferredSize(fieldSize);
+                add(telLab);
+                add(telField);
+
+                initBox();
+            }
+
+            private void initBox(){
+                sexBox.addItem("男");
+                sexBox.addItem("女");
+                sexBox.addItem("保密");
+
+                idCardTypeBox.addItem("居民身份证");
+                idCardTypeBox.addItem("中华人民共和国护照");
+
+                uTypeBox.addItem("student");
+                uTypeBox.addItem("teacher");
+                uTypeBox.addItem("admin");
+
+            }
+        };
+        return baseInfoEntity;
+    }
+
+    private MouseAdapter createJTableAction(){
+        return new MouseAdapter() {
+            /**
+             * {@inheritDoc}
+             *
+             * @param e
+             */
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String id = idTable.getValueAt(idTable.getSelectedRow(),0)+"";
+                if(judge){
+                    setOperationId(id,1);
+                }
+                setOperationId(id,0);
+            }
+        };
+    }
+
+    protected abstract void createInsertAction();
+    protected abstract void createUpdateAction();
+    protected abstract void createDeleteAction();
+    protected abstract void createRefreshAction();
 }

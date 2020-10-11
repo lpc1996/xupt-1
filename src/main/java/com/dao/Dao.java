@@ -30,11 +30,11 @@ public abstract class Dao<Entity> {
         return session;
     }
 
-    protected List<Entity> getQuery(String hql,String... para){
-        List<Entity> list = null;
+    protected List getQuery(String hql,String... para){
+        List list = null;
         Session session = getSession();
         try {
-            Query<Entity> query = session.createQuery(hql);
+            Query query = session.createQuery(hql);
             if(para.length > 0) {
                 int i = 0;
                 for (String str : para) {

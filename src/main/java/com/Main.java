@@ -33,11 +33,9 @@ public class Main {
     }
 
     public static void main( String[] args ) {
-//        loginJDialog = new LoginJDialog();
+        loginJDialog = new LoginJDialog();
         InitGlobalFont(font);
-//        loginJDialog.setVisible(true);
-        com.window.Window window = new Window(new Dimension(1000,800));
-        window.setVisible(true);
+        loginJDialog.setVisible(true);
     }
 
     public static void reLogin(){
