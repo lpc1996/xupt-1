@@ -32,7 +32,7 @@ abstract class OperationPane<T> extends JPanel{
 
     public abstract void setNull();
 
-    private void setList(List<T> list){
+    public void setList(List<T> list){
         this.list=list;
     }
 

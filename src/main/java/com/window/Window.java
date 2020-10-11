@@ -229,8 +229,8 @@ public abstract class Window <T> extends JFrame {
         operationPane.InitData(id);
     }
 
-    protected OperationPane<BaseInfoEntity> createBaseInfoOpeartionPane(Dimension size,List<BaseInfoEntity> list){
-        OperationPane<BaseInfoEntity> baseInfoEntity = new OperationPane<BaseInfoEntity>(size,list) {
+    protected OperationPane<BaseInfoEntity> createBaseInfoOpeartionPane(Dimension size){
+        OperationPane<BaseInfoEntity> baseInfoEntity = new OperationPane<BaseInfoEntity>(size) {
 
             private JComboBox<String> uTypeBox;
             private JTextField telField;

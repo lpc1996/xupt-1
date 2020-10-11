@@ -44,7 +44,17 @@ public class StudentDao extends Dao<StudentEntity> {
      */
     @Override
     public boolean update(String id, StudentEntity data) {
-        return false;
+        boolean result = false;
+        StringBuilder hql = new StringBuilder();
+        hql.append("update ").append(StudentEntity.class.getName()).append(" student set student.year=?0,").append(
+                "student.college=?1,").append("student.department=?2,").append("student.major=?3,").append(
+                        "student.grade=?4,").append("student.clazz=?5,").append("student.cultureLevel=?6,").append(
+                                "student.studentType=?7,").append("student.education=?8").append(" where id=?9");
+        if(executeUpdate(hql.toString(),data.getYear(),data.getCollege(),data.getDepartment(),data.getMajor(),
+                data.getGrade(),data.getClazz(),data.getCultureLevel(),data.getStudentType(),data.getEducation(),id) == 1){
+            result = true;
+        }
+        return result;
     }
 
     /**

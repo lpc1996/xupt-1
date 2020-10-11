@@ -25,12 +25,12 @@ public class StudentJDialog extends Window<StudentEntity>{
     public StudentJDialog(){
         super(new Dimension(1000,500),"学生信息管理",true);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
-        initData();
+
         studenOperationPane = createStudentOperationPane();
-        baseInfoOperationPane = createBaseInfoOpeartionPane(operationSize,baseInfoList);
+        baseInfoOperationPane = createBaseInfoOpeartionPane(operationSize);
         setOperationPane("基础信息",baseInfoOperationPane);
         setOperationPane("学籍信息",studenOperationPane);
-
+        initData();
         createInsertAction();
         createUpdateAction();
         createDeleteAction();
@@ -42,6 +42,8 @@ public class StudentJDialog extends Window<StudentEntity>{
         studentList = studentDao.getList();
         BaseInfoDao baseInfoDao = new BaseInfoDao();
         baseInfoList = baseInfoDao.getList("student");
+        baseInfoOperationPane.setList(baseInfoList);
+        studenOperationPane.setList(studentList);
         String[] title = new String[1];
         title[0] = "学/工号";
         DefaultTableModel model = new DefaultTableModel(title,studentList.size());
@@ -52,7 +54,7 @@ public class StudentJDialog extends Window<StudentEntity>{
     }
 
     private OperationPane<StudentEntity> createStudentOperationPane(){
-        OperationPane<StudentEntity> studentOperation = new OperationPane<StudentEntity>(operationSize,studentList) {
+        OperationPane<StudentEntity> studentOperation = new OperationPane<StudentEntity>(operationSize) {
             private JComboBox<String> departmentBox;
             private JComboBox<String> collegeBox;
             private JTextField idField;
@@ -89,7 +91,7 @@ public class StudentJDialog extends Window<StudentEntity>{
             public StudentEntity getData() {
                 StudentEntity studentEntity = new StudentEntity();
                 studentEntity.setId(idField.getText());
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-d");
                 try {
                     studentEntity.setYear(new Date( sdf.parse(yearText.getText()).getTime() ) );
                 } catch (ParseException e) {
@@ -284,9 +286,13 @@ public class StudentJDialog extends Window<StudentEntity>{
                 StudentEntity studentEntity = studenOperationPane.getData();
                 BaseInfoDao baseInfoDao = new BaseInfoDao();
                 StudentDao studentDao = new StudentDao();
-                try(baseInfoDao.update(baseInfoEntity) && studentDao.update(studentEntity)){
+                if(baseInfoDao.update(id,baseInfoEntity) && studentDao.update(id,studentEntity)){
                     JOptionPane.showMessageDialog(null,"修改成功");
-                }ca (Exception e) {
+                    initData();
+                    repaint();
+                    studenOperationPane.setNull();
+                    baseInfoOperationPane.setNull();
+                }else{
                     JOptionPane.showMessageDialog(null,"修改失败");
                 }
             }

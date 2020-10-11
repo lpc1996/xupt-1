@@ -67,7 +67,7 @@ public abstract class Dao<Entity> {
      * @param para 匹配条件
      * @return 返回操作的行数
      */
-    protected int executeUpdate(String hql,String... para){
+    protected <T> int executeUpdate(String hql,T... para){
         Session session = getSession();
         Transaction t = session.getTransaction();
         int result = -1;
@@ -75,14 +75,13 @@ public abstract class Dao<Entity> {
             Query<Entity> query = session.createQuery(hql);
             if(para != null && para.length > 0) {
                 int i = 0;
-                for (String p : para) {
+                for (T p : para) {
                     query.setParameter(i, p);
                     i++;
                 }
             }
             result = query.executeUpdate();
             t.commit();
-            System.out.println(result);
         }catch (SessionException s){
             s.printStackTrace();
         }finally {

@@ -77,10 +77,18 @@ public class BaseInfoDao extends Dao<BaseInfoEntity>{
     @Override
     public boolean update(String id, BaseInfoEntity data) {
         StringBuilder hql = new StringBuilder();
-        hql.append("update ").append(BaseInfoDao.class.getName()).append(" base ").append(" set base.uName=?");
+        hql.append("update ").append(BaseInfoEntity.class.getName()).append(" base ").append(" set base.uName = ?0,")
+        .append("base.formarName = ?1,").append("base.sex = ?2,").append("base.age = ?3,").append("base.nativePlace = ?4,")
+                .append("base.idcardType = ?5,").append("base.idcardNum = ?6,").append("base.uType = ?7,").append(
+                        "base.tel = ?8 ").append("where uId = ?9");
         boolean result = false;
-
-        return false;
+        if(executeUpdate(hql.toString(),data.getuName(),data.getFormarName(),data.getSex(),data.getAge(),
+                data.getNativePlace(),data.getIdcardType(),data.getIdcardNum(),data.getuType(),data.getTel(),id) == 1){
+            result = true;
+        }else{
+            result = false;
+        }
+        return result;
     }
 
     /**
