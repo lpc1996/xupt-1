@@ -1,12 +1,10 @@
 package com.dao;
 
-import com.entity.BaseInfoEntity;
-import com.entity.StudentEntity;
+import com.entity.TeacherEntity;
 
 import java.util.List;
 
-public class StudentDao extends Dao<StudentEntity> {
-
+public class TeacherDao extends Dao<TeacherEntity> {
     /**
      * 将传入的参数转换成hql delete删除语句并执行
      *
@@ -16,9 +14,10 @@ public class StudentDao extends Dao<StudentEntity> {
     @Override
     public boolean delete(String id) {
         boolean result = false;
-        StringBuilder hql = new StringBuilder();
-        hql.append("delete ").append(StudentEntity.class.getName()).append(" where id=?0");
-        result = delete(hql.toString(),id);
+        StringBuilder hql = new StringBuilder("delete ").append(TeacherEntity.class.getName()).append(" where id=?0");
+        if(executeUpdate(hql.toString(),id) == 1){
+            result = true;
+        }
         return result;
     }
 
@@ -28,10 +27,10 @@ public class StudentDao extends Dao<StudentEntity> {
      * @return 返回数据库中对应Entity的表中所有数据
      */
     @Override
-    public List<StudentEntity> getList() {
-        List<StudentEntity> list = null;
+    public List<TeacherEntity> getList() {
+        List<TeacherEntity> list = null;
         StringBuilder hql = new StringBuilder();
-        hql.append(" from ").append(StudentEntity.class.getName());
+        hql.append("from ").append(TeacherEntity.class.getName());
         try {
             list = getQuery(hql.toString());
         } catch (Exception e) {
@@ -48,15 +47,12 @@ public class StudentDao extends Dao<StudentEntity> {
      * @return 更新成功返回true，反之，返回false
      */
     @Override
-    public boolean update(String id, StudentEntity data) {
+    public boolean update(String id, TeacherEntity data) {
         boolean result = false;
         StringBuilder hql = new StringBuilder();
-        hql.append("update ").append(StudentEntity.class.getName()).append(" student set student.year=?0,").append(
-                "student.college=?1,").append("student.department=?2,").append("student.major=?3,").append(
-                        "student.grade=?4,").append("student.clazz=?5,").append("student.cultureLevel=?6,").append(
-                                "student.studentType=?7,").append("student.education=?8").append(" where id=?9");
-        if(executeUpdate(hql.toString(),data.getYear(),data.getCollege(),data.getDepartment(),data.getMajor(),
-                data.getGrade(),data.getClazz(),data.getCultureLevel(),data.getStudentType(),data.getEducation(),id) == 1){
+        hql.append("update ").append(TeacherEntity.class.getName()).append(" set college=?0,").append("department=?1,")
+                .append("level=?2,").append("education=?3,").append("year=?4 ").append("where id=?5");
+        if(executeUpdate(hql.toString(),data.getCollege(),data.getDepartment(),data.getLevel(),data.getEducation(),data.getYear(),id) == 1){
             result = true;
         }
         return result;
@@ -69,13 +65,14 @@ public class StudentDao extends Dao<StudentEntity> {
      * @return 成功返回true，否则返回false
      */
     @Override
-    public boolean insert(StudentEntity data) {
+    public boolean insert(TeacherEntity data) {
         boolean result = false;
-        try{
+        StringBuilder hql = new StringBuilder();
+        try {
             save(data);
             result = true;
-        }catch (Exception e){
-            result = false;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return result;
     }

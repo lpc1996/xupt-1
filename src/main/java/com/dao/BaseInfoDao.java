@@ -35,7 +35,11 @@ public class BaseInfoDao extends Dao<BaseInfoEntity>{
      */
     @Override
     public boolean delete(String id) {
-        return false;
+        boolean result = false;
+        StringBuilder hql = new StringBuilder();
+        hql.append("delete ").append(BaseInfoEntity.class.getName()).append(" where uId=?0");
+        result = delete(hql.toString(),id);
+        return result;
     }
 
     /**

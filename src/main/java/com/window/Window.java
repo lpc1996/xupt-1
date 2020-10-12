@@ -43,6 +43,7 @@ public abstract class Window <T> extends JFrame {
         judge = x;
 
         setContentPane(createContentPane());
+        setRefreshAction();
     }
 
     protected JPanel createContentPane(){
@@ -135,10 +136,14 @@ public abstract class Window <T> extends JFrame {
 
     /**
      * 给refresh注册监听器
-     * @param action 监听器对象
      */
-    protected void setRefreshAction(ActionListener action) {
-        refreshBtn.addActionListener(action);
+    protected void setRefreshAction() {
+        refreshBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reload();
+            }
+        });
     }
 
     /**
@@ -229,7 +234,7 @@ public abstract class Window <T> extends JFrame {
         operationPane.InitData(id);
     }
 
-    protected OperationPane<BaseInfoEntity> createBaseInfoOpeartionPane(Dimension size){
+    protected OperationPane<BaseInfoEntity> createBaseInfoOpeartion(Dimension size){
         OperationPane<BaseInfoEntity> baseInfoEntity = new OperationPane<BaseInfoEntity>(size) {
 
             private JComboBox<String> uTypeBox;
@@ -404,5 +409,7 @@ public abstract class Window <T> extends JFrame {
     protected abstract void createInsertAction();
     protected abstract void createUpdateAction();
     protected abstract void createDeleteAction();
-    protected abstract void createRefreshAction();
+    protected abstract void initData();
+    protected abstract void reload();
+
 }

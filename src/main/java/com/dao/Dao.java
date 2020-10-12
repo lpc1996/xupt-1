@@ -46,9 +46,7 @@ public abstract class Dao<Entity> {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (session.isOpen()) {
-                session.close();
-            }
+            closeSession(session);
         }
         return list;
     }
@@ -56,9 +54,16 @@ public abstract class Dao<Entity> {
     public void save(Entity data){
         Session session = getSession();
         Transaction t = session.getTransaction();
-        session.save(data);
-        t.commit();
-        session.close();
+        try {
+            session.save(data);
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            rollback(t);
+        } finally {
+            closeSession(session);
+        }
+
     }
 
     /**
@@ -84,8 +89,9 @@ public abstract class Dao<Entity> {
             t.commit();
         }catch (SessionException s){
             s.printStackTrace();
+            rollback(t);
         }finally {
-            session.close();
+            closeSession(session);
         }
         return result;
     }
@@ -93,9 +99,47 @@ public abstract class Dao<Entity> {
     public void update(Entity data){
         Session session = getSession();
         Transaction t = session.getTransaction();
-        session.update(data);
-        t.commit();
-        session.close();
+        try {
+            session.update(data);
+            t.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            rollback(t);
+        } finally {
+            closeSession(session);
+        }
+
+    }
+
+    protected boolean delete(String hql,String id){
+        boolean result = false;
+        Session session = getSession();
+        Transaction t = session.getTransaction();
+        try {
+            Query query = session.createQuery(hql);
+            query.setParameter(0,id);
+            query.executeUpdate();
+            t.commit();
+            result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            rollback(t);
+        }finally {
+            closeSession(session);
+        }
+        return result;
+    }
+
+    private void rollback(Transaction t){
+        if(t.isActive()){
+            t.rollback();
+        }
+    }
+
+    private void closeSession(Session session){
+        if (session.isOpen()){
+            session.close();
+        }
     }
 
     /**

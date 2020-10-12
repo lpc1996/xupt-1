@@ -24,6 +24,7 @@ abstract class OperationPane<T> extends JPanel{
         fieldSize = new Dimension(getWidth()/2-120,35);
 
         InitPane();
+        setNull();
     }
 
     public abstract void InitData(String id);

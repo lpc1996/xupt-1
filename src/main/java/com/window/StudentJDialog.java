@@ -19,31 +19,30 @@ public class StudentJDialog extends Window<StudentEntity>{
     private List<StudentEntity> studentList;
     private List<BaseInfoEntity> baseInfoList;
     private Dimension operationSize;
-    private OperationPane<StudentEntity> studenOperationPane;
-    private OperationPane<BaseInfoEntity> baseInfoOperationPane;
+    private OperationPane<StudentEntity> studentOperation;
+    private OperationPane<BaseInfoEntity> baseInfoOperation;
 
     public StudentJDialog(){
         super(new Dimension(1000,500),"学生信息管理",true);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
 
-        studenOperationPane = createStudentOperationPane();
-        baseInfoOperationPane = createBaseInfoOpeartionPane(operationSize);
-        setOperationPane("基础信息",baseInfoOperationPane);
-        setOperationPane("学籍信息",studenOperationPane);
+        studentOperation = createStudentOperation();
+        baseInfoOperation = createBaseInfoOpeartion(operationSize);
+        setOperationPane("基础信息",baseInfoOperation);
+        setOperationPane("学籍信息",studentOperation);
         initData();
         createInsertAction();
         createUpdateAction();
         createDeleteAction();
-        createRefreshAction();
     }
 
-    private void initData(){
+    protected void initData(){
         StudentDao studentDao = new StudentDao();
         studentList = studentDao.getList();
         BaseInfoDao baseInfoDao = new BaseInfoDao();
         baseInfoList = baseInfoDao.getList("student");
-        baseInfoOperationPane.setList(baseInfoList);
-        studenOperationPane.setList(studentList);
+        baseInfoOperation.setList(baseInfoList);
+        studentOperation.setList(studentList);
         String[] title = new String[1];
         title[0] = "学/工号";
         DefaultTableModel model = new DefaultTableModel(title,studentList.size());
@@ -53,11 +52,18 @@ public class StudentJDialog extends Window<StudentEntity>{
         setTableModel(model);
     }
 
-    private OperationPane<StudentEntity> createStudentOperationPane(){
+    @Override
+    protected void reload() {
+        initData();
+        studentOperation.setNull();
+        baseInfoOperation.setNull();
+        repaint();
+    }
+
+    private OperationPane<StudentEntity> createStudentOperation(){
         OperationPane<StudentEntity> studentOperation = new OperationPane<StudentEntity>(operationSize) {
             private JComboBox<String> departmentBox;
             private JComboBox<String> collegeBox;
-            private JTextField idField;
             private JComboBox<String> educationBox;
             private JComboBox<String> typeBox;
             private JComboBox<String> cultureBox;
@@ -72,7 +78,6 @@ public class StudentJDialog extends Window<StudentEntity>{
                 for(int i=0; i<list.size(); i++){
                     StudentEntity studentEntity = list.get(i);
                     if(studentEntity.getId().equals(id)){
-                        idField.setText(id);
                         yearText.setText(studentEntity.getYear().toString());
                         collegeBox.setSelectedItem(equals(studentEntity.getCollege(),collegeBox));
                         departmentBox.setSelectedItem(equals(studentEntity.getDepartment(),departmentBox));
@@ -90,7 +95,6 @@ public class StudentJDialog extends Window<StudentEntity>{
             @Override
             public StudentEntity getData() {
                 StudentEntity studentEntity = new StudentEntity();
-                studentEntity.setId(idField.getText());
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-d");
                 try {
                     studentEntity.setYear(new Date( sdf.parse(yearText.getText()).getTime() ) );
@@ -110,7 +114,6 @@ public class StudentJDialog extends Window<StudentEntity>{
 
             @Override
             public void setNull() {
-                idField.setText(null);
                 yearText.setText(null);
                 collegeBox.setSelectedIndex(-1);
                 departmentBox.setSelectedIndex(-1);
@@ -124,12 +127,6 @@ public class StudentJDialog extends Window<StudentEntity>{
 
             @Override
             protected void InitPane() {
-                JLabel idLab = new JLabel("学号：");
-                idLab.setPreferredSize(labSize);
-                idField = new JTextField();
-                idField.setPreferredSize(fieldSize);
-                add(idLab);
-                add(idField);
                 JLabel yearLab = new JLabel("入学时间*：");
                 yearLab.setPreferredSize(labSize);;
                 yearText = new JTextField();
@@ -192,15 +189,12 @@ public class StudentJDialog extends Window<StudentEntity>{
 
             private void initBox(){
                 List list = null;
-                CollegeDao collegeDao = new CollegeDao();
-                list = collegeDao.getList();
+                list = new CollegeDao().getList();
                 for(int i=0; i<list.size(); i++){
                     CollegeEntity collegeEntity = (CollegeEntity) list.get(i);
                     collegeBox.addItem(collegeEntity.getId()+" "+collegeEntity.getName());
                 }
-                collegeDao = null;
-                DepartmentDao departmentDao = new DepartmentDao();
-                list = departmentDao.getIdAndName();
+                list = new DepartmentDao().getIdAndName();
                 for(int i=0; i<list.size(); i++){
                     Object[] departmentEntity = (Object[]) list.get(i);
                     departmentBox.addItem(departmentEntity[0]+" "+departmentEntity[1]);
@@ -254,8 +248,9 @@ public class StudentJDialog extends Window<StudentEntity>{
         setInsertAction(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BaseInfoEntity baseInfoEntity = baseInfoOperationPane.getData();
-                StudentEntity studentEntity = studenOperationPane.getData();
+                BaseInfoEntity baseInfoEntity = baseInfoOperation.getData();
+                StudentEntity studentEntity = studentOperation.getData();
+                studentEntity.setId(baseInfoEntity.getuId());
                 if(baseInfoEntity.getuId().length() == 0){
                     JOptionPane.showMessageDialog(null,"请输入要添加的信息！");
                     return;
@@ -264,6 +259,7 @@ public class StudentJDialog extends Window<StudentEntity>{
                 StudentDao studentDao = new StudentDao();
                 if(baseInfoDao.insert(baseInfoEntity) && studentDao.insert(studentEntity)){
                     JOptionPane.showMessageDialog(null,"添加成功");
+                    reload();
                 }else{
                     JOptionPane.showMessageDialog(null,"添加失败");
                 }
@@ -282,16 +278,14 @@ public class StudentJDialog extends Window<StudentEntity>{
                     return;
                 }
                 String id = getValueAt(index)+"";
-                BaseInfoEntity baseInfoEntity = baseInfoOperationPane.getData();
-                StudentEntity studentEntity = studenOperationPane.getData();
+                BaseInfoEntity baseInfoEntity = baseInfoOperation.getData();
+                StudentEntity studentEntity = studentOperation.getData();
+                studentEntity.setId(baseInfoEntity.getuId());
                 BaseInfoDao baseInfoDao = new BaseInfoDao();
                 StudentDao studentDao = new StudentDao();
                 if(baseInfoDao.update(id,baseInfoEntity) && studentDao.update(id,studentEntity)){
                     JOptionPane.showMessageDialog(null,"修改成功");
-                    initData();
-                    repaint();
-                    studenOperationPane.setNull();
-                    baseInfoOperationPane.setNull();
+                    reload();
                 }else{
                     JOptionPane.showMessageDialog(null,"修改失败");
                 }
@@ -304,34 +298,20 @@ public class StudentJDialog extends Window<StudentEntity>{
         setDeleteAction(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int index = getSelectRow();
-                if(index == -1){
-                    JOptionPane.showMessageDialog(null,"请选中一行数据");
-                    return;
-                }
-                String id = getValueAt(index)+"";
-                BaseInfoDao baseInfoDao = new BaseInfoDao();
-                StudentDao studentDao = new StudentDao();
-                if(studentDao.delete(id) && baseInfoDao.delete(id)){
-                    JOptionPane.showMessageDialog(null,"删除成功");
-                    initData();
-                    repaint();
-                }else{
-                    JOptionPane.showMessageDialog(null,"删除失败");
-                }
+            int index = getSelectRow();
+            if(index == -1){
+                JOptionPane.showMessageDialog(null,"请选中一行数据");
+                return;
             }
-        });
-    }
-
-    @Override
-    protected void createRefreshAction() {
-        setRefreshAction(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                initData();
-                baseInfoOperationPane.setNull();
-                studenOperationPane.setNull();
-                repaint();
+            String id = getValueAt(index)+"";
+            BaseInfoDao baseInfoDao = new BaseInfoDao();
+            StudentDao studentDao = new StudentDao();
+            if(studentDao.delete(id) && baseInfoDao.delete(id)){
+                JOptionPane.showMessageDialog(null,"删除成功");
+                reload();
+            }else{
+                JOptionPane.showMessageDialog(null,"删除失败");
+            }
             }
         });
     }
