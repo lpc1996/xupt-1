@@ -9,6 +9,7 @@ abstract class OperationPane<T> extends JPanel{
     protected List<T> list;
     protected Dimension labSize;
     protected Dimension fieldSize;
+    protected Dimension fieldSize1;
 
     public OperationPane(Dimension size){
         this(size,null);
@@ -22,6 +23,7 @@ abstract class OperationPane<T> extends JPanel{
 
         labSize = new Dimension(120,35);
         fieldSize = new Dimension(getWidth()/2-120,35);
+        fieldSize1 = new Dimension(getWidth()-labSize.width,35);
 
         InitPane();
         setNull();

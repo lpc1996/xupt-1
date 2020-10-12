@@ -51,7 +51,7 @@ public abstract class Dao<Entity> {
         return list;
     }
 
-    public void save(Entity data){
+    protected void save(Entity data){
         Session session = getSession();
         Transaction t = session.getTransaction();
         try {

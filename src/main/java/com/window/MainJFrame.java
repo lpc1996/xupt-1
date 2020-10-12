@@ -15,6 +15,7 @@ public class MainJFrame extends JFrame {
     private UpdatePass updatePass;
     private StudentJDialog studentJDialog;
     private TeacherJDialog teacherJDialog;
+    private CollegeJDialog collegeJdialog;
 
     public MainJFrame() {
         setTitle("教务管理系统");
@@ -103,6 +104,7 @@ public class MainJFrame extends JFrame {
         JMenu EAMJMenu = new JMenu("教务信息管理");
         EAMJMenu.add(createStudentManageJMenu());
         EAMJMenu.add(createTeacherManageItem());
+        EAMJMenu.add(createCollegeItem());
 
         return EAMJMenu;
     }
@@ -124,10 +126,22 @@ public class MainJFrame extends JFrame {
         teacherItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                teacherJDialog = new TeacherJDialog();
-                teacherJDialog.setVisible(true);
+            teacherJDialog = new TeacherJDialog();
+            teacherJDialog.setVisible(true);
             }
         });
         return teacherItem;
+    }
+
+    private JMenuItem createCollegeItem(){
+        JMenuItem collegeItem = new JMenuItem("学院信息管理");
+        collegeItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                collegeJdialog = new CollegeJDialog();
+                collegeJdialog.setVisible(true);
+            }
+        });
+        return collegeItem;
     }
 }

@@ -14,7 +14,13 @@ public class CollegeDao extends Dao<CollegeEntity> {
      */
     @Override
     public boolean delete(String id) {
-        return false;
+        boolean result = false;
+        StringBuilder hql = new StringBuilder();
+        hql.append("delete ").append(CollegeEntity.class.getName()).append(" where id=?0");
+        if(executeUpdate(hql.toString(),id) == 1){
+            result = true;
+        }
+        return result;
     }
 
     /**
@@ -45,7 +51,13 @@ public class CollegeDao extends Dao<CollegeEntity> {
      */
     @Override
     public boolean update(String id, CollegeEntity data) {
-        return false;
+        boolean result = false;
+        StringBuilder hql = new StringBuilder();
+        hql.append("update ").append(CollegeEntity.class.getName()).append(" set name=?0 where id=?1");
+        if(executeUpdate(hql.toString(),data.getName(),id) == 1){
+            result = true;
+        }
+        return result;
     }
 
     /**
@@ -56,7 +68,15 @@ public class CollegeDao extends Dao<CollegeEntity> {
      */
     @Override
     public boolean insert(CollegeEntity data) {
-        return false;
+        boolean result = false;
+        try {
+            save(data);
+            result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = false;
+        }
+        return result;
     }
 
 }
