@@ -57,6 +57,8 @@ public class StudentJDialog extends Window<StudentEntity>{
         initData();
         studentOperation.setNull();
         baseInfoOperation.setNull();
+        studentOperation.initBox();
+        baseInfoOperation.initBox();
         repaint();
     }
 
@@ -187,28 +189,33 @@ public class StudentJDialog extends Window<StudentEntity>{
                 initBox();
             }
 
-            private void initBox(){
+            public void initBox(){
                 List list = null;
+                collegeBox.removeAllItems();
                 list = new CollegeDao().getList();
                 for(int i=0; i<list.size(); i++){
                     CollegeEntity collegeEntity = (CollegeEntity) list.get(i);
                     collegeBox.addItem(collegeEntity.getId()+" "+collegeEntity.getName());
                 }
+                departmentBox.removeAllItems();
                 list = new DepartmentDao().getIdAndName();
                 for(int i=0; i<list.size(); i++){
                     Object[] departmentEntity = (Object[]) list.get(i);
                     departmentBox.addItem(departmentEntity[0]+" "+departmentEntity[1]);
                 }
+                majorBox.removeAllItems();
                 list = new MajorDao().getIdAndName();
                 for(int i=0; i<list.size(); i++){
                     Object[] obj = (Object[]) list.get(i);
                     majorBox.addItem(obj[0]+" "+obj[1]);
                 }
+                gradeBox.removeAllItems();
                 list = new SemesterDao().getIdAndName();
                 for(int i=0; i<list.size(); i++){
                     Object[] obj = (Object[]) list.get(i);
                     gradeBox.addItem(obj[0]+" "+obj[1]);
                 }
+                classBox.removeAllItems();
                 list = new TeamDao().getIdAndName();
                 for(int i=0; i<list.size(); i++){
                     Object[] obj = (Object[]) list.get(i);

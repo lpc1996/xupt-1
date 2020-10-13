@@ -56,4 +56,5 @@ abstract class OperationPane<T> extends JPanel{
         return string.split(" ")[0];
     }
 
+    public abstract void initBox();
 }

@@ -371,7 +371,7 @@ public abstract class Window <T> extends JFrame {
                 initBox();
             }
 
-            private void initBox(){
+            public void initBox(){
                 sexBox.addItem("男");
                 sexBox.addItem("女");
                 sexBox.addItem("保密");

@@ -133,6 +133,8 @@ public class TeacherJDialog extends Window<TeacherEntity> {
         initData();
         baseInfoOperation.setNull();
         teacherOperation.setNull();
+        baseInfoOperation.initBox();
+        teacherOperation.initBox();
         repaint();
     }
 
@@ -220,13 +222,15 @@ public class TeacherJDialog extends Window<TeacherEntity> {
 
                 initBox();
             }
-            private void initBox(){
+            public void initBox(){
                 List list = null;
+                collegeBox.removeAllItems();
                 list = new CollegeDao().getList();
                 for(int i=0; i<list.size(); i++){
                     CollegeEntity collegeEntity = (CollegeEntity) list.get(i);
                     collegeBox.addItem(collegeEntity.getId()+" "+collegeEntity.getName());
                 }
+                departmentBox.removeAllItems();
                 list = new DepartmentDao().getIdAndName();
                 for(int i=0; i<list.size(); i++){
                     Object[] departmentEntity = (Object[]) list.get(i);

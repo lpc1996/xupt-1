@@ -2,6 +2,7 @@ package com.dao;
 
 import com.entity.DepartmentEntity;
 
+import javax.management.StringValueExp;
 import java.util.List;
 
 public class DepartmentDao extends Dao<DepartmentEntity> {
@@ -13,7 +14,13 @@ public class DepartmentDao extends Dao<DepartmentEntity> {
      */
     @Override
     public boolean delete(String id) {
-        return false;
+        boolean result = false;
+        StringBuilder hql = new StringBuilder();
+        hql.append("delete ").append(DepartmentEntity.class.getName()).append(" where id=?0");
+        if(executeUpdate(hql.toString(),id) == 1){
+            result = true;
+        }
+        return result;
     }
 
     /**
@@ -23,7 +30,10 @@ public class DepartmentDao extends Dao<DepartmentEntity> {
      */
     @Override
     public List<DepartmentEntity> getList() {
-        return null;
+        StringBuilder hql = new StringBuilder();
+        hql.append("from ").append(DepartmentEntity.class.getName());
+        List<DepartmentEntity> list = getQuery(hql.toString());
+        return list;
     }
 
     /**
@@ -35,7 +45,13 @@ public class DepartmentDao extends Dao<DepartmentEntity> {
      */
     @Override
     public boolean update(String id, DepartmentEntity data) {
-        return false;
+        boolean result = false;
+        StringBuilder hql = new StringBuilder();
+        hql.append("update ").append(DepartmentEntity.class.getName()).append(" set name=?0,collegeId=?1 where id=?2");
+        if(executeUpdate(hql.toString(),data.getName(),data.getCollegeId(),id) == 1){
+            result = result;
+        }
+        return result;
     }
 
     /**
@@ -46,7 +62,15 @@ public class DepartmentDao extends Dao<DepartmentEntity> {
      */
     @Override
     public boolean insert(DepartmentEntity data) {
-        return false;
+        boolean result = false;
+        try {
+            save(data);
+            result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = false;
+        }
+        return result;
     }
 
     public List<Object[]> getIdAndName(){

@@ -73,6 +73,11 @@ public class CollegeJDialog extends Window<CollegeEntity> {
                 add(nameLab);
                 add(nameField);
             }
+
+            @Override
+            public void initBox() {
+
+            }
         };
         return college;
     }

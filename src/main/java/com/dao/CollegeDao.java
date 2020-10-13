@@ -1,6 +1,7 @@
 package com.dao;
 
 import com.entity.CollegeEntity;
+import com.entity.DepartmentEntity;
 
 import java.util.List;
 
@@ -77,6 +78,14 @@ public class CollegeDao extends Dao<CollegeEntity> {
             result = false;
         }
         return result;
+    }
+
+    public List<Object[]> getIdAndName(){
+        List<Object[]> list = null;
+        StringBuilder hql = new StringBuilder();
+        hql.append("select id,name from ").append(CollegeEntity.class.getName());
+        list = getQuery(hql.toString());
+        return list;
     }
 
 }
