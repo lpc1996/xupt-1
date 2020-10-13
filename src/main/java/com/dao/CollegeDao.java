@@ -54,8 +54,8 @@ public class CollegeDao extends Dao<CollegeEntity> {
     public boolean update(String id, CollegeEntity data) {
         boolean result = false;
         StringBuilder hql = new StringBuilder();
-        hql.append("update ").append(CollegeEntity.class.getName()).append(" set name=?0 where id=?1");
-        if(executeUpdate(hql.toString(),data.getName(),id) == 1){
+        hql.append("update ").append(CollegeEntity.class.getName()).append(" set name=?0,id=?1 where id=?2");
+        if(executeUpdate(hql.toString(),data.getName(),data.getId(),id) == 1){
             result = true;
         }
         return result;

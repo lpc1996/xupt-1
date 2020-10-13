@@ -47,9 +47,9 @@ public class DepartmentDao extends Dao<DepartmentEntity> {
     public boolean update(String id, DepartmentEntity data) {
         boolean result = false;
         StringBuilder hql = new StringBuilder();
-        hql.append("update ").append(DepartmentEntity.class.getName()).append(" set name=?0,collegeId=?1 where id=?2");
-        if(executeUpdate(hql.toString(),data.getName(),data.getCollegeId(),id) == 1){
-            result = result;
+        hql.append("update ").append(DepartmentEntity.class.getName()).append(" set name=?0,collegeId=?1,id=?2 where id=?3");
+        if(executeUpdate(hql.toString(),data.getName(),data.getCollegeId(),data.getId(),id) == 1){
+            result = true;
         }
         return result;
     }

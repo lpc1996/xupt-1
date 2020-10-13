@@ -17,6 +17,7 @@ public class MainJFrame extends JFrame {
     private TeacherJDialog teacherJDialog;
     private CollegeJDialog collegeJdialog;
     private DepartmentJDialog departmentJDialog;
+    private MajorJDialog majorJDialog;
 
     public MainJFrame() {
         setTitle("教务管理系统");
@@ -107,6 +108,7 @@ public class MainJFrame extends JFrame {
         EAMJMenu.add(createTeacherManageItem());
         EAMJMenu.add(createCollegeItem());
         EAMJMenu.add(createDepartmentItem());
+        EAMJMenu.add(createMajorItem());
 
         return EAMJMenu;
     }
@@ -148,19 +150,31 @@ public class MainJFrame extends JFrame {
     }
 
     private JMenuItem createDepartmentItem(){
-        final JMenuItem departmentItem = new JMenuItem("系/部信息管理");
+        JMenuItem departmentItem = new JMenuItem("系/部信息管理");
         departmentItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(departmentJDialog == null){
-                    departmentJDialog = new DepartmentJDialog();
-                }
-                departmentJDialog.setVisible(true);
-                if(departmentJDialog.isActive()){
-                    System.out.println("active");
-                }
+            if(departmentJDialog == null){
+                departmentJDialog = new DepartmentJDialog();
+            }
+            departmentJDialog.setVisible(true);
+            if(departmentJDialog.isActive()){
+                System.out.println("active");
+            }
             }
         });
         return departmentItem;
+    }
+
+    private JMenuItem createMajorItem(){
+        JMenuItem majorItem = new JMenuItem("专业信息管理");
+        majorItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                majorJDialog = new MajorJDialog();
+                majorJDialog.setVisible(true);
+            }
+        });
+        return majorItem;
     }
 }

@@ -55,10 +55,10 @@ public class StudentJDialog extends Window<StudentEntity>{
     @Override
     protected void reload() {
         initData();
-        studentOperation.setNull();
-        baseInfoOperation.setNull();
         studentOperation.initBox();
         baseInfoOperation.initBox();
+        studentOperation.setNull();
+        baseInfoOperation.setNull();
         repaint();
     }
 

@@ -85,9 +85,9 @@ public class BaseInfoDao extends Dao<BaseInfoEntity>{
         hql.append("update ").append(BaseInfoEntity.class.getName()).append(" base ").append(" set base.uName = ?0,")
         .append("base.formarName = ?1,").append("base.sex = ?2,").append("base.age = ?3,").append("base.nativePlace = ?4,")
                 .append("base.idcardType = ?5,").append("base.idcardNum = ?6,").append("base.uType = ?7,").append(
-                        "base.tel = ?8 ").append("where uId = ?9");
+                        "base.tel = ?8 ,").append("base.uId=?9").append("where uId = ?10");
         if(executeUpdate(hql.toString(),data.getuName(),data.getFormarName(),data.getSex(),data.getAge(),
-                data.getNativePlace(),data.getIdcardType(),data.getIdcardNum(),data.getuType(),data.getTel(),id) == 1){
+                data.getNativePlace(),data.getIdcardType(),data.getIdcardNum(),data.getuType(),data.getTel(),data.getuId(),id) == 1){
             result = true;
         }else{
             result = false;

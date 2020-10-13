@@ -14,7 +14,13 @@ public class MajorDao extends Dao<MajorEntity> {
      */
     @Override
     public boolean delete(String id) {
-        return false;
+        boolean result = false;
+        StringBuilder hql = new StringBuilder();
+        hql.append("delete ").append(MajorEntity.class.getName()).append(" where id=?0");
+        if(executeUpdate(hql.toString(),id) == 1){
+            result = true;
+        }
+        return result;
     }
 
     /**
@@ -24,7 +30,10 @@ public class MajorDao extends Dao<MajorEntity> {
      */
     @Override
     public List<MajorEntity> getList() {
-        return null;
+        StringBuilder hql = new StringBuilder();
+        hql.append("from ").append(MajorEntity.class.getName());
+        List<MajorEntity> list = getQuery(hql.toString());
+        return list;
     }
 
     /**
@@ -36,7 +45,13 @@ public class MajorDao extends Dao<MajorEntity> {
      */
     @Override
     public boolean update(String id, MajorEntity data) {
-        return false;
+        boolean result = false;
+        StringBuilder hql = new StringBuilder();
+        hql.append("update ").append(MajorEntity.class.getName()).append(" set name=?0,collegeId=?1,departmentId=?2,id=?3 where id=?4");
+        if(executeUpdate(hql.toString(),data.getName(),data.getCollegeId(),data.getDepartmentId(),data.getId(),id) == 1){
+            result = true;
+        }
+        return result;
     }
 
     /**
@@ -47,6 +62,12 @@ public class MajorDao extends Dao<MajorEntity> {
      */
     @Override
     public boolean insert(MajorEntity data) {
+        try{
+            save(data);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return false;
     }
 

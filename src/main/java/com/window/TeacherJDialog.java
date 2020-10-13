@@ -131,10 +131,11 @@ public class TeacherJDialog extends Window<TeacherEntity> {
 
     protected void reload(){
         initData();
-        baseInfoOperation.setNull();
-        teacherOperation.setNull();
         baseInfoOperation.initBox();
         teacherOperation.initBox();
+        baseInfoOperation.setNull();
+        teacherOperation.setNull();
+
         repaint();
     }
 
