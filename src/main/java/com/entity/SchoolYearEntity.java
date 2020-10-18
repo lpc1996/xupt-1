@@ -1,6 +1,7 @@
 package com.entity;
 
 import java.sql.Date;
+import java.util.Objects;
 
 @javax.persistence.Entity
 @javax.persistence.Table(name = "school_year", schema = "xupt")
@@ -57,10 +58,10 @@ public class SchoolYearEntity {
 
         SchoolYearEntity that = (SchoolYearEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (begin != null ? !begin.equals(that.begin) : that.begin != null) return false;
-        if (end != null ? !end.equals(that.end) : that.end != null) return false;
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(name, that.name)) return false;
+        if (!Objects.equals(begin, that.begin)) return false;
+        if (!Objects.equals(end, that.end)) return false;
 
         return true;
     }

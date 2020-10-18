@@ -26,7 +26,7 @@ public class StudentJDialog extends Window<StudentEntity>{
         super(new Dimension(1000,500),"学生信息管理",true);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
 
-        studentOperation = createStudentOperation();
+        studentOperation = createOperation();
         baseInfoOperation = createBaseInfoOpeartion(operationSize);
         setOperationPane("基础信息",baseInfoOperation);
         setOperationPane("学籍信息",studentOperation);
@@ -62,7 +62,7 @@ public class StudentJDialog extends Window<StudentEntity>{
         repaint();
     }
 
-    private OperationPane<StudentEntity> createStudentOperation(){
+    protected OperationPane<StudentEntity> createOperation(){
         OperationPane<StudentEntity> studentOperation = new OperationPane<StudentEntity>(operationSize) {
             private JComboBox<String> departmentBox;
             private JComboBox<String> collegeBox;

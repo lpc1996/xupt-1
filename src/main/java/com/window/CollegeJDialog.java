@@ -19,7 +19,7 @@ public class CollegeJDialog extends Window<CollegeEntity> {
     public CollegeJDialog(){
         super(new Dimension(600,500),"学院信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
-        collegeOperation = createCollegeOperation();
+        collegeOperation = createOperation();
         setOperationPane("学院信息",collegeOperation);
 
         initData();
@@ -28,7 +28,7 @@ public class CollegeJDialog extends Window<CollegeEntity> {
         createDeleteAction();
     }
 
-    private OperationPane<CollegeEntity> createCollegeOperation(){
+    protected OperationPane<CollegeEntity> createOperation(){
         OperationPane<CollegeEntity> college = new OperationPane<CollegeEntity>(operationSize) {
             private JTextField nameField;
             private JTextField idField;

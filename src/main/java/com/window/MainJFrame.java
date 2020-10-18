@@ -109,6 +109,7 @@ public class MainJFrame extends JFrame {
         EAMJMenu.add(createCollegeItem());
         EAMJMenu.add(createDepartmentItem());
         EAMJMenu.add(createMajorItem());
+        EAMJMenu.add(createSYItem());
 
         return EAMJMenu;
     }
@@ -176,5 +177,17 @@ public class MainJFrame extends JFrame {
             }
         });
         return majorItem;
+    }
+
+    private JMenuItem createSYItem(){
+        JMenuItem item = new JMenuItem("学年管理");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SyJDialog syJDialog = new SyJDialog();
+                syJDialog.setVisible(true);
+            }
+        });
+        return item;
     }
 }

@@ -18,7 +18,7 @@ public class DepartmentJDialog extends Window<DepartmentEntity> {
     public DepartmentJDialog() {
         super(new Dimension(600,500),"系/部信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
-        departmentOperation = createDepartmentOperation();
+        departmentOperation = createOperation();
         setOperationPane("系/部信息",departmentOperation);
 
         initData();
@@ -27,7 +27,7 @@ public class DepartmentJDialog extends Window<DepartmentEntity> {
         createDeleteAction();
     }
 
-    private OperationPane<DepartmentEntity> createDepartmentOperation() {
+    protected OperationPane<DepartmentEntity> createOperation() {
         OperationPane<DepartmentEntity> departmentOperation = new OperationPane<DepartmentEntity>(operationSize) {
             private JComboBox<String> collegeBox;
             private JTextField nameField;

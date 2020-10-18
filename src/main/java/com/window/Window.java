@@ -406,6 +406,7 @@ public abstract class Window <T> extends JFrame {
         };
     }
 
+    protected abstract OperationPane<T> createOperation();
     protected abstract void createInsertAction();
     protected abstract void createUpdateAction();
     protected abstract void createDeleteAction();

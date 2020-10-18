@@ -1,6 +1,5 @@
 package com.dao;
 
-import com.entity.DepartmentEntity;
 import com.entity.MajorEntity;
 
 import java.util.List;

@@ -20,7 +20,7 @@ public class MajorJDialog extends Window<MajorEntity> {
     public MajorJDialog(){
         super(new Dimension(600,500),"专业信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
-        majorOperation = createMajorOperation();
+        majorOperation = createOperation();
         setOperationPane("专业信息",majorOperation);
 
         initData();
@@ -29,7 +29,7 @@ public class MajorJDialog extends Window<MajorEntity> {
         createDeleteAction();
     }
 
-    private OperationPane<MajorEntity> createMajorOperation() {
+    protected OperationPane<MajorEntity> createOperation() {
         OperationPane<MajorEntity> majorOperation = new OperationPane<MajorEntity>(operationSize) {
             private JComboBox<String> departmentBox;
             private JComboBox<String> collegeBox;
@@ -118,18 +118,18 @@ public class MajorJDialog extends Window<MajorEntity> {
         setInsertAction(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MajorEntity major = majorOperation.getData();
-                if(major.getId().length() == 0){
-                    JOptionPane.showMessageDialog(null,"请输入要添加的信息！");
-                    return;
-                }
-                MajorDao majorDao = new MajorDao();
-                if(majorDao.insert(major)){
-                    JOptionPane.showMessageDialog(null,"添加成功");
-                }else{
-                    JOptionPane.showMessageDialog(null,"添加失败");
-                }
-                reload();
+            MajorEntity major = majorOperation.getData();
+            if(major.getId().length() == 0){
+                JOptionPane.showMessageDialog(null,"请输入要添加的信息！");
+                return;
+            }
+            MajorDao majorDao = new MajorDao();
+            if(majorDao.insert(major)){
+                JOptionPane.showMessageDialog(null,"添加成功");
+            }else{
+                JOptionPane.showMessageDialog(null,"添加失败");
+            }
+            reload();
             }
         });
 
@@ -140,21 +140,21 @@ public class MajorJDialog extends Window<MajorEntity> {
         setUpdateAction(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int index = getSelectRow();
-                if(index == -1){
-                    JOptionPane.showMessageDialog(null,"请选中一行数据并进行修改");
-                    return;
-                }
-                String id = getValueAt(index)+"";
-                MajorEntity major = majorOperation.getData();
-                MajorDao majorDao = new MajorDao();
-                if(majorDao.update(id,major)){
-                    JOptionPane.showMessageDialog(null,"修改成功");
+            int index = getSelectRow();
+            if(index == -1){
+                JOptionPane.showMessageDialog(null,"请选中一行数据并进行修改");
+                return;
+            }
+            String id = getValueAt(index)+"";
+            MajorEntity major = majorOperation.getData();
+            MajorDao majorDao = new MajorDao();
+            if(majorDao.update(id,major)){
+                JOptionPane.showMessageDialog(null,"修改成功");
 
-                }else{
-                    JOptionPane.showMessageDialog(null,"修改失败");
-                }
-                reload();
+            }else{
+                JOptionPane.showMessageDialog(null,"修改失败");
+            }
+            reload();
             }
         });
     }

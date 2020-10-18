@@ -29,7 +29,7 @@ public class TeacherJDialog extends Window<TeacherEntity> {
         super(new Dimension(1000,500),"教职工信息管理",true);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
         baseInfoOperation = createBaseInfoOpeartion(operationSize);
-        teacherOperation = createTeacherOperation();
+        teacherOperation = createOperation();
         initData();
         setOperationPane("基础信息",baseInfoOperation);
         setOperationPane("职务信息",teacherOperation);
@@ -139,7 +139,7 @@ public class TeacherJDialog extends Window<TeacherEntity> {
         repaint();
     }
 
-    private OperationPane<TeacherEntity> createTeacherOperation(){
+    protected OperationPane<TeacherEntity> createOperation(){
         OperationPane<TeacherEntity> teacherOperation = new OperationPane<TeacherEntity>(operationSize) {
             private JComboBox<String> departmentBox;
             private JTextField yearField;
