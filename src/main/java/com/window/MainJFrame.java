@@ -18,6 +18,8 @@ public class MainJFrame extends JFrame {
     private CollegeJDialog collegeJdialog;
     private DepartmentJDialog departmentJDialog;
     private MajorJDialog majorJDialog;
+    private SyJDialog syJDialog;
+    private StJDialog stJDialog;
 
     public MainJFrame() {
         setTitle("教务管理系统");
@@ -57,8 +59,10 @@ public class MainJFrame extends JFrame {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-            personalInfoJFrame = new PersonalInfoJFrame();
-            personalInfoJFrame.setVisible(true);
+                if(personalInfoJFrame == null || !personalInfoJFrame.isDisplayable()) {
+                    personalInfoJFrame = new PersonalInfoJFrame();
+                }
+                personalInfoJFrame.setVisible(true);
             }
         });
         return personalInfo;
@@ -69,7 +73,10 @@ public class MainJFrame extends JFrame {
         updatePassItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updatePass = new UpdatePass();
+                if(updatePass == null || !updatePass.isDisplayable()) {
+                    updatePass = new UpdatePass();
+                }
+                updatePass.repaint();
                 updatePass.setVisible(true);
             }
         });
@@ -110,6 +117,7 @@ public class MainJFrame extends JFrame {
         EAMJMenu.add(createDepartmentItem());
         EAMJMenu.add(createMajorItem());
         EAMJMenu.add(createSYItem());
+        EAMJMenu.add(createSTItem());
 
         return EAMJMenu;
     }
@@ -119,8 +127,11 @@ public class MainJFrame extends JFrame {
         studentManageJMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            studentJDialog = new StudentJDialog();
-            studentJDialog.setVisible(true);
+                if(studentJDialog == null || !studentJDialog.isDisplayable() ){
+                    studentJDialog = new StudentJDialog();
+                }
+                studentJDialog.repaint();
+                studentJDialog.setVisible(true);
             }
         });
         return studentManageJMenu;
@@ -131,8 +142,11 @@ public class MainJFrame extends JFrame {
         teacherItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            teacherJDialog = new TeacherJDialog();
-            teacherJDialog.setVisible(true);
+                if(teacherJDialog == null || !teacherJDialog.isDisplayable()) {
+                    teacherJDialog = new TeacherJDialog();
+                }
+                teacherJDialog.repaint();
+                teacherJDialog.setVisible(true);
             }
         });
         return teacherItem;
@@ -143,7 +157,10 @@ public class MainJFrame extends JFrame {
         collegeItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                collegeJdialog = new CollegeJDialog();
+                if(collegeJdialog == null || !collegeJdialog.isDisplayable()) {
+                    collegeJdialog = new CollegeJDialog();
+                }
+                collegeJdialog.repaint();
                 collegeJdialog.setVisible(true);
             }
         });
@@ -155,13 +172,12 @@ public class MainJFrame extends JFrame {
         departmentItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            if(departmentJDialog == null){
-                departmentJDialog = new DepartmentJDialog();
-            }
-            departmentJDialog.setVisible(true);
-            if(departmentJDialog.isActive()){
-                System.out.println("active");
-            }
+                if(departmentJDialog == null || !departmentJDialog.isDisplayable()){
+                    departmentJDialog = new DepartmentJDialog();
+                }
+                departmentJDialog.repaint();
+                departmentJDialog.setVisible(true);
+
             }
         });
         return departmentItem;
@@ -172,7 +188,10 @@ public class MainJFrame extends JFrame {
         majorItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                majorJDialog = new MajorJDialog();
+                if(majorJDialog == null || !majorJDialog.isDisplayable()) {
+                    majorJDialog = new MajorJDialog();
+                }
+                majorJDialog.repaint();
                 majorJDialog.setVisible(true);
             }
         });
@@ -180,14 +199,37 @@ public class MainJFrame extends JFrame {
     }
 
     private JMenuItem createSYItem(){
-        JMenuItem item = new JMenuItem("学年管理");
+        JMenuItem item = new JMenuItem("学年信息管理");
         item.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SyJDialog syJDialog = new SyJDialog();
+                if(syJDialog == null || syJDialog.isDisplayable()) {
+                    syJDialog = new SyJDialog();
+                }
+                syJDialog.repaint();
                 syJDialog.setVisible(true);
             }
         });
         return item;
+    }
+
+    private JMenuItem createSTItem(){
+        JMenuItem item = new JMenuItem("学期信息管理");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(stJDialog == null || !stJDialog.isDisplayable()){
+                    stJDialog = new StJDialog();
+                }
+                stJDialog.repaint();
+                stJDialog.setVisible(true);
+            }
+        });
+        return item;
+    }
+
+    public static void main(String... argv){
+        MainJFrame mainJFrame = new MainJFrame();
+        mainJFrame.setVisible(true);
     }
 }

@@ -1,9 +1,11 @@
 package com.dao;
 
+import com.entity.SchoolTremEntity;
 import com.entity.SchoolYearEntity;
+
 import java.util.List;
 
-public class SYDao extends Dao<SchoolYearEntity> {
+public class STDao extends Dao<SchoolTremEntity> {
     /**
      * 将传入的参数转换成hql delete删除语句并执行
      *
@@ -14,7 +16,7 @@ public class SYDao extends Dao<SchoolYearEntity> {
     public boolean delete(String id) {
         boolean result;
         StringBuilder hql = new StringBuilder();
-        hql.append("delete ").append(SchoolYearEntity.class.getName()).append(" where id=?0");
+        hql.append("delete ").append(SchoolTremEntity.class.getName()).append(" where id=?0");
         result = delete(hql.toString(),id);
         return result;
     }
@@ -25,10 +27,10 @@ public class SYDao extends Dao<SchoolYearEntity> {
      * @return 返回数据库中对应Entity的表中所有数据
      */
     @Override
-    public List<SchoolYearEntity> getList() {
-        List<SchoolYearEntity> list = null;
+    public List<SchoolTremEntity> getList() {
+        List<SchoolTremEntity> list = null;
         StringBuilder hql = new StringBuilder();
-        hql.append(" from ").append(SchoolYearEntity.class.getName());
+        hql.append(" from ").append(SchoolTremEntity.class.getName());
         try {
             list = getQuery(hql.toString());
         } catch (Exception e) {
@@ -45,14 +47,14 @@ public class SYDao extends Dao<SchoolYearEntity> {
      * @return 更新成功返回true，反之，返回false
      */
     @Override
-    public boolean update(String id, SchoolYearEntity data) {
+    public boolean update(String id, SchoolTremEntity data) {
         boolean result = false;
         StringBuilder hql = new StringBuilder();
-        hql.append("update ").append(SchoolYearEntity.class.getName()).append(" sy set sy.id=?0,sy.name=?1,")
-               .append("sy.begin=?2,sy.end=?3 where sy.id=?4");
+        hql.append("update ").append(SchoolTremEntity.class.getName()).append(" st set st.id=?0,st.name=?1,")
+                .append("st.begin=?2,st.end=?3,st.schoolYear=?4 where st.id=?5");
         System.out.println(hql.toString());
-        if(executeUpdate(hql.toString(),data.getId(),data.getName(),data.getBegin(),data.getEnd(),id) == 1){
-           result = true;
+        if(executeUpdate(hql.toString(),data.getId(),data.getName(),data.getBegin(),data.getEnd(),data.getSchoolYear(),id) == 1){
+            result = true;
         }
         return result;
     }
@@ -64,7 +66,7 @@ public class SYDao extends Dao<SchoolYearEntity> {
      * @return 成功返回true，否则返回false
      */
     @Override
-    public boolean insert(SchoolYearEntity data) {
+    public boolean insert(SchoolTremEntity data) {
         boolean result;
         try{
             save(data);
@@ -73,13 +75,5 @@ public class SYDao extends Dao<SchoolYearEntity> {
             result = false;
         }
         return result;
-    }
-
-    public List<Object[]> getIdAndName(){
-        List<Object[]> list = null;
-        StringBuilder hql = new StringBuilder();
-        hql.append("select id,name from ").append(SchoolYearEntity.class.getName());
-        list = getQuery(hql.toString());
-        return list;
     }
 }

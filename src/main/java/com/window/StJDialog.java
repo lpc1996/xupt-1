@@ -1,9 +1,9 @@
 package com.window;
 
 import com.DateChooser;
+import com.dao.STDao;
 import com.dao.SYDao;
-import com.entity.SchoolYearEntity;
-
+import com.entity.SchoolTremEntity;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -14,16 +14,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class SyJDialog extends Window<SchoolYearEntity> {
+public class StJDialog extends Window<SchoolTremEntity> {
 
-    private OperationPane<SchoolYearEntity> syOperation;
-    private Dimension operationSize;
+    private final OperationPane<SchoolTremEntity> stOperation;
+    private final Dimension operationSize;
 
-    public SyJDialog(){
-        super(new Dimension(600,500),"学年信息管理",false);
+    public StJDialog(){
+        super(new Dimension(600,500),"学期信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
-        syOperation = createOperation();
-        setOperationPane("学年信息",syOperation);
+        stOperation = createOperation();
+        setOperationPane("学期信息",stOperation);
 
         initData();
         createInsertAction();
@@ -31,46 +31,50 @@ public class SyJDialog extends Window<SchoolYearEntity> {
         createDeleteAction();
     }
 
-    protected OperationPane<SchoolYearEntity> createOperation() {
-        OperationPane<SchoolYearEntity> operation = new OperationPane<SchoolYearEntity>(operationSize) {
+    @Override
+    protected OperationPane<SchoolTremEntity> createOperation() {
+        OperationPane<SchoolTremEntity> operation = new OperationPane<SchoolTremEntity>(operationSize) {
+            private JComboBox<String> syBox;
             private JTextField endField;
             private JTextField beginField;
-            private JTextField idField;
             private JTextField nameField;
+            private JTextField idField;
 
             @Override
             public void InitData(String id) {
                 for(int i=0; i<list.size(); i++){
                     if(list.get(i).getId().equals(id)){
-                        SchoolYearEntity sy = list.get(i);
-                        idField.setText(sy.getId());
-                        nameField.setText(sy.getName());
-                        beginField.setText(sy.getBegin().toString());
-                        endField.setText(sy.getEnd().toString());
+                        SchoolTremEntity st = list.get(i);
+                        idField.setText(st.getId());
+                        nameField.setText(st.getName());
+                        syBox.setSelectedItem(equals(st.getSchoolYear(),syBox));
+                        beginField.setText(st.getBegin().toString());
+                        endField.setText(st.getEnd().toString());
                     }
                 }
             }
 
             @Override
-            public SchoolYearEntity getData() {
-                SchoolYearEntity sy = new SchoolYearEntity();
-                sy.setId(idField.getText());
-                sy.setName(nameField.getText());
+            public SchoolTremEntity getData() {
+                SchoolTremEntity st = new SchoolTremEntity();
+                st.setId(idField.getText());
+                st.setName(nameField.getText());
+                st.setSchoolYear(split(syBox.getSelectedItem().toString() ));
                 try {
-                    sy.setBegin(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(beginField.getText()).getTime() ));
-                    sy.setEnd(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(endField.getText()).getTime()));
+                    st.setBegin(new Date( new SimpleDateFormat("yyyy-MM-dd").parse(beginField.getText()).getTime()));
+                    st.setEnd(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(endField.getText()).getTime()));
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    JOptionPane.showMessageDialog(null,"请输入正确的日期！");
                     return null;
                 }
-                return sy;
+                return st;
             }
 
             @Override
             public void setNull() {
                 idField.setText(null);
                 nameField.setText(null);
+                syBox.setSelectedIndex(-1);
                 beginField.setText(null);
                 endField.setText(null);
             }
@@ -89,7 +93,12 @@ public class SyJDialog extends Window<SchoolYearEntity> {
                 nameField.setPreferredSize(fieldSize1);
                 add(nameLab);
                 add(nameField);
-                DateChooser dateChooser = DateChooser.getInstance("yyyy-MM-dd");
+                JLabel syLab = new JLabel("所属学年：");
+                syLab.setPreferredSize(labSize);
+                syBox = new JComboBox<String>();
+                syBox.setPreferredSize(fieldSize1);
+                add(syLab);
+                add(syBox);
                 JLabel beginLab = new JLabel("起始时间：");
                 beginLab.setPreferredSize(labSize);
                 beginField = new JTextField();
@@ -104,11 +113,16 @@ public class SyJDialog extends Window<SchoolYearEntity> {
                 DateChooser.getInstance("yyyy-MM-dd").register(endField);
                 add(endLab);
                 add(endField);
+
+                initBox();
             }
 
             @Override
             public void initBox() {
-
+                List<Object[]> list = new SYDao().getIdAndName();
+                for(int i=0; i<list.size(); i++){
+                    syBox.addItem(list.get(i)[0]+" "+list.get(i)[1]);
+                }
             }
         };
         return operation;
@@ -119,13 +133,13 @@ public class SyJDialog extends Window<SchoolYearEntity> {
         setInsertAction(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SchoolYearEntity sy = syOperation.getData();
-                if(sy.getId().length() == 0){
+                SchoolTremEntity st = stOperation.getData();
+                if(st.getId().length() == 0){
                     JOptionPane.showMessageDialog(null,"请输入要添加的信息！");
                     return;
                 }
-                SYDao syDao = new SYDao();
-                if(syDao.insert(sy)){
+                STDao stDao = new STDao();
+                if(stDao.save(st)){
                     JOptionPane.showMessageDialog(null,"添加成功");
                 }else{
                     JOptionPane.showMessageDialog(null,"添加失败");
@@ -146,9 +160,9 @@ public class SyJDialog extends Window<SchoolYearEntity> {
                     return;
                 }
                 String id = getValueAt(index)+"";
-                SchoolYearEntity sy = syOperation.getData();
-                SYDao syDao = new SYDao();
-                if(syDao.update(id,sy)){
+                SchoolTremEntity st = stOperation.getData();
+                STDao stDao = new STDao();
+                if(stDao.update(id,st)){
                     JOptionPane.showMessageDialog(null,"修改成功");
 
                 }else{
@@ -170,11 +184,11 @@ public class SyJDialog extends Window<SchoolYearEntity> {
                     return;
                 }
                 String id = getValueAt(index)+"";
-                SYDao syDao = new SYDao();
-                if(syDao.delete(id)){
-                    JOptionPane.showMessageDialog(null,"修改成功");
+                STDao stDao = new STDao();
+                if(stDao.delete(id)){
+                    JOptionPane.showMessageDialog(null,"删除成功");
                 }else{
-                    JOptionPane.showMessageDialog(null,"修改失败");
+                    JOptionPane.showMessageDialog(null,"删除失败");
                 }
                 reload();
             }
@@ -183,10 +197,10 @@ public class SyJDialog extends Window<SchoolYearEntity> {
 
     @Override
     protected void initData() {
-        SYDao syDao = new SYDao();
-        List<SchoolYearEntity> list = syDao.getList();
-        syOperation.setList(list);
-        String[] title = {"学年编号"};
+        STDao stDao = new STDao();
+        List<SchoolTremEntity> list = stDao.getList();
+        stOperation.setList(list);
+        String[] title = {"学期编号"};
         DefaultTableModel model = new DefaultTableModel(title,list.size());
         for(int i=0; i<list.size(); i++){
             model.setValueAt(list.get(i).getId(),i,0);
@@ -197,7 +211,8 @@ public class SyJDialog extends Window<SchoolYearEntity> {
     @Override
     protected void reload() {
         initData();
-        syOperation.setNull();
+        stOperation.initBox();
+        stOperation.setNull();
         repaint();
     }
 }

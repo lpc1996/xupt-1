@@ -44,7 +44,7 @@ abstract class OperationPane<T> extends JPanel{
     protected String equals(String string,JComboBox<String> box){
         String item = "";
         for(int i=0; i <box.getItemCount(); i++){
-            item = box.getItemAt(i)+"";
+            item = box.getItemAt(i);
             if(item.split(" ")[0].equals(string)){
                 return box.getItemAt(i);
             }

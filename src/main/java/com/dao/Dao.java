@@ -51,19 +51,21 @@ public abstract class Dao<Entity> {
         return list;
     }
 
-    protected void save(Entity data){
+    public boolean save(Entity data){
+        boolean result = false;
         Session session = getSession();
         Transaction t = session.getTransaction();
         try {
             session.save(data);
             t.commit();
+            result = true;
         } catch (Exception e) {
             e.printStackTrace();
             rollback(t);
         } finally {
             closeSession(session);
         }
-
+        return result;
     }
 
     /**
