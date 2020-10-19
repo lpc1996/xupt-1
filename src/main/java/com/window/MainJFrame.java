@@ -20,6 +20,7 @@ public class MainJFrame extends JFrame {
     private MajorJDialog majorJDialog;
     private SyJDialog syJDialog;
     private StJDialog stJDialog;
+    private CourseJDialog courseJDialog;
 
     public MainJFrame() {
         setTitle("教务管理系统");
@@ -118,6 +119,7 @@ public class MainJFrame extends JFrame {
         EAMJMenu.add(createMajorItem());
         EAMJMenu.add(createSYItem());
         EAMJMenu.add(createSTItem());
+        EAMJMenu.add(createCourseItem());
 
         return EAMJMenu;
     }
@@ -223,6 +225,21 @@ public class MainJFrame extends JFrame {
                 }
                 stJDialog.repaint();
                 stJDialog.setVisible(true);
+            }
+        });
+        return item;
+    }
+
+    private JMenuItem createCourseItem(){
+        JMenuItem item = new JMenuItem("课程信息管理");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(courseJDialog == null || !courseJDialog.isDisplayable()) {
+                    courseJDialog = new CourseJDialog();
+                }
+                courseJDialog.repaint();
+                courseJDialog.setVisible(true);
             }
         });
         return item;

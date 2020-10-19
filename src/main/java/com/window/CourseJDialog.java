@@ -1,38 +1,39 @@
 package com.window;
 
 import com.dao.CollegeDao;
+import com.dao.CourseDao;
 import com.dao.DepartmentDao;
-import com.dao.MajorDao;
-import com.entity.MajorEntity;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import com.entity.CourseEntity;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
-public class MajorJDialog extends Window<MajorEntity> {
+public class CourseJDialog extends Window<CourseEntity> {
 
-    private OperationPane<MajorEntity> majorOperation;
-    private List<MajorEntity> majorList;
-    private Dimension operationSize;
+    private final Dimension operationSize;
+    private final OperationPane<CourseEntity> courseOperation;
 
-    public MajorJDialog(){
-        super(new Dimension(600,500),"专业信息管理",false);
+    public CourseJDialog(){
+        super(new Dimension(600,500),"课程信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
-        majorOperation = createOperation();
-        setOperationPane("专业信息",majorOperation);
+        courseOperation = createOperation();
+        setOperationPane("课程信息",courseOperation);
 
         initData();
         createInsertAction();
         createUpdateAction();
         createDeleteAction();
     }
-
-    protected OperationPane<MajorEntity> createOperation() {
-        OperationPane<MajorEntity> majorOperation = new OperationPane<MajorEntity>(operationSize) {
+    @Override
+    protected OperationPane<CourseEntity> createOperation() {
+        OperationPane<CourseEntity> operation = new OperationPane<CourseEntity>(operationSize) {
             private JComboBox<String> departmentBox;
             private JComboBox<String> collegeBox;
+            private JTextField creditField;
+            private JComboBox<String> typeBox;
             private JTextField nameField;
             private JTextField idField;
 
@@ -40,23 +41,33 @@ public class MajorJDialog extends Window<MajorEntity> {
             public void InitData(String id) {
                 for(int i=0; i<list.size(); i++){
                     if(list.get(i).getId().equals(id)){
-                        MajorEntity major = list.get(i);
-                        idField.setText(major.getId());
-                        nameField.setText(major.getName());
-                        collegeBox.setSelectedItem(equals(major.getCollegeId(),collegeBox));
-                        departmentBox.setSelectedItem(equals(major.getDepartmentId(),departmentBox));
+                        CourseEntity course = list.get(i);
+                        idField.setText(course.getId());
+                        nameField.setText(course.getName());
+                        collegeBox.setSelectedItem(equals(course.getCollegeId(),collegeBox));
+                        departmentBox.setSelectedItem(equals(course.getDepartmentId(),departmentBox));
+                        typeBox.setSelectedItem(course.getType());
+                        creditField.setText(course.getCredit()+"");
                     }
                 }
             }
 
             @Override
-            public MajorEntity getData() {
-                MajorEntity major = new MajorEntity();
-                major.setId(idField.getText());
-                major.setName(nameField.getText());
-                major.setCollegeId(split(collegeBox.getSelectedItem()+""));
-                major.setDepartmentId(split(departmentBox.getSelectedItem()+""));
-                return major;
+            public CourseEntity getData() {
+                CourseEntity course = new CourseEntity();
+                course.setId(idField.getText());
+                course.setName(nameField.getText());
+                course.setCollegeId(split(collegeBox.getSelectedItem().toString()));
+                course.setDepartmentId(split(departmentBox.getSelectedItem().toString()));
+                course.setType(typeBox.getSelectedItem().toString());
+                try {
+                    course.setCredit(Double.parseDouble(creditField.getText()));
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null,"请输入正确的学分！");
+                    course = null;
+                }
+                return course;
             }
 
             @Override
@@ -65,34 +76,48 @@ public class MajorJDialog extends Window<MajorEntity> {
                 nameField.setText(null);
                 collegeBox.setSelectedIndex(-1);
                 departmentBox.setSelectedIndex(-1);
+                typeBox.setSelectedIndex(-1);
+                creditField.setText(null);
             }
 
             @Override
             protected void InitPane() {
-                JLabel idLab = new JLabel("专业编号:");
-                idLab.setPreferredSize(labSize);
+                JLabel idlab = new JLabel("课程编号：");
+                idlab.setPreferredSize(labSize);
                 idField = new JTextField();
                 idField.setPreferredSize(fieldSize1);
-                add(idLab);
+                add(idlab);
                 add(idField);
-                JLabel nameLab = new JLabel("专业名称：");
+                JLabel nameLab = new JLabel("课程名称：");
                 nameLab.setPreferredSize(labSize);
                 nameField = new JTextField();
                 nameField.setPreferredSize(fieldSize1);
                 add(nameLab);
                 add(nameField);
-                JLabel collegeLab = new JLabel("所属学院：");
+                JLabel collegeLab = new JLabel("开课学院：");
                 collegeLab.setPreferredSize(labSize);
                 collegeBox = new JComboBox<String>();
                 collegeBox.setPreferredSize(fieldSize1);
                 add(collegeLab);
                 add(collegeBox);
-                JLabel departmentLab = new JLabel("所属系/部：");
+                JLabel departmentLab = new JLabel("所属系/部:");
                 departmentLab.setPreferredSize(labSize);
                 departmentBox = new JComboBox<String>();
                 departmentBox.setPreferredSize(fieldSize1);
                 add(departmentLab);
                 add(departmentBox);
+                JLabel typeLab = new JLabel("课程性质：");
+                typeLab.setPreferredSize(labSize);
+                typeBox = new JComboBox<String>();
+                typeBox.setPreferredSize(fieldSize1);
+                add(typeLab);
+                add(typeBox);
+                JLabel creditLab = new JLabel("学分：");
+                creditLab.setPreferredSize(labSize);
+                creditField = new JTextField();
+                creditField.setPreferredSize(fieldSize1);
+                add(creditLab);
+                add(creditField);
 
                 initBox();
             }
@@ -100,7 +125,6 @@ public class MajorJDialog extends Window<MajorEntity> {
             @Override
             public void initBox() {
                 List<Object[]> list = new CollegeDao().getIdAndName();
-                collegeBox.removeAllItems();
                 for(int i=0; i<list.size(); i++){
                     collegeBox.addItem(list.get(i)[0]+" "+list.get(i)[1]);
                 }
@@ -108,9 +132,12 @@ public class MajorJDialog extends Window<MajorEntity> {
                 for(int i=0; i<list.size(); i++){
                     departmentBox.addItem(list.get(i)[0]+" "+list.get(i)[1]);
                 }
+
+                typeBox.addItem("必修课");
+                typeBox.addItem("选修课");
             }
         };
-        return majorOperation;
+        return operation;
     }
 
     @Override
@@ -118,13 +145,13 @@ public class MajorJDialog extends Window<MajorEntity> {
         setInsertAction(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MajorEntity major = majorOperation.getData();
-                if(major.getId().length() == 0){
+                CourseEntity course = courseOperation.getData();
+                if(course.getId().length() == 0){
                     JOptionPane.showMessageDialog(null,"请输入要添加的信息！");
                     return;
                 }
-                MajorDao majorDao = new MajorDao();
-                if(majorDao.insert(major)){
+                CourseDao courseDao = new CourseDao();
+                if(courseDao.save(course)){
                     JOptionPane.showMessageDialog(null,"添加成功");
                 }else{
                     JOptionPane.showMessageDialog(null,"添加失败");
@@ -146,9 +173,9 @@ public class MajorJDialog extends Window<MajorEntity> {
                     return;
                 }
                 String id = getValueAt(index)+"";
-                MajorEntity major = majorOperation.getData();
-                MajorDao majorDao = new MajorDao();
-                if(majorDao.update(id,major)){
+                CourseEntity course = courseOperation.getData();
+                CourseDao courseDao = new CourseDao();
+                if(courseDao.update(id,course)){
                     JOptionPane.showMessageDialog(null,"修改成功");
 
                 }else{
@@ -170,8 +197,8 @@ public class MajorJDialog extends Window<MajorEntity> {
                     return;
                 }
                 String id = getValueAt(index)+"";
-                MajorDao majorDao = new MajorDao();
-                if(majorDao.delete(id)){
+                CourseDao courseDao = new CourseDao();
+                if(courseDao.delete(id)){
                     JOptionPane.showMessageDialog(null,"修改成功");
 
                 }else{
@@ -184,13 +211,12 @@ public class MajorJDialog extends Window<MajorEntity> {
 
     @Override
     protected void initData() {
-        MajorDao majorDao = new MajorDao();
-        majorList = majorDao.getList();
-        majorOperation.setList(majorList);
-        String[] title = {"专业编号"};
-        DefaultTableModel model = new DefaultTableModel(title,majorList.size());
-        for(int i=0; i<majorList.size(); i++){
-            model.setValueAt(majorList.get(i).getId(),i,0);
+        List<CourseEntity> list = new CourseDao().getList();
+        courseOperation.setList(list);
+        String[] title = {"课程编号："};
+        DefaultTableModel model = new DefaultTableModel(title,list.size());
+        for(int i=0; i<list.size(); i++){
+            model.setValueAt(list.get(i).getId(),i,0);
         }
         setTableModel(model);
     }
@@ -198,8 +224,7 @@ public class MajorJDialog extends Window<MajorEntity> {
     @Override
     protected void reload() {
         initData();
-        majorOperation.initBox();
-        majorOperation.setNull();
+        courseOperation.setNull();
         repaint();
     }
 }
