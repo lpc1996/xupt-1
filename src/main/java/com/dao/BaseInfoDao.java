@@ -1,6 +1,7 @@
 package com.dao;
 
 import com.entity.BaseInfoEntity;
+import com.entity.CollegeEntity;
 import org.hibernate.HibernateError;
 import java.util.List;
 
@@ -112,6 +113,15 @@ public class BaseInfoDao extends Dao<BaseInfoEntity>{
             result = false;
         }
         return result;
+    }
+
+    public List<Object[]> getIdAndName(String type){
+        List<Object[]> list = null;
+        StringBuilder hql = new StringBuilder();
+        hql.append("select uId,uName from ").append(BaseInfoEntity.class.getName())
+        .append(" where uType=?0");
+        list = getQuery(hql.toString(),type);
+        return list;
     }
 
     public static void main(String[] argv){

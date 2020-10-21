@@ -22,8 +22,8 @@ abstract class OperationPane<T> extends JPanel{
         setList(list);
 
         labSize = new Dimension(120,35);
-        fieldSize = new Dimension(getWidth()/2-120,35);
-        fieldSize1 = new Dimension(getWidth()-labSize.width,35);
+        fieldSize = new Dimension(getWidth()/2-labSize.width-10,35);
+        fieldSize1 = new Dimension(getWidth()-labSize.width-10,35);
 
         InitPane();
         setNull();

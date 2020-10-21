@@ -1,6 +1,5 @@
 package com.window;
 
-import com.dao.BaseInfoDao;
 import com.entity.BaseInfoEntity;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -9,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 
 /**
  * @author 濃霧-遠方
@@ -59,7 +57,6 @@ public abstract class Window <T> extends JFrame {
         showPane.add(dataPane);
 
         contentPane.add(showPane);
-
         contentPane.add(createBtnPane());
 
         return contentPane;
@@ -67,7 +64,7 @@ public abstract class Window <T> extends JFrame {
 
     private JScrollPane createIdTable(){
         JScrollPane js = new JScrollPane();
-        js.setPreferredSize(new Dimension(100,getHeight()-140));
+        js.setPreferredSize(new Dimension(120,getHeight()-140));
         idTable = new JTable();
         idTable.addMouseListener(createJTableAction());
         js.setViewportView(idTable);
@@ -76,7 +73,7 @@ public abstract class Window <T> extends JFrame {
 
     private JTabbedPane createdataPane(){
         JTabbedPane dataPane = new JTabbedPane(JTabbedPane.TOP);
-        dataPane.setPreferredSize(new Dimension(getWidth()-150,getHeight()-140));
+        dataPane.setPreferredSize(new Dimension(getWidth()-170,getHeight()-140));
 
         return dataPane;
     }
