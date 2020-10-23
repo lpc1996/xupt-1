@@ -82,7 +82,7 @@ public class CourseJDialog extends Window<CourseEntity> {
 
             @Override
             protected void InitPane() {
-                JLabel idlab = new JLabel("课程编号：");
+                JLabel idlab = new JLabel("课程代码：");
                 idlab.setPreferredSize(labSize);
                 idField = new JTextField();
                 idField.setPreferredSize(fieldSize1);
@@ -213,7 +213,7 @@ public class CourseJDialog extends Window<CourseEntity> {
     protected void initData() {
         List<CourseEntity> list = new CourseDao().getList();
         courseOperation.setList(list);
-        String[] title = {"课程编号："};
+        String[] title = {"课程代码："};
         DefaultTableModel model = new DefaultTableModel(title,list.size());
         for(int i=0; i<list.size(); i++){
             model.setValueAt(list.get(i).getId(),i,0);

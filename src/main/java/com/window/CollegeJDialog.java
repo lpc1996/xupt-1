@@ -60,13 +60,14 @@ public class CollegeJDialog extends Window<CollegeEntity> {
 
             @Override
             protected void InitPane() {
-                JLabel idLab = new JLabel("学院编号：");
+                List<String> list = new CollegeDao().getComments();
+                JLabel idLab = new JLabel(list.get(0)+"：");
                 idLab.setPreferredSize(labSize);
                 idField = new JTextField();
                 idField.setPreferredSize(fieldSize1);
                 add(idLab);
                 add(idField);
-                JLabel nameLab = new JLabel("学院名称：");
+                JLabel nameLab = new JLabel(list.get(1)+"：");
                 nameLab.setPreferredSize(labSize);
                 nameField = new JTextField();
                 nameField.setPreferredSize(fieldSize1);
@@ -160,7 +161,7 @@ public class CollegeJDialog extends Window<CollegeEntity> {
         CollegeDao collegeDao = new CollegeDao();
         collegeList = collegeDao.getList();
         collegeOperation.setList(collegeList);
-        String[] title = {"学院编号"};
+        String[] title = {collegeDao.getComments().get(0)};
         DefaultTableModel model = new DefaultTableModel(title,collegeList.size());
         for(int i=0; i<collegeList.size(); i++){
             model.setValueAt(collegeList.get(i).getId(),i,0);

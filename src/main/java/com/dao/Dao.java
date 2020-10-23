@@ -5,6 +5,8 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+
 import java.util.List;
 
 /**
@@ -130,6 +132,25 @@ public abstract class Dao<Entity> {
             closeSession(session);
         }
         return result;
+    }
+
+    public List<String> getComments(String tableName){
+        StringBuilder hql = new StringBuilder();
+        hql.append("select column_comment from INFORMATION_SCHEMA.COLUMNS WHERE table_name=?0")
+                .append(" AND table_schema = 'xupt'");
+        Session session = getSession();
+        List<String> comments = null;
+        try{
+            Query query = session.createSQLQuery(hql.toString())
+                    .addScalar("column_comment", StringType.INSTANCE);
+            query.setParameter(0,tableName);
+            comments = query.getResultList();
+        }catch (QueryException e){
+            e.printStackTrace();
+        }finally {
+            closeSession(session);
+        }
+        return comments;
     }
 
     private void rollback(Transaction t){

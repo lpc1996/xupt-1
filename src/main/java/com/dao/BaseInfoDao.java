@@ -124,8 +124,17 @@ public class BaseInfoDao extends Dao<BaseInfoEntity>{
         return list;
     }
 
+    public List<String> getComments(){
+        List<String> list = getComments("base_info");
+        return list;
+    }
+
     public static void main(String[] argv){
         BaseInfoDao baseInfoDao = new BaseInfoDao();
-        System.out.println(baseInfoDao.getList("student").size());
+        List list = baseInfoDao.getComments();
+        for(int i=0; i<list.size(); i++){
+            System.out.println(list.get(i));
+            System.out.println(list.get(i) instanceof String);
+        }
     }
 }

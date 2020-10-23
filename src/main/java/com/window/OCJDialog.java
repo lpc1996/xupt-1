@@ -19,10 +19,10 @@ public class OCJDialog extends Window<OfferingCoursesEntity> {
     private final OperationPane<OfferingCoursesEntity> ocOperation;
 
     public OCJDialog(){
-        super(new Dimension(800,500),"课程信息管理",false);
+        super(new Dimension(800,500),"教学班信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
         ocOperation = createOperation();
-        setOperationPane("课程信息",ocOperation);
+        setOperationPane("教学班信息",ocOperation);
 
         initData();
         createInsertAction();
@@ -98,13 +98,13 @@ public class OCJDialog extends Window<OfferingCoursesEntity> {
 
             @Override
             protected void InitPane() {
-                JLabel idLab = new JLabel("课程班编号：");
+                JLabel idLab = new JLabel("教学班代码：");
                 idLab.setPreferredSize(labSize);
                 idField = new JTextField();
                 idField.setPreferredSize(fieldSize1);
                 add(idLab);
                 add(idField);
-                JLabel courseIdLab = new JLabel("课程编号：");
+                JLabel courseIdLab = new JLabel("课程代码：");
                 courseIdLab.setPreferredSize(labSize);
                 courseIdBox = new JComboBox<String>();
                 courseIdBox.setPreferredSize(fieldSize1);
@@ -271,6 +271,7 @@ public class OCJDialog extends Window<OfferingCoursesEntity> {
         initData();
         ocOperation.initBox();
         ocOperation.setNull();
+        repaint();
     }
 
     public static void main(String[] argv){
