@@ -66,6 +66,17 @@ public class OCDao extends Dao<OfferingCoursesEntity> {
         return false;
     }
 
+    /**
+     * 获取数据库表中所有字段注释
+     *
+     * @return 返回一个字符串链表
+     */
+    @Override
+    public List<String> getComments() {
+        List<String> list = getComments("offering_courses");
+        return list;
+    }
+
     public List<Object[]> getIdAndName(){
         List<Object[]> list = null;
         StringBuilder hql = new StringBuilder();

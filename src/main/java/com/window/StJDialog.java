@@ -23,9 +23,10 @@ public class StJDialog extends Window<SchoolTremEntity> {
         super(new Dimension(600,500),"学期信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
         stOperation = createOperation();
+        initData();
+        stOperation.InitPane();
         setOperationPane("学期信息",stOperation);
 
-        initData();
         createInsertAction();
         createUpdateAction();
         createDeleteAction();
@@ -81,37 +82,38 @@ public class StJDialog extends Window<SchoolTremEntity> {
 
             @Override
             protected void InitPane() {
+                createJLabel(comments.size());
                 JLabel idLab = new JLabel("学年编号：");
                 idLab.setPreferredSize(labSize);
                 idField = new JTextField();
                 idField.setPreferredSize(fieldSize1);
-                add(idLab);
+                add(labList.get(0));
                 add(idField);
                 JLabel nameLab = new JLabel("学年名称：");
                 nameLab.setPreferredSize(labSize);
                 nameField = new JTextField();
                 nameField.setPreferredSize(fieldSize1);
-                add(nameLab);
+                add(labList.get(1));
                 add(nameField);
                 JLabel syLab = new JLabel("所属学年：");
                 syLab.setPreferredSize(labSize);
                 syBox = new JComboBox<String>();
                 syBox.setPreferredSize(fieldSize1);
-                add(syLab);
+                add(labList.get(2));
                 add(syBox);
                 JLabel beginLab = new JLabel("起始时间：");
                 beginLab.setPreferredSize(labSize);
                 beginField = new JTextField();
                 beginField.setPreferredSize(fieldSize1);
                 DateChooser.getInstance("yyyy-MM-dd").register(beginField);
-                add(beginLab);
+                add(labList.get(3));
                 add(beginField);
                 JLabel endLab = new JLabel("结束时间：");
                 endLab.setPreferredSize(labSize);
                 endField = new JTextField();
                 endField.setPreferredSize(fieldSize1);
                 DateChooser.getInstance("yyyy-MM-dd").register(endField);
-                add(endLab);
+                add(labList.get(4));
                 add(endField);
 
                 initBox();
@@ -119,10 +121,16 @@ public class StJDialog extends Window<SchoolTremEntity> {
 
             @Override
             public void initBox() {
+                for(int i=0; i<labList.size(); i++){
+                    labList.get(i).setText(comments.get(i)+"：");
+                }
                 List<Object[]> list = new SYDao().getIdAndName();
+                syBox.removeAllItems();
                 for(int i=0; i<list.size(); i++){
                     syBox.addItem(list.get(i)[0]+" "+list.get(i)[1]);
                 }
+
+                setNull();
             }
         };
         return operation;
@@ -199,8 +207,9 @@ public class StJDialog extends Window<SchoolTremEntity> {
     protected void initData() {
         STDao stDao = new STDao();
         List<SchoolTremEntity> list = stDao.getList();
-        stOperation.setList(list);
-        String[] title = {"学期编号"};
+        List<String> comments = stDao.getComments();
+        stOperation.setList(list,comments);
+        String[] title = {comments.get(0)};
         DefaultTableModel model = new DefaultTableModel(title,list.size());
         for(int i=0; i<list.size(); i++){
             model.setValueAt(list.get(i).getId(),i,0);
@@ -212,7 +221,6 @@ public class StJDialog extends Window<SchoolTremEntity> {
     protected void reload() {
         initData();
         stOperation.initBox();
-        stOperation.setNull();
         repaint();
     }
 }

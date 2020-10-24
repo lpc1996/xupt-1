@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 濃霧-遠方
@@ -234,6 +236,7 @@ public abstract class Window <T> extends JFrame {
     protected OperationPane<BaseInfoEntity> createBaseInfoOpeartion(Dimension size){
         OperationPane<BaseInfoEntity> baseInfoEntity = new OperationPane<BaseInfoEntity>(size) {
 
+            private List<JLabel> labList;
             private JComboBox<String> uTypeBox;
             private JTextField telField;
             private JTextField idCardNumField;
@@ -244,7 +247,6 @@ public abstract class Window <T> extends JFrame {
             private JTextField formarNameField;
             private JTextField nameField;
             private JTextField idField;
-
 
             @Override
             public void InitData(String id) {
@@ -304,83 +306,78 @@ public abstract class Window <T> extends JFrame {
 
             @Override
             protected void InitPane() {
-                JLabel idLab = new JLabel("学/工号*：");
-                idLab.setPreferredSize(labSize);
+                labList = new ArrayList<JLabel>();
+                for(int i=0; i<comments.size()-1; i++){
+                    JLabel jLabel = new JLabel();
+                    jLabel.setPreferredSize(labSize);
+                    labList.add(jLabel);
+                }
                 idField = new JTextField();
                 idField.setPreferredSize(fieldSize);
-                add(idLab);
+                add(labList.get(0));
                 add(idField);
-                JLabel nameLab = new JLabel("姓名*：");
-                nameLab.setPreferredSize(labSize);
                 nameField = new JTextField();
                 nameField.setPreferredSize(fieldSize);
-                add(nameLab);
+                add(labList.get(1));
                 add(nameField);
-                JLabel formarNameLab = new JLabel("曾用名：");
-                formarNameLab.setPreferredSize(labSize);
                 formarNameField = new JTextField();
                 formarNameField.setPreferredSize(fieldSize);
-                add(formarNameLab);
+                add(labList.get(2));
                 add(formarNameField);
-                JLabel sexLab = new JLabel("性别*：");
-                sexLab.setPreferredSize(labSize);
                 sexBox = new JComboBox();
                 sexBox.setPreferredSize(fieldSize);
-                add(sexLab);
+                add(labList.get(3));
                 add(sexBox);
-                JLabel ageLab = new JLabel("年龄：");
-                ageLab.setPreferredSize(labSize);
                 ageField = new JTextField();
                 ageField.setPreferredSize(fieldSize);
-                add(ageLab);
+                add(labList.get(4));
                 add(ageField);
-                JLabel nativePlaceLab = new JLabel("籍贯*：");
-                nativePlaceLab.setPreferredSize(labSize);
                 nativePlaceField = new JTextField();
                 nativePlaceField.setPreferredSize(fieldSize);
-                add(nativePlaceLab);
+                add(labList.get(5));
                 add(nativePlaceField);
-                JLabel idCardTypeLab = new JLabel("证件类型*：");
-                idCardTypeLab.setPreferredSize(labSize);
                 idCardTypeBox = new JComboBox();
                 idCardTypeBox.setPreferredSize(fieldSize);;
-                add(idCardTypeLab);
+                add(labList.get(6));
                 add(idCardTypeBox);
-                JLabel idCardNumLab = new JLabel("证件号码*：");
-                idCardNumLab.setPreferredSize(labSize);
                 idCardNumField = new JTextField();
                 idCardNumField.setPreferredSize(fieldSize);
-                add(idCardNumLab);
+                add(labList.get(7));
                 add(idCardNumField);
-                JLabel uTypeLab = new JLabel("用户类型*：");
-                uTypeLab.setPreferredSize(labSize);
                 uTypeBox = new JComboBox<String>();
                 uTypeBox.setPreferredSize(fieldSize);
-                add(uTypeLab);
+                add(labList.get(8));
                 add(uTypeBox);
-                JLabel telLab = new JLabel("电话号码：");
-                telLab.setPreferredSize(labSize);
                 telField = new JTextField();
                 telField.setPreferredSize(fieldSize);
-                add(telLab);
+                add(labList.get(9));
                 add(telField);
 
                 initBox();
             }
 
             public void initBox(){
+
+                for(int i=0; i<labList.size(); i++){
+                    labList.get(i).setText(comments.get(i+1)+"：");
+                }
+                sexBox.removeAllItems();
                 sexBox.addItem("男");
                 sexBox.addItem("女");
                 sexBox.addItem("保密");
 
+                idCardTypeBox.removeAllItems();
                 idCardTypeBox.addItem("居民身份证");
                 idCardTypeBox.addItem("中华人民共和国护照");
 
+                uTypeBox.removeAllItems();
                 uTypeBox.addItem("student");
                 uTypeBox.addItem("teacher");
                 uTypeBox.addItem("admin");
 
+                setNull();
             }
+
         };
         return baseInfoEntity;
     }

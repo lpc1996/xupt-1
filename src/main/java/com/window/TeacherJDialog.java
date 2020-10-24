@@ -4,7 +4,6 @@ import com.DateChooser;
 import com.dao.*;
 import com.entity.BaseInfoEntity;
 import com.entity.CollegeEntity;
-import com.entity.StudentEntity;
 import com.entity.TeacherEntity;
 
 import javax.swing.*;
@@ -15,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeacherJDialog extends Window<TeacherEntity> {
@@ -28,9 +28,14 @@ public class TeacherJDialog extends Window<TeacherEntity> {
     public TeacherJDialog() {
         super(new Dimension(1000,500),"教职工信息管理",true);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
+
         baseInfoOperation = createBaseInfoOpeartion(operationSize);
         teacherOperation = createOperation();
         initData();
+//        baseInfoOperation.setList(baseInfoList,);
+        baseInfoOperation.InitPane();
+        teacherOperation.InitPane();
+//        reload();
         setOperationPane("基础信息",baseInfoOperation);
         setOperationPane("职务信息",teacherOperation);
 
@@ -118,10 +123,11 @@ public class TeacherJDialog extends Window<TeacherEntity> {
         TeacherDao teacherDao = new TeacherDao();
         baseInfoList = baseInfoDao.getList("teacher");
         teacherList = teacherDao.getList();
-        baseInfoOperation.setList(baseInfoList);
-        teacherOperation.setList(teacherList);
-        String[] title = new String[1];
-        title[0] = "工号";
+        List<String> baseComments = baseInfoDao.getComments();
+        List<String> teacherComments = teacherDao.getComments();
+        baseInfoOperation.setList(baseInfoList,baseComments);
+        teacherOperation.setList(teacherList,teacherComments);
+        String[] title = {baseComments.get(1)};
         DefaultTableModel model = new DefaultTableModel(title,teacherList.size());
         for(int i=0; i<teacherList.size(); i++){
             model.setValueAt(teacherList.get(i).getId()+"",i,0);
@@ -133,8 +139,6 @@ public class TeacherJDialog extends Window<TeacherEntity> {
         initData();
         baseInfoOperation.initBox();
         teacherOperation.initBox();
-        baseInfoOperation.setNull();
-        teacherOperation.setNull();
 
         repaint();
     }
@@ -188,45 +192,38 @@ public class TeacherJDialog extends Window<TeacherEntity> {
 
             @Override
             protected void InitPane() {
-                JLabel collegeLab = new JLabel("所属学院*：");
-                collegeLab.setPreferredSize(labSize);
+                createJLabel(comments.size()-1);
                 collegeBox = new JComboBox<String>();
-                collegeBox.setPreferredSize(fieldSize);
-                add(collegeLab);
+                collegeBox.setPreferredSize(fieldSize1);
+                add(labList.get(0));
                 add(collegeBox);
-                JLabel departmentLab = new JLabel("所属系/部*：");
-                departmentLab.setPreferredSize(labSize);
                 departmentBox = new JComboBox<String>();
-                departmentBox.setPreferredSize(fieldSize);
-                add(departmentLab);
+                departmentBox.setPreferredSize(fieldSize1);
+                add(labList.get(1));
                 add(departmentBox);
-                JLabel levelLab = new JLabel("职称*：");
-                levelLab.setPreferredSize(labSize);
                 levelBox = new JComboBox<String>();
-                levelBox.setPreferredSize(fieldSize);
-                add(levelLab);
+                levelBox.setPreferredSize(fieldSize1);
+                add(labList.get(2));
                 add(levelBox);
-                JLabel educationLab = new JLabel("学历*：");
-                educationLab.setPreferredSize(labSize);
                 educationBox = new JComboBox<String>();
-                educationBox.setPreferredSize(fieldSize);
-                add(educationLab);
+                educationBox.setPreferredSize(fieldSize1);
+                add(labList.get(3));
                 add(educationBox);
-                JLabel yearLab = new JLabel("入职时间");
-                yearLab.setPreferredSize(labSize);
                 yearField = new JTextField();
                 DateChooser dateChooser = DateChooser.getInstance("yyyy-MM-dd");
                 dateChooser.register(yearField);
-                yearField.setPreferredSize(fieldSize);
-                add(yearLab);
+                yearField.setPreferredSize(fieldSize1);
+                add(labList.get(4));
                 add(yearField);
 
                 initBox();
             }
             public void initBox(){
-                List list = null;
+                for(int i=0; i<labList.size(); i++){
+                    labList.get(i).setText(comments.get(i+1)+"：");
+                }
                 collegeBox.removeAllItems();
-                list = new CollegeDao().getList();
+                List list = new CollegeDao().getList();
                 for(int i=0; i<list.size(); i++){
                     CollegeEntity collegeEntity = (CollegeEntity) list.get(i);
                     collegeBox.addItem(collegeEntity.getId()+" "+collegeEntity.getName());
@@ -238,15 +235,19 @@ public class TeacherJDialog extends Window<TeacherEntity> {
                     departmentBox.addItem(departmentEntity[0]+" "+departmentEntity[1]);
                 }
 
+                levelBox.removeAllItems();
                 levelBox.addItem("助教");
                 levelBox.addItem("讲师");
                 levelBox.addItem("副教授");
                 levelBox.addItem("教授");
 
+                educationBox.removeAllItems();
                 educationBox.addItem("专科");
                 educationBox.addItem("本科");
                 educationBox.addItem("硕士");
                 educationBox.addItem("博士");
+
+                setNull();
             }
         };
         return teacherOperation;

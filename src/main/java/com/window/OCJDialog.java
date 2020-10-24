@@ -22,9 +22,10 @@ public class OCJDialog extends Window<OfferingCoursesEntity> {
         super(new Dimension(800,500),"教学班信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
         ocOperation = createOperation();
+        initData();
+        ocOperation.InitPane();
         setOperationPane("教学班信息",ocOperation);
 
-        initData();
         createInsertAction();
         createUpdateAction();
         createDeleteAction();
@@ -98,54 +99,39 @@ public class OCJDialog extends Window<OfferingCoursesEntity> {
 
             @Override
             protected void InitPane() {
-                JLabel idLab = new JLabel("教学班代码：");
-                idLab.setPreferredSize(labSize);
+                createJLabel(comments.size());
                 idField = new JTextField();
                 idField.setPreferredSize(fieldSize1);
-                add(idLab);
+                add(labList.get(0));
                 add(idField);
-                JLabel courseIdLab = new JLabel("课程代码：");
-                courseIdLab.setPreferredSize(labSize);
                 courseIdBox = new JComboBox<String>();
                 courseIdBox.setPreferredSize(fieldSize1);
-                add(courseIdLab);
+                add(labList.get(1));
                 add(courseIdBox);
-                JLabel teacherIdLab = new JLabel("任课教师工号：");
-                teacherIdLab.setPreferredSize(labSize);
                 teacherIdBox = new JComboBox<String>();
                 teacherIdBox.setPreferredSize(fieldSize1);
-                add(teacherIdLab);
+                add(labList.get(2));
                 add(teacherIdBox);
-                JLabel beginLab = new JLabel("开课时间：");
-                beginLab.setPreferredSize(labSize);
                 beginField = new JTextField();
                 DateChooser.getInstance("yyyy-MM-dd").register(beginField);
                 beginField.setPreferredSize(fieldSize1);
-                add(beginLab);
+                add(labList.get(3));
                 add(beginField);
-                JLabel syLab = new JLabel("开课学年：");
-                syLab.setPreferredSize(labSize);
                 syBox = new JComboBox<String>();
                 syBox.setPreferredSize(fieldSize1);
-                add(syLab);
+                add(labList.get(4));
                 add(syBox);
-                JLabel stLab = new JLabel("开课学期：");
-                stLab.setPreferredSize(labSize);
                 stBox = new JComboBox<String>();
                 stBox.setPreferredSize(fieldSize1);
-                add(stLab);
+                add(labList.get(5));
                 add(stBox);
-                JLabel semesterLab = new JLabel("开课年级：");
-                semesterLab.setPreferredSize(labSize);
                 semesterBox = new JComboBox<String>();
                 semesterBox.setPreferredSize(fieldSize1);
-                add(semesterLab);
+                add(labList.get(6));
                 add(semesterBox);
-                JLabel numLab = new JLabel("班级人数：");
-                numLab.setPreferredSize(labSize);
                 numField = new JTextField();
                 numField.setPreferredSize(fieldSize1);
-                add(numLab);
+                add(labList.get(7));
                 add(numField);
 
                 initBox();
@@ -153,6 +139,9 @@ public class OCJDialog extends Window<OfferingCoursesEntity> {
 
             @Override
             public void initBox() {
+                for(int i=0; i<labList.size(); i++){
+                    labList.get(i).setText(comments.get(i)+"：");
+                }
                 List<Object[]> list = new CourseDao().getIdAndName();
                 courseIdBox.removeAllItems();
                 for(int i=0; i<list.size(); i++){
@@ -178,6 +167,8 @@ public class OCJDialog extends Window<OfferingCoursesEntity> {
                 for(int i=0; i<list.size(); i++){
                     semesterBox.addItem(list.get(i)[0]+" "+list.get(i)[1]);
                 }
+
+                setNull();
             }
         };
         return operation;
@@ -257,8 +248,9 @@ public class OCJDialog extends Window<OfferingCoursesEntity> {
     protected void initData() {
         OCDao ocDao = new OCDao();
         List<OfferingCoursesEntity> list = ocDao.getList();
-        ocOperation.setList(list);
-        String[] title = {"课程班编号"};
+        List<String> comments = ocDao.getComments();
+        ocOperation.setList(list,comments);
+        String[] title = {comments.get(0)};
         DefaultTableModel model = new DefaultTableModel(title,list.size());
         for(int i=0; i<list.size(); i++){
             model.setValueAt(list.get(i).getId(),i,0);
@@ -270,7 +262,6 @@ public class OCJDialog extends Window<OfferingCoursesEntity> {
     protected void reload() {
         initData();
         ocOperation.initBox();
-        ocOperation.setNull();
         repaint();
     }
 

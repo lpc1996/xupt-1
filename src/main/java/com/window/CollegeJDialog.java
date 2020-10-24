@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CollegeJDialog extends Window<CollegeEntity> {
@@ -20,9 +21,11 @@ public class CollegeJDialog extends Window<CollegeEntity> {
         super(new Dimension(600,500),"学院信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
         collegeOperation = createOperation();
+        initData();
+        collegeOperation.InitPane();
+
         setOperationPane("学院信息",collegeOperation);
 
-        initData();
         createInsertAction();
         createUpdateAction();
         createDeleteAction();
@@ -60,24 +63,26 @@ public class CollegeJDialog extends Window<CollegeEntity> {
 
             @Override
             protected void InitPane() {
-                List<String> list = new CollegeDao().getComments();
-                JLabel idLab = new JLabel(list.get(0)+"：");
-                idLab.setPreferredSize(labSize);
+                createJLabel(comments.size());
                 idField = new JTextField();
                 idField.setPreferredSize(fieldSize1);
-                add(idLab);
+                add(labList.get(0));
                 add(idField);
-                JLabel nameLab = new JLabel(list.get(1)+"：");
-                nameLab.setPreferredSize(labSize);
                 nameField = new JTextField();
                 nameField.setPreferredSize(fieldSize1);
-                add(nameLab);
+                add(labList.get(1));
                 add(nameField);
+
+                initBox();
             }
 
             @Override
             public void initBox() {
+                for(int i=0; i<labList.size(); i++){
+                    labList.get(i).setText(comments.get(i)+"：");
+                }
 
+                setNull();
             }
         };
         return college;
@@ -160,8 +165,9 @@ public class CollegeJDialog extends Window<CollegeEntity> {
     protected void initData() {
         CollegeDao collegeDao = new CollegeDao();
         collegeList = collegeDao.getList();
-        collegeOperation.setList(collegeList);
-        String[] title = {collegeDao.getComments().get(0)};
+        List<String> comments = collegeDao.getComments();
+        collegeOperation.setList(collegeList,comments);
+        String[] title = {comments.get(0)};
         DefaultTableModel model = new DefaultTableModel(title,collegeList.size());
         for(int i=0; i<collegeList.size(); i++){
             model.setValueAt(collegeList.get(i).getId(),i,0);
@@ -172,7 +178,7 @@ public class CollegeJDialog extends Window<CollegeEntity> {
     @Override
     protected void reload() {
         initData();
-        collegeOperation.setNull();
+        collegeOperation.initBox();
         repaint();
     }
 }

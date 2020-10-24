@@ -19,9 +19,11 @@ public class DepartmentJDialog extends Window<DepartmentEntity> {
         super(new Dimension(600,500),"系/部信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
         departmentOperation = createOperation();
-        setOperationPane("系/部信息",departmentOperation);
 
         initData();
+        departmentOperation.InitPane();
+        setOperationPane("系/部信息",departmentOperation);
+
         createInsertAction();
         createUpdateAction();
         createDeleteAction();
@@ -63,34 +65,34 @@ public class DepartmentJDialog extends Window<DepartmentEntity> {
 
             @Override
             protected void InitPane() {
-                JLabel idLab = new JLabel("系/部编号:");
-                idLab.setPreferredSize(labSize);
+                createJLabel(comments.size());
                 idField = new JTextField();
                 idField.setPreferredSize(fieldSize1);
-                add(idLab);
+                add(labList.get(0));
                 add(idField);
-                JLabel nameLab = new JLabel("系/部名称：");
-                nameLab.setPreferredSize(labSize);
                 nameField = new JTextField();
                 nameField.setPreferredSize(fieldSize1);
-                add(nameLab);
+                add(labList.get(1));
                 add(nameField);
-                JLabel collegeLab = new JLabel("所属学院：");
-                collegeLab.setPreferredSize(labSize);
                 collegeBox = new JComboBox<String>();
                 collegeBox.setPreferredSize(fieldSize1);
-                add(collegeLab);
+                add(labList.get(2));
                 add(collegeBox);
 
                 initBox();
             }
 
             public void initBox(){
+                for(int i=0; i<labList.size(); i++){
+                    labList.get(i).setText(comments.get(i)+"：");
+                }
                 List<Object[]> list = new CollegeDao().getIdAndName();
                 collegeBox.removeAllItems();
                 for(int i=0; i<list.size(); i++){
                     collegeBox.addItem(list.get(i)[0]+" "+list.get(i)[1]);
                 }
+
+                setNull();
             }
         };
         return departmentOperation;
@@ -173,8 +175,9 @@ public class DepartmentJDialog extends Window<DepartmentEntity> {
     protected void initData() {
         DepartmentDao departmentDao = new DepartmentDao();
         departmentList = departmentDao.getList();
-        String[] title = {"系/部编号"};
-        departmentOperation.setList(departmentList);
+        List<String> comment = departmentDao.getComments();
+        String[] title = {comment.get(0)};
+        departmentOperation.setList(departmentList,comment);
         DefaultTableModel model = new DefaultTableModel(title,departmentList.size());
         for(int i=0; i<departmentList.size(); i++) {
             model.setValueAt(departmentList.get(i).getId(),i,0);
@@ -186,7 +189,6 @@ public class DepartmentJDialog extends Window<DepartmentEntity> {
     protected void reload() {
         initData();
         departmentOperation.initBox();
-        departmentOperation.setNull();
         repaint();
     }
 }

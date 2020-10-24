@@ -23,9 +23,11 @@ public class SyJDialog extends Window<SchoolYearEntity> {
         super(new Dimension(600,500),"学年信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
         syOperation = createOperation();
+        initData();
+        syOperation.InitPane();
         setOperationPane("学年信息",syOperation);
 
-        initData();
+
         createInsertAction();
         createUpdateAction();
         createDeleteAction();
@@ -77,17 +79,18 @@ public class SyJDialog extends Window<SchoolYearEntity> {
 
             @Override
             protected void InitPane() {
+                createJLabel(comments.size());
                 JLabel idLab = new JLabel("学年编号：");
                 idLab.setPreferredSize(labSize);
                 idField = new JTextField();
                 idField.setPreferredSize(fieldSize1);
-                add(idLab);
+                add(labList.get(0));
                 add(idField);
                 JLabel nameLab = new JLabel("学年名称：");
                 nameLab.setPreferredSize(labSize);
                 nameField = new JTextField();
                 nameField.setPreferredSize(fieldSize1);
-                add(nameLab);
+                add(labList.get(1));
                 add(nameField);
                 DateChooser dateChooser = DateChooser.getInstance("yyyy-MM-dd");
                 JLabel beginLab = new JLabel("起始时间：");
@@ -95,20 +98,26 @@ public class SyJDialog extends Window<SchoolYearEntity> {
                 beginField = new JTextField();
                 beginField.setPreferredSize(fieldSize1);
                 DateChooser.getInstance("yyyy-MM-dd").register(beginField);
-                add(beginLab);
+                add(labList.get(2));
                 add(beginField);
                 JLabel endLab = new JLabel("结束时间：");
                 endLab.setPreferredSize(labSize);
                 endField = new JTextField();
                 endField.setPreferredSize(fieldSize1);
                 DateChooser.getInstance("yyyy-MM-dd").register(endField);
-                add(endLab);
+                add(labList.get(3));
                 add(endField);
+
+                initBox();
             }
 
             @Override
             public void initBox() {
+                for(int i=0; i<labList.size(); i++){
+                    labList.get(i).setText(comments.get(i)+"：");
+                }
 
+                setNull();
             }
         };
         return operation;
@@ -185,8 +194,9 @@ public class SyJDialog extends Window<SchoolYearEntity> {
     protected void initData() {
         SYDao syDao = new SYDao();
         List<SchoolYearEntity> list = syDao.getList();
-        syOperation.setList(list);
-        String[] title = {"学年编号"};
+        List<String> comments = syDao.getComments();
+        syOperation.setList(list,comments);
+        String[] title = {comments.get(0)};
         DefaultTableModel model = new DefaultTableModel(title,list.size());
         for(int i=0; i<list.size(); i++){
             model.setValueAt(list.get(i).getId(),i,0);
@@ -197,7 +207,7 @@ public class SyJDialog extends Window<SchoolYearEntity> {
     @Override
     protected void reload() {
         initData();
-        syOperation.setNull();
+        syOperation.initBox();
         repaint();
     }
 }

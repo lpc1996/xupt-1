@@ -21,9 +21,10 @@ public class MajorJDialog extends Window<MajorEntity> {
         super(new Dimension(600,500),"专业信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
         majorOperation = createOperation();
+        initData();
+        majorOperation.InitPane();
         setOperationPane("专业信息",majorOperation);
 
-        initData();
         createInsertAction();
         createUpdateAction();
         createDeleteAction();
@@ -69,29 +70,22 @@ public class MajorJDialog extends Window<MajorEntity> {
 
             @Override
             protected void InitPane() {
-                JLabel idLab = new JLabel("专业编号:");
-                idLab.setPreferredSize(labSize);
+                createJLabel(comments.size());
                 idField = new JTextField();
                 idField.setPreferredSize(fieldSize1);
-                add(idLab);
+                add(labList.get(0));
                 add(idField);
-                JLabel nameLab = new JLabel("专业名称：");
-                nameLab.setPreferredSize(labSize);
                 nameField = new JTextField();
                 nameField.setPreferredSize(fieldSize1);
-                add(nameLab);
+                add(labList.get(1));
                 add(nameField);
-                JLabel collegeLab = new JLabel("所属学院：");
-                collegeLab.setPreferredSize(labSize);
                 collegeBox = new JComboBox<String>();
                 collegeBox.setPreferredSize(fieldSize1);
-                add(collegeLab);
+                add(labList.get(2));
                 add(collegeBox);
-                JLabel departmentLab = new JLabel("所属系/部：");
-                departmentLab.setPreferredSize(labSize);
                 departmentBox = new JComboBox<String>();
                 departmentBox.setPreferredSize(fieldSize1);
-                add(departmentLab);
+                add(labList.get(3));
                 add(departmentBox);
 
                 initBox();
@@ -99,15 +93,21 @@ public class MajorJDialog extends Window<MajorEntity> {
 
             @Override
             public void initBox() {
+                for(int i=0; i<labList.size(); i++){
+                    labList.get(i).setText(comments.get(i)+"：");
+                }
                 List<Object[]> list = new CollegeDao().getIdAndName();
                 collegeBox.removeAllItems();
                 for(int i=0; i<list.size(); i++){
                     collegeBox.addItem(list.get(i)[0]+" "+list.get(i)[1]);
                 }
                 list = new DepartmentDao().getIdAndName();
+                departmentBox.removeAllItems();
                 for(int i=0; i<list.size(); i++){
                     departmentBox.addItem(list.get(i)[0]+" "+list.get(i)[1]);
                 }
+
+                setNull();
             }
         };
         return majorOperation;
@@ -186,8 +186,9 @@ public class MajorJDialog extends Window<MajorEntity> {
     protected void initData() {
         MajorDao majorDao = new MajorDao();
         majorList = majorDao.getList();
-        majorOperation.setList(majorList);
-        String[] title = {"专业编号"};
+        List<String> comments = majorDao.getComments();
+        majorOperation.setList(majorList,comments);
+        String[] title = {comments.get(0)};
         DefaultTableModel model = new DefaultTableModel(title,majorList.size());
         for(int i=0; i<majorList.size(); i++){
             model.setValueAt(majorList.get(i).getId(),i,0);
@@ -199,7 +200,6 @@ public class MajorJDialog extends Window<MajorEntity> {
     protected void reload() {
         initData();
         majorOperation.initBox();
-        majorOperation.setNull();
         repaint();
     }
 }

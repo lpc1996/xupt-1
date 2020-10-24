@@ -76,4 +76,9 @@ public class CourseDao extends Dao<CourseEntity> {
         list = getQuery(hql.toString());
         return list;
     }
+
+    public List<String> getComments(){
+        List<String> list = getComments("course");
+        return list;
+    }
 }

@@ -193,4 +193,10 @@ public abstract class Dao<Entity> {
      */
     public abstract boolean insert(Entity data);
 
+    /**
+     * 获取数据库表中所有字段注释
+     * @return 返回一个字符串链表
+     */
+    public abstract List<String> getComments();
+
 }

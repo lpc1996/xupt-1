@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentJDialog extends Window<StudentEntity>{
@@ -28,9 +29,12 @@ public class StudentJDialog extends Window<StudentEntity>{
 
         studentOperation = createOperation();
         baseInfoOperation = createBaseInfoOpeartion(operationSize);
+        initData();
+        studentOperation.InitPane();
+        baseInfoOperation.InitPane();
         setOperationPane("基础信息",baseInfoOperation);
         setOperationPane("学籍信息",studentOperation);
-        initData();
+
         createInsertAction();
         createUpdateAction();
         createDeleteAction();
@@ -41,10 +45,10 @@ public class StudentJDialog extends Window<StudentEntity>{
         studentList = studentDao.getList();
         BaseInfoDao baseInfoDao = new BaseInfoDao();
         baseInfoList = baseInfoDao.getList("student");
-        baseInfoOperation.setList(baseInfoList);
-        studentOperation.setList(studentList);
-        String[] title = new String[1];
-        title[0] = "学/工号";
+        List<String> baseComments = baseInfoDao.getComments();
+        baseInfoOperation.setList(baseInfoList,baseComments);
+        studentOperation.setList(studentList,studentDao.getComments());
+        String[] title = {baseComments.get(1)};
         DefaultTableModel model = new DefaultTableModel(title,studentList.size());
         for(int i=0; i<studentList.size(); i++){
             model.setValueAt(studentList.get(i).getId()+"",i,0);
@@ -57,8 +61,6 @@ public class StudentJDialog extends Window<StudentEntity>{
         initData();
         studentOperation.initBox();
         baseInfoOperation.initBox();
-        studentOperation.setNull();
-        baseInfoOperation.setNull();
         repaint();
     }
 
@@ -129,70 +131,55 @@ public class StudentJDialog extends Window<StudentEntity>{
 
             @Override
             protected void InitPane() {
-                JLabel yearLab = new JLabel("入学时间*：");
-                yearLab.setPreferredSize(labSize);;
+                createJLabel(comments.size()-1);
                 yearText = new JTextField();
                 dateChooser = DateChooser.getInstance("yyyy-MM-dd");
                 dateChooser.register(yearText);
                 yearText.setPreferredSize(fieldSize);
-                add(yearLab);
+                add(labList.get(0));
                 add(yearText);
-                JLabel collegeLab = new JLabel("所属学院*：");
-                collegeLab.setPreferredSize(labSize);
                 collegeBox = new JComboBox<String>();
                 collegeBox.setPreferredSize(fieldSize);
-                add(collegeLab);
+                add(labList.get(1));
                 add(collegeBox);
-                JLabel departmentLab = new JLabel("所属系/部*：");
-                departmentLab.setPreferredSize(labSize);
                 departmentBox = new JComboBox<String>();
                 departmentBox.setPreferredSize(fieldSize);
-                add(departmentLab);
+                add(labList.get(2));
                 add(departmentBox);
-                JLabel majorLab = new JLabel("专业*：");
-                majorLab.setPreferredSize(labSize);
                 majorBox = new JComboBox();
                 majorBox.setPreferredSize(fieldSize);
-                add(majorLab);
+                add(labList.get(3));
                 add(majorBox);
-                JLabel gradeLab = new JLabel("年级*：");
-                gradeLab.setPreferredSize(labSize);;
                 gradeBox = new JComboBox();
                 gradeBox.setPreferredSize(fieldSize);
-                add(gradeLab);
+                add(labList.get(4));
                 add(gradeBox);
-                JLabel classLab = new JLabel("班级*：");
-                classLab.setPreferredSize(labSize);;
                 classBox = new JComboBox();
                 classBox.setPreferredSize(fieldSize);
-                add(classLab);
+                add(labList.get(5));
                 add(classBox);
-                JLabel cultureLab = new JLabel("培养层次*：");
-                cultureLab.setPreferredSize(labSize);
                 cultureBox = new JComboBox<String>();
                 cultureBox.setPreferredSize(fieldSize);
-                add(cultureLab);
+                add(labList.get(6));
                 add(cultureBox);
-                JLabel typeLab = new JLabel("学生类别*：");
-                typeLab.setPreferredSize(labSize);
                 typeBox = new JComboBox<String>();
                 typeBox.setPreferredSize(fieldSize);
-                add(typeLab);
+                add(labList.get(7));
                 add(typeBox);
-                JLabel EducationLab = new JLabel("学历：");
-                EducationLab.setPreferredSize(labSize);
                 educationBox = new JComboBox<String>();
                 educationBox.setPreferredSize(fieldSize);
-                add(EducationLab);
+                add(labList.get(8));
                 add(educationBox);
 
                 initBox();
             }
 
             public void initBox(){
-                List list = null;
+                for(int i=0; i<labList.size(); i++){
+                    labList.get(i).setText(comments.get(i+1)+"：");
+                }
                 collegeBox.removeAllItems();
-                list = new CollegeDao().getList();
+                List list = new CollegeDao().getList();
                 for(int i=0; i<list.size(); i++){
                     CollegeEntity collegeEntity = (CollegeEntity) list.get(i);
                     collegeBox.addItem(collegeEntity.getId()+" "+collegeEntity.getName());
@@ -222,16 +209,19 @@ public class StudentJDialog extends Window<StudentEntity>{
                     classBox.addItem(obj[0]+" "+obj[1]);
                 }
 
+                cultureBox.removeAllItems();
                 cultureBox.addItem("专科");
                 cultureBox.addItem("本科");
                 cultureBox.addItem("硕士");
                 cultureBox.addItem("博士");
 
+                typeBox.removeAllItems();
                 typeBox.addItem("普通专科生");
                 typeBox.addItem("普通本科生");
                 typeBox.addItem("硕士研究生");
                 typeBox.addItem("博士");
 
+                educationBox.removeAllItems();
                 educationBox.addItem("小学");
                 educationBox.addItem("初中");
                 educationBox.addItem("高中");
@@ -239,7 +229,8 @@ public class StudentJDialog extends Window<StudentEntity>{
                 educationBox.addItem("专科");
                 educationBox.addItem("硕士");
                 educationBox.addItem("博士");
-                educationBox.addItem(" ");
+
+                setNull();
             }
         };
         return studentOperation;
@@ -266,10 +257,10 @@ public class StudentJDialog extends Window<StudentEntity>{
                 StudentDao studentDao = new StudentDao();
                 if(baseInfoDao.insert(baseInfoEntity) && studentDao.insert(studentEntity)){
                     JOptionPane.showMessageDialog(null,"添加成功");
-                    reload();
                 }else{
                     JOptionPane.showMessageDialog(null,"添加失败");
                 }
+                reload();
             }
         });
     }
@@ -292,10 +283,10 @@ public class StudentJDialog extends Window<StudentEntity>{
                 StudentDao studentDao = new StudentDao();
                 if(baseInfoDao.update(id,baseInfoEntity) && studentDao.update(id,studentEntity)){
                     JOptionPane.showMessageDialog(null,"修改成功");
-                    reload();
                 }else{
                     JOptionPane.showMessageDialog(null,"修改失败");
                 }
+                reload();
             }
         });
     }

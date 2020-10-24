@@ -79,4 +79,9 @@ public class StudentDao extends Dao<StudentEntity> {
         }
         return result;
     }
+
+    public List<String> getComments(){
+        List<String> list = getComments("student");
+        return list;
+    }
 }

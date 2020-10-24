@@ -20,9 +20,10 @@ public class CourseJDialog extends Window<CourseEntity> {
         super(new Dimension(600,500),"课程信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
         courseOperation = createOperation();
+        initData();
+        courseOperation.InitPane();
         setOperationPane("课程信息",courseOperation);
 
-        initData();
         createInsertAction();
         createUpdateAction();
         createDeleteAction();
@@ -82,41 +83,30 @@ public class CourseJDialog extends Window<CourseEntity> {
 
             @Override
             protected void InitPane() {
-                JLabel idlab = new JLabel("课程代码：");
-                idlab.setPreferredSize(labSize);
+                createJLabel(comments.size());
                 idField = new JTextField();
                 idField.setPreferredSize(fieldSize1);
-                add(idlab);
+                add(labList.get(0));
                 add(idField);
-                JLabel nameLab = new JLabel("课程名称：");
-                nameLab.setPreferredSize(labSize);
                 nameField = new JTextField();
                 nameField.setPreferredSize(fieldSize1);
-                add(nameLab);
+                add(labList.get(1));
                 add(nameField);
-                JLabel collegeLab = new JLabel("开课学院：");
-                collegeLab.setPreferredSize(labSize);
                 collegeBox = new JComboBox<String>();
                 collegeBox.setPreferredSize(fieldSize1);
-                add(collegeLab);
+                add(labList.get(2));
                 add(collegeBox);
-                JLabel departmentLab = new JLabel("所属系/部:");
-                departmentLab.setPreferredSize(labSize);
                 departmentBox = new JComboBox<String>();
                 departmentBox.setPreferredSize(fieldSize1);
-                add(departmentLab);
+                add(labList.get(3));
                 add(departmentBox);
-                JLabel typeLab = new JLabel("课程性质：");
-                typeLab.setPreferredSize(labSize);
                 typeBox = new JComboBox<String>();
                 typeBox.setPreferredSize(fieldSize1);
-                add(typeLab);
+                add(labList.get(4));
                 add(typeBox);
-                JLabel creditLab = new JLabel("学分：");
-                creditLab.setPreferredSize(labSize);
                 creditField = new JTextField();
                 creditField.setPreferredSize(fieldSize1);
-                add(creditLab);
+                add(labList.get(5));
                 add(creditField);
 
                 initBox();
@@ -124,17 +114,26 @@ public class CourseJDialog extends Window<CourseEntity> {
 
             @Override
             public void initBox() {
+                for(int i=0; i<labList.size(); i++){
+                    labList.get(i).setText(comments.get(i)+"：");
+                }
+
                 List<Object[]> list = new CollegeDao().getIdAndName();
+                collegeBox.removeAllItems();
                 for(int i=0; i<list.size(); i++){
                     collegeBox.addItem(list.get(i)[0]+" "+list.get(i)[1]);
                 }
                 list = new DepartmentDao().getIdAndName();
+                departmentBox.removeAllItems();
                 for(int i=0; i<list.size(); i++){
                     departmentBox.addItem(list.get(i)[0]+" "+list.get(i)[1]);
                 }
 
+                typeBox.removeAllItems();
                 typeBox.addItem("必修课");
                 typeBox.addItem("选修课");
+
+                setNull();
             }
         };
         return operation;
@@ -211,9 +210,11 @@ public class CourseJDialog extends Window<CourseEntity> {
 
     @Override
     protected void initData() {
-        List<CourseEntity> list = new CourseDao().getList();
-        courseOperation.setList(list);
-        String[] title = {"课程代码："};
+        CourseDao courseDao = new CourseDao();
+        List<CourseEntity> list = courseDao.getList();
+        List<String> comments = courseDao.getComments();
+        courseOperation.setList(list,comments);
+        String[] title = {comments.get(0)};
         DefaultTableModel model = new DefaultTableModel(title,list.size());
         for(int i=0; i<list.size(); i++){
             model.setValueAt(list.get(i).getId(),i,0);
@@ -224,7 +225,7 @@ public class CourseJDialog extends Window<CourseEntity> {
     @Override
     protected void reload() {
         initData();
-        courseOperation.setNull();
+        courseOperation.initBox();
         repaint();
     }
 }

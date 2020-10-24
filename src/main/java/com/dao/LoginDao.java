@@ -89,6 +89,16 @@ public class LoginDao extends Dao<LoginEntity>{
     }
 
     /**
+     * 获取数据库表中所有字段注释
+     *
+     * @return 返回一个字符串链表
+     */
+    @Override
+    public List<String> getComments() {
+        return null;
+    }
+
+    /**
      * 修改用户登录密码
      * @param id 用户名，用于识别要修改的用户
      * @param oldPass 旧密码，用于识别密码修改操作是否是本人操作

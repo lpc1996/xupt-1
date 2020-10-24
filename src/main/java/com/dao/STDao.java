@@ -77,6 +77,17 @@ public class STDao extends Dao<SchoolTremEntity> {
         return result;
     }
 
+    /**
+     * 获取数据库表中所有字段注释
+     *
+     * @return 返回一个字符串链表
+     */
+    @Override
+    public List<String> getComments() {
+        List<String> list = getComments("school_trem");
+        return list;
+    }
+
     public List<Object[]> getIdAndName(){
         List<Object[]> list = null;
         StringBuilder hql = new StringBuilder();
