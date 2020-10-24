@@ -77,6 +77,7 @@ public class TeacherDao extends Dao<TeacherEntity> {
         return result;
     }
 
+    @Override
     public List<String> getComments(){
         List<String> list = getComments("teacher");
         return list;

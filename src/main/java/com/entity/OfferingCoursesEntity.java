@@ -96,19 +96,39 @@ public class OfferingCoursesEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         OfferingCoursesEntity that = (OfferingCoursesEntity) o;
 
-        if (maxNum != that.maxNum) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (courseId != null ? !courseId.equals(that.courseId) : that.courseId != null) return false;
-        if (teacherId != null ? !teacherId.equals(that.teacherId) : that.teacherId != null) return false;
-        if (begin != null ? !begin.equals(that.begin) : that.begin != null) return false;
-        if (schoolYearId != null ? !schoolYearId.equals(that.schoolYearId) : that.schoolYearId != null) return false;
-        if (schoolTremId != null ? !schoolTremId.equals(that.schoolTremId) : that.schoolTremId != null) return false;
-        if (semesterId != null ? !semesterId.equals(that.semesterId) : that.semesterId != null) return false;
+        if (maxNum != that.maxNum) {
+            return false;
+        }
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (courseId != null ? !courseId.equals(that.courseId) : that.courseId != null) {
+            return false;
+        }
+        if (teacherId != null ? !teacherId.equals(that.teacherId) : that.teacherId != null) {
+            return false;
+        }
+        if (begin != null ? !begin.equals(that.begin) : that.begin != null) {
+            return false;
+        }
+        if (schoolYearId != null ? !schoolYearId.equals(that.schoolYearId) : that.schoolYearId != null) {
+            return false;
+        }
+        if (schoolTremId != null ? !schoolTremId.equals(that.schoolTremId) : that.schoolTremId != null) {
+            return false;
+        }
+        if (semesterId != null ? !semesterId.equals(that.semesterId) : that.semesterId != null) {
+            return false;
+        }
 
         return true;
     }

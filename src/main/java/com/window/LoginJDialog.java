@@ -21,10 +21,7 @@ public class LoginJDialog extends JFrame {
     private static MainJFrame mainJFrame;
 
     public LoginJDialog() {
-//        if(!mainJFrame.isDisplayable()){
-//            mainJFrame.dispose();
-//            mainJFrame = null;
-//        }
+
         this.setSize(new Dimension(296, 356));
         this.setResizable(true);
         this.setTitle("欢迎登陆");

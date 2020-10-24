@@ -63,16 +63,30 @@ public class SchoolTremEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         SchoolTremEntity that = (SchoolTremEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (schoolYear != null ? !schoolYear.equals(that.schoolYear) : that.schoolYear != null) return false;
-        if (begin != null ? !begin.equals(that.begin) : that.begin != null) return false;
-        if (end != null ? !end.equals(that.end) : that.end != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(that.name) : that.name != null) {
+            return false;
+        }
+        if (schoolYear != null ? !schoolYear.equals(that.schoolYear) : that.schoolYear != null) {
+            return false;
+        }
+        if (begin != null ? !begin.equals(that.begin) : that.begin != null) {
+            return false;
+        }
+        if (end != null ? !end.equals(that.end) : that.end != null) {
+            return false;
+        }
 
         return true;
     }

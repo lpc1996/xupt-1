@@ -136,22 +136,48 @@ public class BaseInfoEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         BaseInfoEntity that = (BaseInfoEntity) o;
 
-        if (id != that.id) return false;
-        if (age != that.age) return false;
-        if (uId != null ? !uId.equals(that.uId) : that.uId != null) return false;
-        if (uName != null ? !uName.equals(that.uName) : that.uName != null) return false;
-        if (formarName != null ? !formarName.equals(that.formarName) : that.formarName != null) return false;
-        if (sex != null ? !sex.equals(that.sex) : that.sex != null) return false;
-        if (nativePlace != null ? !nativePlace.equals(that.nativePlace) : that.nativePlace != null) return false;
-        if (idcardType != null ? !idcardType.equals(that.idcardType) : that.idcardType != null) return false;
-        if (idcardNum != null ? !idcardNum.equals(that.idcardNum) : that.idcardNum != null) return false;
-        if (uType != null ? !uType.equals(that.uType) : that.uType != null) return false;
-        if (tel != null ? !tel.equals(that.tel) : that.tel != null) return false;
+        if (id != that.id) {
+            return false;
+        }
+        if (age != that.age) {
+            return false;
+        }
+        if (uId != null ? !uId.equals(that.uId) : that.uId != null) {
+            return false;
+        }
+        if (uName != null ? !uName.equals(that.uName) : that.uName != null) {
+            return false;
+        }
+        if (formarName != null ? !formarName.equals(that.formarName) : that.formarName != null) {
+            return false;
+        }
+        if (sex != null ? !sex.equals(that.sex) : that.sex != null) {
+            return false;
+        }
+        if (nativePlace != null ? !nativePlace.equals(that.nativePlace) : that.nativePlace != null) {
+            return false;
+        }
+        if (idcardType != null ? !idcardType.equals(that.idcardType) : that.idcardType != null) {
+            return false;
+        }
+        if (idcardNum != null ? !idcardNum.equals(that.idcardNum) : that.idcardNum != null) {
+            return false;
+        }
+        if (uType != null ? !uType.equals(that.uType) : that.uType != null) {
+            return false;
+        }
+        if (tel != null ? !tel.equals(that.tel) : that.tel != null) {
+            return false;
+        }
 
         return true;
     }

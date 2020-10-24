@@ -83,18 +83,36 @@ public class TeamEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         TeamEntity that = (TeamEntity) o;
 
-        if (number != that.number) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (collegeId != null ? !collegeId.equals(that.collegeId) : that.collegeId != null) return false;
-        if (departmentId != null ? !departmentId.equals(that.departmentId) : that.departmentId != null) return false;
-        if (majorId != null ? !majorId.equals(that.majorId) : that.majorId != null) return false;
-        if (semester != null ? !semester.equals(that.semester) : that.semester != null) return false;
+        if (number != that.number) {
+            return false;
+        }
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(that.name) : that.name != null) {
+            return false;
+        }
+        if (collegeId != null ? !collegeId.equals(that.collegeId) : that.collegeId != null) {
+            return false;
+        }
+        if (departmentId != null ? !departmentId.equals(that.departmentId) : that.departmentId != null) {
+            return false;
+        }
+        if (majorId != null ? !majorId.equals(that.majorId) : that.majorId != null) {
+            return false;
+        }
+        if (semester != null ? !semester.equals(that.semester) : that.semester != null) {
+            return false;
+        }
 
         return true;
     }

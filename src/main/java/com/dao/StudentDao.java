@@ -80,6 +80,7 @@ public class StudentDao extends Dao<StudentEntity> {
         return result;
     }
 
+    @Override
     public List<String> getComments(){
         List<String> list = getComments("student");
         return list;

@@ -356,6 +356,7 @@ public abstract class Window <T> extends JFrame {
                 initBox();
             }
 
+            @Override
             public void initBox(){
 
                 for(int i=0; i<labList.size(); i++){
@@ -400,11 +401,35 @@ public abstract class Window <T> extends JFrame {
         };
     }
 
+    /**
+     *
+     * @return
+     */
     protected abstract OperationPane<T> createOperation();
+
+    /**
+     *
+     */
     protected abstract void createInsertAction();
+
+    /**
+     *
+     */
     protected abstract void createUpdateAction();
+
+    /**
+     *
+     */
     protected abstract void createDeleteAction();
+
+    /**
+     *
+     */
     protected abstract void initData();
+
+    /**
+     *
+     */
     protected abstract void reload();
 
 }

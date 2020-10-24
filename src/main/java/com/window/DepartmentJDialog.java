@@ -29,6 +29,7 @@ public class DepartmentJDialog extends Window<DepartmentEntity> {
         createDeleteAction();
     }
 
+    @Override
     protected OperationPane<DepartmentEntity> createOperation() {
         OperationPane<DepartmentEntity> departmentOperation = new OperationPane<DepartmentEntity>(operationSize) {
             private JComboBox<String> collegeBox;
@@ -82,6 +83,7 @@ public class DepartmentJDialog extends Window<DepartmentEntity> {
                 initBox();
             }
 
+            @Override
             public void initBox(){
                 for(int i=0; i<labList.size(); i++){
                     labList.get(i).setText(comments.get(i)+"：");

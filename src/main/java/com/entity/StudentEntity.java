@@ -118,21 +118,45 @@ public class StudentEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         StudentEntity that = (StudentEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (year != null ? !year.equals(that.year) : that.year != null) return false;
-        if (college != null ? !college.equals(that.college) : that.college != null) return false;
-        if (department != null ? !department.equals(that.department) : that.department != null) return false;
-        if (major != null ? !major.equals(that.major) : that.major != null) return false;
-        if (grade != null ? !grade.equals(that.grade) : that.grade != null) return false;
-        if (clazz != null ? !clazz.equals(that.clazz) : that.clazz != null) return false;
-        if (cultureLevel != null ? !cultureLevel.equals(that.cultureLevel) : that.cultureLevel != null) return false;
-        if (studentType != null ? !studentType.equals(that.studentType) : that.studentType != null) return false;
-        if (education != null ? !education.equals(that.education) : that.education != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (year != null ? !year.equals(that.year) : that.year != null) {
+            return false;
+        }
+        if (college != null ? !college.equals(that.college) : that.college != null) {
+            return false;
+        }
+        if (department != null ? !department.equals(that.department) : that.department != null) {
+            return false;
+        }
+        if (major != null ? !major.equals(that.major) : that.major != null) {
+            return false;
+        }
+        if (grade != null ? !grade.equals(that.grade) : that.grade != null) {
+            return false;
+        }
+        if (clazz != null ? !clazz.equals(that.clazz) : that.clazz != null) {
+            return false;
+        }
+        if (cultureLevel != null ? !cultureLevel.equals(that.cultureLevel) : that.cultureLevel != null) {
+            return false;
+        }
+        if (studentType != null ? !studentType.equals(that.studentType) : that.studentType != null) {
+            return false;
+        }
+        if (education != null ? !education.equals(that.education) : that.education != null) {
+            return false;
+        }
 
         return true;
     }

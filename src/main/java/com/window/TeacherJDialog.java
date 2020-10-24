@@ -32,10 +32,8 @@ public class TeacherJDialog extends Window<TeacherEntity> {
         baseInfoOperation = createBaseInfoOpeartion(operationSize);
         teacherOperation = createOperation();
         initData();
-//        baseInfoOperation.setList(baseInfoList,);
         baseInfoOperation.InitPane();
         teacherOperation.InitPane();
-//        reload();
         setOperationPane("基础信息",baseInfoOperation);
         setOperationPane("职务信息",teacherOperation);
 
@@ -135,6 +133,7 @@ public class TeacherJDialog extends Window<TeacherEntity> {
         setTableModel(model);
     }
 
+    @Override
     protected void reload(){
         initData();
         baseInfoOperation.initBox();
@@ -143,6 +142,7 @@ public class TeacherJDialog extends Window<TeacherEntity> {
         repaint();
     }
 
+    @Override
     protected OperationPane<TeacherEntity> createOperation(){
         OperationPane<TeacherEntity> teacherOperation = new OperationPane<TeacherEntity>(operationSize) {
             private JComboBox<String> departmentBox;
@@ -218,6 +218,7 @@ public class TeacherJDialog extends Window<TeacherEntity> {
 
                 initBox();
             }
+            @Override
             public void initBox(){
                 for(int i=0; i<labList.size(); i++){
                     labList.get(i).setText(comments.get(i+1)+"：");

@@ -33,6 +33,7 @@ public class SyJDialog extends Window<SchoolYearEntity> {
         createDeleteAction();
     }
 
+    @Override
     protected OperationPane<SchoolYearEntity> createOperation() {
         OperationPane<SchoolYearEntity> operation = new OperationPane<SchoolYearEntity>(operationSize) {
             private JTextField endField;

@@ -31,6 +31,7 @@ public class CollegeJDialog extends Window<CollegeEntity> {
         createDeleteAction();
     }
 
+    @Override
     protected OperationPane<CollegeEntity> createOperation(){
         OperationPane<CollegeEntity> college = new OperationPane<CollegeEntity>(operationSize) {
             private JTextField nameField;

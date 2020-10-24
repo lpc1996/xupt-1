@@ -74,17 +74,33 @@ public class TeacherEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         TeacherEntity that = (TeacherEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (college != null ? !college.equals(that.college) : that.college != null) return false;
-        if (department != null ? !department.equals(that.department) : that.department != null) return false;
-        if (level != null ? !level.equals(that.level) : that.level != null) return false;
-        if (education != null ? !education.equals(that.education) : that.education != null) return false;
-        if (year != null ? !year.equals(that.year) : that.year != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (college != null ? !college.equals(that.college) : that.college != null) {
+            return false;
+        }
+        if (department != null ? !department.equals(that.department) : that.department != null) {
+            return false;
+        }
+        if (level != null ? !level.equals(that.level) : that.level != null) {
+            return false;
+        }
+        if (education != null ? !education.equals(that.education) : that.education != null) {
+            return false;
+        }
+        if (year != null ? !year.equals(that.year) : that.year != null) {
+            return false;
+        }
 
         return true;
     }

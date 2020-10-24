@@ -50,15 +50,27 @@ public class MajorEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         MajorEntity that = (MajorEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (collegeId != null ? !collegeId.equals(that.collegeId) : that.collegeId != null) return false;
-        if (departmentId != null ? !departmentId.equals(that.departmentId) : that.departmentId != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(that.name) : that.name != null) {
+            return false;
+        }
+        if (collegeId != null ? !collegeId.equals(that.collegeId) : that.collegeId != null) {
+            return false;
+        }
+        if (departmentId != null ? !departmentId.equals(that.departmentId) : that.departmentId != null) {
+            return false;
+        }
 
         return true;
     }

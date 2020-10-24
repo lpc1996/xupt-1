@@ -53,15 +53,27 @@ public class SchoolYearEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         SchoolYearEntity that = (SchoolYearEntity) o;
 
-        if (!Objects.equals(id, that.id)) return false;
-        if (!Objects.equals(name, that.name)) return false;
-        if (!Objects.equals(begin, that.begin)) return false;
-        if (!Objects.equals(end, that.end)) return false;
+        if (!Objects.equals(id, that.id)) {
+            return false;
+        }
+        if (!Objects.equals(name, that.name)) {
+            return false;
+        }
+        if (!Objects.equals(begin, that.begin)) {
+            return false;
+        }
+        if (!Objects.equals(end, that.end)) {
+            return false;
+        }
 
         return true;
     }

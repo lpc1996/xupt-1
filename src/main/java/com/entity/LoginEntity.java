@@ -52,15 +52,27 @@ public class LoginEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         LoginEntity that = (LoginEntity) o;
 
-        if (uId != null ? !uId.equals(that.uId) : that.uId != null) return false;
-        if (uName != null ? !uName.equals(that.uName) : that.uName != null) return false;
-        if (uLimit != null ? !uLimit.equals(that.uLimit) : that.uLimit != null) return false;
-        if (uPass != null ? !uPass.equals(that.uPass) : that.uPass != null) return false;
+        if (uId != null ? !uId.equals(that.uId) : that.uId != null) {
+            return false;
+        }
+        if (uName != null ? !uName.equals(that.uName) : that.uName != null) {
+            return false;
+        }
+        if (uLimit != null ? !uLimit.equals(that.uLimit) : that.uLimit != null) {
+            return false;
+        }
+        if (uPass != null ? !uPass.equals(that.uPass) : that.uPass != null) {
+            return false;
+        }
 
         return true;
     }

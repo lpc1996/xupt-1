@@ -88,6 +88,7 @@ public class CollegeDao extends Dao<CollegeEntity> {
         return list;
     }
 
+    @Override
     public List<String> getComments(){
         List<String> list = getComments("college");
         return list;

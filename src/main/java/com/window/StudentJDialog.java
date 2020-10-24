@@ -40,6 +40,7 @@ public class StudentJDialog extends Window<StudentEntity>{
         createDeleteAction();
     }
 
+    @Override
     protected void initData(){
         StudentDao studentDao = new StudentDao();
         studentList = studentDao.getList();
@@ -64,6 +65,7 @@ public class StudentJDialog extends Window<StudentEntity>{
         repaint();
     }
 
+    @Override
     protected OperationPane<StudentEntity> createOperation(){
         OperationPane<StudentEntity> studentOperation = new OperationPane<StudentEntity>(operationSize) {
             private JComboBox<String> departmentBox;
@@ -174,6 +176,7 @@ public class StudentJDialog extends Window<StudentEntity>{
                 initBox();
             }
 
+            @Override
             public void initBox(){
                 for(int i=0; i<labList.size(); i++){
                     labList.get(i).setText(comments.get(i+1)+"：");

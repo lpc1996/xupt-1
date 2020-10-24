@@ -1,5 +1,7 @@
 package com.entity;
 
+import java.util.Objects;
+
 @javax.persistence.Entity
 @javax.persistence.Table(name = "college", schema = "xupt")
 public class CollegeEntity {
@@ -28,13 +30,21 @@ public class CollegeEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         CollegeEntity that = (CollegeEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (!Objects.equals(id, that.id)) {
+            return false;
+        }
+        if (!Objects.equals(name, that.name)) {
+            return false;
+        }
 
         return true;
     }

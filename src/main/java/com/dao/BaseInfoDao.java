@@ -124,6 +124,7 @@ public class BaseInfoDao extends Dao<BaseInfoEntity>{
         return list;
     }
 
+    @Override
     public List<String> getComments(){
         List<String> list = getComments("base_info");
         return list;

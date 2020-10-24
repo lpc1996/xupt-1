@@ -32,10 +32,21 @@ abstract class OperationPane<T> extends JPanel{
 //        setNull();
     }
 
+    /**
+     *
+     * @param id
+     */
     public abstract void InitData(String id);
 
+    /**
+     *
+     * @return
+     */
     public abstract T getData();
 
+    /**
+     *
+     */
     public abstract void setNull();
 
     public void setList(List<T> list,List<String> comments){
@@ -56,6 +67,9 @@ abstract class OperationPane<T> extends JPanel{
         }
     }
 
+    /**
+     *
+     */
     protected abstract void InitPane();
 
     protected String equals(String string,JComboBox<String> box){
@@ -73,5 +87,8 @@ abstract class OperationPane<T> extends JPanel{
         return string.split(" ")[0];
     }
 
+    /**
+     *
+     */
     public abstract void initBox();
 }

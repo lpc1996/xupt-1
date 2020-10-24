@@ -30,6 +30,7 @@ public class MajorJDialog extends Window<MajorEntity> {
         createDeleteAction();
     }
 
+    @Override
     protected OperationPane<MajorEntity> createOperation() {
         OperationPane<MajorEntity> majorOperation = new OperationPane<MajorEntity>(operationSize) {
             private JComboBox<String> departmentBox;
