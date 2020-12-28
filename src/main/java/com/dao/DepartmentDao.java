@@ -2,9 +2,12 @@ package com.dao;
 
 import com.entity.DepartmentEntity;
 
-import javax.management.StringValueExp;
 import java.util.List;
 
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class DepartmentDao extends Dao<DepartmentEntity> {
     /**
      * 将传入的参数转换成hql delete删除语句并执行
@@ -30,10 +33,7 @@ public class DepartmentDao extends Dao<DepartmentEntity> {
      */
     @Override
     public List<DepartmentEntity> getList() {
-        StringBuilder hql = new StringBuilder();
-        hql.append("from ").append(DepartmentEntity.class.getName());
-        List<DepartmentEntity> list = getQuery(hql.toString());
-        return list;
+        return (List<DepartmentEntity>) getQuery("from " + DepartmentEntity.class.getName());
     }
 
     /**
@@ -62,7 +62,7 @@ public class DepartmentDao extends Dao<DepartmentEntity> {
      */
     @Override
     public boolean insert(DepartmentEntity data) {
-        boolean result = false;
+        boolean result;
         try {
             save(data);
             result = true;
@@ -80,15 +80,11 @@ public class DepartmentDao extends Dao<DepartmentEntity> {
      */
     @Override
     public List<String> getComments() {
-        List<String> list = getComments("department");
-        return list;
+        return getComments("department");
     }
 
     public List<Object[]> getIdAndName(){
-        List<Object[]> list = null;
-        StringBuilder hql = new StringBuilder();
-        hql.append("select id,name from ").append(DepartmentEntity.class.getName());
-        list = getQuery(hql.toString());
+        List<Object[]> list = getQuery("select id,name from " + DepartmentEntity.class.getName());
         return list;
     }
 

@@ -1,6 +1,5 @@
 package com.dao;
 
-import com.entity.CourseEntity;
 import com.entity.StudentCourseEntity;
 
 import java.util.List;
@@ -21,9 +20,7 @@ public class CourseSelectionDao extends Dao<StudentCourseEntity> {
     @Override
     public boolean delete(String id) {
         boolean result;
-        StringBuilder hql = new StringBuilder();
-        hql.append("delete ").append(StudentCourseEntity.class.getName()).append(" where id=?0");
-        result = delete(hql.toString(),id);
+        result = delete("delete " + StudentCourseEntity.class.getName() + " where id=?0",id);
         return result;
     }
 
@@ -67,7 +64,6 @@ public class CourseSelectionDao extends Dao<StudentCourseEntity> {
      */
     @Override
     public List<String> getComments() {
-        List<String> list = getComments("student_course");
-        return null;
+        return getComments("student_course");
     }
 }

@@ -4,7 +4,6 @@ import com.entity.BaseInfoEntity;
 import com.settings.Config;
 import com.settings.Setting;
 import com.window.LoginJDialog;
-import com.window.Window;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;

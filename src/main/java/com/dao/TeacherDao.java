@@ -4,6 +4,10 @@ import com.entity.TeacherEntity;
 
 import java.util.List;
 
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class TeacherDao extends Dao<TeacherEntity> {
     /**
      * 将传入的参数转换成hql delete删除语句并执行
@@ -67,7 +71,6 @@ public class TeacherDao extends Dao<TeacherEntity> {
     @Override
     public boolean insert(TeacherEntity data) {
         boolean result = false;
-        StringBuilder hql = new StringBuilder();
         try {
             save(data);
             result = true;
@@ -79,7 +82,6 @@ public class TeacherDao extends Dao<TeacherEntity> {
 
     @Override
     public List<String> getComments(){
-        List<String> list = getComments("teacher");
-        return list;
+        return getComments("teacher");
     }
 }

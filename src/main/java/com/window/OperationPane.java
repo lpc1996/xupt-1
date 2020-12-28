@@ -67,6 +67,16 @@ abstract class OperationPane<T> extends JPanel{
         }
     }
 
+    protected List<JLabel> createJLabel(List<String> comments){
+        List<JLabel> jLabelList = new ArrayList<>();
+        for(String comment:comments){
+            JLabel jLabel = new JLabel(comment+"：");
+            jLabel.setPreferredSize(labSize);
+            jLabelList.add(jLabel);
+        }
+        return jLabelList;
+    }
+
     /**
      *
      */

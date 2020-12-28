@@ -3,6 +3,10 @@ package com.dao;
 import com.entity.SchoolYearEntity;
 import java.util.List;
 
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class SYDao extends Dao<SchoolYearEntity> {
     /**
      * 将传入的参数转换成hql delete删除语句并执行
@@ -13,9 +17,7 @@ public class SYDao extends Dao<SchoolYearEntity> {
     @Override
     public boolean delete(String id) {
         boolean result;
-        StringBuilder hql = new StringBuilder();
-        hql.append("delete ").append(SchoolYearEntity.class.getName()).append(" where id=?0");
-        result = delete(hql.toString(),id);
+        result = delete("delete " + SchoolYearEntity.class.getName() + " where id=?0",id);
         return result;
     }
 
@@ -87,10 +89,8 @@ public class SYDao extends Dao<SchoolYearEntity> {
     }
 
     public List<Object[]> getIdAndName(){
-        List<Object[]> list = null;
-        StringBuilder hql = new StringBuilder();
-        hql.append("select id,name from ").append(SchoolYearEntity.class.getName());
-        list = getQuery(hql.toString());
+        List<Object[]> list;
+        list = getQuery("select id,name from " + SchoolYearEntity.class.getName());
         return list;
     }
 }

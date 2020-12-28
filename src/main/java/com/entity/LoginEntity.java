@@ -1,17 +1,23 @@
 package com.entity;
 
-import javax.persistence.Column;
+import javax.persistence.*;
+import java.util.Objects;
 
-@javax.persistence.Entity
-@javax.persistence.Table(name = "login", schema = "xupt")
+@Entity
+@Table(name = "login", schema = "xupt")
+
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class LoginEntity {
     private String uId;
     private String uName;
     private Integer uLimit;
     private String uPass;
 
-    @javax.persistence.Id
-    @javax.persistence.Column(name = "u_id")
+    @Id
+    @Column(name = "u_id")
     public String getuId() {
         return uId;
     }
@@ -20,8 +26,8 @@ public class LoginEntity {
         this.uId = uId;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "u_name")
+    @Basic
+    @Column(name = "u_name")
     public String getuName() {
         return uName;
     }
@@ -30,7 +36,7 @@ public class LoginEntity {
         this.uName = uName;
     }
 
-    @javax.persistence.Basic
+    @Basic
     @Column(name = "u_limit",columnDefinition = "enum('1','2','3','4','5','6','7','8','9')")
     public Integer getuLimit() {
         return uLimit;
@@ -40,8 +46,8 @@ public class LoginEntity {
         this.uLimit = uLimit;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "u_pass")
+    @Basic
+    @Column(name = "u_pass")
     public String getuPass() {
         return uPass;
     }
@@ -61,20 +67,16 @@ public class LoginEntity {
 
         LoginEntity that = (LoginEntity) o;
 
-        if (uId != null ? !uId.equals(that.uId) : that.uId != null) {
+        if (!Objects.equals(uId, that.uId)) {
             return false;
         }
-        if (uName != null ? !uName.equals(that.uName) : that.uName != null) {
+        if (!Objects.equals(uName, that.uName)) {
             return false;
         }
-        if (uLimit != null ? !uLimit.equals(that.uLimit) : that.uLimit != null) {
+        if (!Objects.equals(uLimit, that.uLimit)) {
             return false;
         }
-        if (uPass != null ? !uPass.equals(that.uPass) : that.uPass != null) {
-            return false;
-        }
-
-        return true;
+        return Objects.equals(uPass, that.uPass);
     }
 
     @Override

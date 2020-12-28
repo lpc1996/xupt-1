@@ -1,10 +1,13 @@
 package com.dao;
 
-import com.entity.MajorEntity;
 import com.entity.SemesterEntity;
 
 import java.util.List;
 
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class SemesterDao extends Dao<SemesterEntity> {
     /**
      * 将传入的参数转换成hql delete删除语句并执行
@@ -47,7 +50,7 @@ public class SemesterDao extends Dao<SemesterEntity> {
      */
     @Override
     public boolean insert(SemesterEntity data) {
-        return false;
+        return save(data);
     }
 
     /**
@@ -62,10 +65,8 @@ public class SemesterDao extends Dao<SemesterEntity> {
     }
 
     public List<Object[]> getIdAndName(){
-        List<Object[]> list = null;
-        StringBuilder hql = new StringBuilder();
-        hql.append("select id,name from ").append(SemesterEntity.class.getName());
-        list = getQuery(hql.toString());
+        List<Object[]> list;
+        list = getQuery("select id,name from " + SemesterEntity.class.getName());
         return list;
     }
 }

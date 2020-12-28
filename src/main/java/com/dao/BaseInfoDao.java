@@ -1,7 +1,6 @@
 package com.dao;
 
 import com.entity.BaseInfoEntity;
-import com.entity.CollegeEntity;
 import org.hibernate.HibernateError;
 import java.util.List;
 
@@ -36,21 +35,19 @@ public class BaseInfoDao extends Dao<BaseInfoEntity>{
      */
     @Override
     public boolean delete(String id) {
-        boolean result = false;
-        StringBuilder hql = new StringBuilder();
-        hql.append("delete ").append(BaseInfoEntity.class.getName()).append(" where uId=?0");
-        result = delete(hql.toString(),id);
+        boolean result;
+        result = delete("delete " + BaseInfoEntity.class.getName() + " where uId=?0",id);
         return result;
     }
 
     /**
      * 读取数据库中BaseInfoEntity表中所有的数据
-     * @return
+     * @return 返回一个List或者null
      */
     @Override
     public List<BaseInfoEntity> getList() {
         List<BaseInfoEntity> list = null;
-        hql = new StringBuilder();
+        StringBuilder hql = new StringBuilder();
         hql.append(" from ").append(BaseInfoEntity.class.getName());
         try{
             list = getQuery(hql.toString());
@@ -62,7 +59,7 @@ public class BaseInfoDao extends Dao<BaseInfoEntity>{
 
     public List<BaseInfoEntity> getList(String type){
         List<BaseInfoEntity> list = null;
-        hql = new StringBuilder();
+        StringBuilder hql = new StringBuilder();
         hql.append("from ").append(BaseInfoEntity.class.getName()).append(" where uType=?0");
         try{
             list = getQuery(hql.toString(),type);
@@ -81,18 +78,14 @@ public class BaseInfoDao extends Dao<BaseInfoEntity>{
      */
     @Override
     public boolean update(String id, BaseInfoEntity data) {
-        boolean result = false;
-        StringBuilder hql = new StringBuilder();
-        hql.append("update ").append(BaseInfoEntity.class.getName()).append(" base ").append(" set base.uName = ?0,")
-        .append("base.formarName = ?1,").append("base.sex = ?2,").append("base.age = ?3,").append("base.nativePlace = ?4,")
-                .append("base.idcardType = ?5,").append("base.idcardNum = ?6,").append("base.uType = ?7,").append(
-                        "base.tel = ?8 ,").append("base.uId=?9").append("where uId = ?10");
-        if(executeUpdate(hql.toString(),data.getuName(),data.getFormarName(),data.getSex(),data.getAge(),
-                data.getNativePlace(),data.getIdcardType(),data.getIdcardNum(),data.getuType(),data.getTel(),data.getuId(),id) == 1){
-            result = true;
-        }else{
-            result = false;
-        }
+        boolean result ;
+        String hql;
+        hql = "update " + BaseInfoEntity.class.getName() + " base " + " set base.uName = ?0," +
+                "base.formarName = ?1," + "base.sex = ?2," + "base.age = ?3," + "base.nativePlace = ?4," +
+                "base.idcardType = ?5," + "base.idcardNum = ?6," + "base.uType = ?7," +
+                "base.tel = ?8 ," + "base.uId=?9" + "where uId = ?10";
+        result = executeUpdate(hql, data.getuName(), data.getFormarName(), data.getSex(), data.getAge(),
+                data.getNativePlace(), data.getIdcardType(), data.getIdcardNum(), data.getuType(), data.getTel(), data.getuId(), id) == 1;
         return result;
     }
 
@@ -104,7 +97,7 @@ public class BaseInfoDao extends Dao<BaseInfoEntity>{
      */
     @Override
     public boolean insert(BaseInfoEntity data) {
-        boolean result = false;
+        boolean result;
         try {
             save(data);
             result = true;
@@ -116,26 +109,25 @@ public class BaseInfoDao extends Dao<BaseInfoEntity>{
     }
 
     public List<Object[]> getIdAndName(String type){
-        List<Object[]> list = null;
-        StringBuilder hql = new StringBuilder();
-        hql.append("select uId,uName from ").append(BaseInfoEntity.class.getName())
-        .append(" where uType=?0");
-        list = getQuery(hql.toString(),type);
+        List<Object[]> list;
+        String hql;
+        hql = "select uId,uName from " + BaseInfoEntity.class.getName() +
+                " where uType=?0";
+        list = getQuery(hql,type);
         return list;
     }
 
     @Override
     public List<String> getComments(){
-        List<String> list = getComments("base_info");
-        return list;
+        return getComments("base_info");
     }
 
     public static void main(String[] argv){
         BaseInfoDao baseInfoDao = new BaseInfoDao();
-        List list = baseInfoDao.getComments();
-        for(int i=0; i<list.size(); i++){
-            System.out.println(list.get(i));
-            System.out.println(list.get(i) instanceof String);
+        List<String> list = baseInfoDao.getComments();
+        for (String s : list) {
+            System.out.println(s);
+            System.out.println(s != null);
         }
     }
 }

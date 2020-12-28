@@ -5,7 +5,6 @@ import com.dao.LoginDao;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
@@ -29,7 +28,6 @@ public class UpdatePass extends JFrame {
 
     private JPanel createContentPane() {
         JPanel contentPane = new JPanel();
-        FlowLayout flow = new FlowLayout(FlowLayout.CENTER,5,5);
         contentPane.setBorder(BorderFactory.createTitledBorder("操作一体化"));
         JLabel oldPassLab = new JLabel();
         oldPassLab.setPreferredSize(new Dimension(120,30));
@@ -62,42 +60,31 @@ public class UpdatePass extends JFrame {
 
     private ActionListener createBtnAction() {
 
-        ActionListener submitAction =  new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-                if(oldPass.getPassword().length == 0 || newPass1.getPassword().length == 0 || newPass2.getPassword().length ==0) {
-                    JOptionPane.showMessageDialog(getComponent(0), "请输入密码！");
-                    return;
-                }
-                String oldPassword = new String( oldPass.getPassword() );
-                String newPass = new String( newPass1.getPassword() );
-                if(!newPass.equals(new String(newPass2.getPassword()))) {
-                    JOptionPane.showMessageDialog(getComponent(0), "两次输入的密码不同，请重新输入");
-                    return ;
-                }
-                LoginDao loginDao = new LoginDao();
-                if(loginDao.updatePass(Main.getUser().getuId(), oldPassword, newPass)) {
-                    JOptionPane.showMessageDialog(getComponent(0), "密码修改成功，请重新登陆！");
-                    dispose();
-                    Main.reLogin();
-                }else {
-                    JOptionPane.showMessageDialog(getComponent(0), "密码修改失败！");
-                }
+        return arg0 -> {
+            // TODO Auto-generated method stub
+            if(oldPass.getPassword().length == 0 || newPass1.getPassword().length == 0 || newPass2.getPassword().length ==0) {
+                JOptionPane.showMessageDialog(getComponent(0), "请输入密码！");
+                return;
+            }
+            String oldPassword = new String( oldPass.getPassword() );
+            String newPass = new String( newPass1.getPassword() );
+            if(!newPass.equals(new String(newPass2.getPassword()))) {
+                JOptionPane.showMessageDialog(getComponent(0), "两次输入的密码不同，请重新输入");
+                return ;
+            }
+            LoginDao loginDao = new LoginDao();
+            if(loginDao.updatePass(Main.getUser().getuId(), oldPassword, newPass)) {
+                JOptionPane.showMessageDialog(getComponent(0), "密码修改成功，请重新登陆！");
+                dispose();
+                Main.reLogin();
+            }else {
+                JOptionPane.showMessageDialog(getComponent(0), "密码修改失败！");
             }
         };
-        return submitAction;
     }
 
     private ActionListener createExitAction(){
-        ActionListener exitAction = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        };
-        return exitAction;
+        return e -> dispose();
     }
 
     public static void main(String[] argv){

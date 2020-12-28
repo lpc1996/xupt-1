@@ -4,6 +4,10 @@ import com.entity.TeamEntity;
 
 import java.util.List;
 
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class TeamDao extends Dao<TeamEntity> {
 
     /**
@@ -24,7 +28,14 @@ public class TeamDao extends Dao<TeamEntity> {
      */
     @Override
     public List<TeamEntity> getList() {
-        return null;
+        String hql = "from "+TeamEntity.class.getName();
+        List<TeamEntity> list = null;
+        try {
+            list=getQuery(hql);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     /**
@@ -57,15 +68,12 @@ public class TeamDao extends Dao<TeamEntity> {
      */
     @Override
     public List<String> getComments() {
-        List<String> list = getComments("team");
-        return list;
+        return getComments("team");
     }
 
     public List<Object[]> getIdAndName(){
-        List<Object[]> list = null;
-        StringBuilder hql = new StringBuilder();
-        hql.append("select id,name from ").append(TeamEntity.class.getName());
-        list = getQuery(hql.toString());
+        List<Object[]> list ;
+        list = getQuery("select id,name from " + TeamEntity.class.getName());
         return list;
     }
 }

@@ -5,10 +5,15 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import java.util.Objects;
 
 @javax.persistence.Entity
 @javax.persistence.Table(name = "base_info", schema = "xupt")
 
+/**
+  *@author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class BaseInfoEntity {
     private int id;
     private String uId;
@@ -151,35 +156,31 @@ public class BaseInfoEntity {
         if (age != that.age) {
             return false;
         }
-        if (uId != null ? !uId.equals(that.uId) : that.uId != null) {
+        if (!Objects.equals(uId, that.uId)) {
             return false;
         }
-        if (uName != null ? !uName.equals(that.uName) : that.uName != null) {
+        if (!Objects.equals(uName, that.uName)) {
             return false;
         }
-        if (formarName != null ? !formarName.equals(that.formarName) : that.formarName != null) {
+        if (!Objects.equals(formarName, that.formarName)) {
             return false;
         }
-        if (sex != null ? !sex.equals(that.sex) : that.sex != null) {
+        if (!Objects.equals(sex, that.sex)) {
             return false;
         }
-        if (nativePlace != null ? !nativePlace.equals(that.nativePlace) : that.nativePlace != null) {
+        if (!Objects.equals(nativePlace, that.nativePlace)) {
             return false;
         }
-        if (idcardType != null ? !idcardType.equals(that.idcardType) : that.idcardType != null) {
+        if (!Objects.equals(idcardType, that.idcardType)) {
             return false;
         }
-        if (idcardNum != null ? !idcardNum.equals(that.idcardNum) : that.idcardNum != null) {
+        if (!Objects.equals(idcardNum, that.idcardNum)) {
             return false;
         }
-        if (uType != null ? !uType.equals(that.uType) : that.uType != null) {
+        if (!Objects.equals(uType, that.uType)) {
             return false;
         }
-        if (tel != null ? !tel.equals(that.tel) : that.tel != null) {
-            return false;
-        }
-
-        return true;
+        return Objects.equals(tel, that.tel);
     }
 
     @Override

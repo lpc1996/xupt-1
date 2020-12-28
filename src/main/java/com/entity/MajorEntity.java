@@ -1,7 +1,14 @@
 package com.entity;
 
+import java.util.Objects;
+
 @javax.persistence.Entity
 @javax.persistence.Table(name = "major", schema = "xupt")
+
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class MajorEntity {
     private String id;
     private String name;
@@ -59,20 +66,16 @@ public class MajorEntity {
 
         MajorEntity that = (MajorEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) {
+        if (!Objects.equals(id, that.id)) {
             return false;
         }
-        if (name != null ? !name.equals(that.name) : that.name != null) {
+        if (!Objects.equals(name, that.name)) {
             return false;
         }
-        if (collegeId != null ? !collegeId.equals(that.collegeId) : that.collegeId != null) {
+        if (!Objects.equals(collegeId, that.collegeId)) {
             return false;
         }
-        if (departmentId != null ? !departmentId.equals(that.departmentId) : that.departmentId != null) {
-            return false;
-        }
-
-        return true;
+        return Objects.equals(departmentId, that.departmentId);
     }
 
     @Override

@@ -1,9 +1,15 @@
 package com.entity;
 
 import java.sql.Date;
+import java.util.Objects;
 
 @javax.persistence.Entity
 @javax.persistence.Table(name = "offering_courses", schema = "xupt")
+
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class OfferingCoursesEntity {
     private String id;
     private String courseId;
@@ -108,29 +114,25 @@ public class OfferingCoursesEntity {
         if (maxNum != that.maxNum) {
             return false;
         }
-        if (id != null ? !id.equals(that.id) : that.id != null) {
+        if (!Objects.equals(id, that.id)) {
             return false;
         }
-        if (courseId != null ? !courseId.equals(that.courseId) : that.courseId != null) {
+        if (!Objects.equals(courseId, that.courseId)) {
             return false;
         }
-        if (teacherId != null ? !teacherId.equals(that.teacherId) : that.teacherId != null) {
+        if (!Objects.equals(teacherId, that.teacherId)) {
             return false;
         }
-        if (begin != null ? !begin.equals(that.begin) : that.begin != null) {
+        if (!Objects.equals(begin, that.begin)) {
             return false;
         }
-        if (schoolYearId != null ? !schoolYearId.equals(that.schoolYearId) : that.schoolYearId != null) {
+        if (!Objects.equals(schoolYearId, that.schoolYearId)) {
             return false;
         }
-        if (schoolTremId != null ? !schoolTremId.equals(that.schoolTremId) : that.schoolTremId != null) {
+        if (!Objects.equals(schoolTremId, that.schoolTremId)) {
             return false;
         }
-        if (semesterId != null ? !semesterId.equals(that.semesterId) : that.semesterId != null) {
-            return false;
-        }
-
-        return true;
+        return Objects.equals(semesterId, that.semesterId);
     }
 
     @Override

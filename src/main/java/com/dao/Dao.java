@@ -1,5 +1,7 @@
 package com.dao;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -15,8 +17,7 @@ import java.util.List;
 
 public abstract class Dao<Entity> {
 
-    protected boolean result;
-    protected StringBuilder hql;
+    public static final Logger logger = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
 
     private Session getSession(){
         Session session;
@@ -28,6 +29,7 @@ public abstract class Dao<Entity> {
         }catch (HibernateError hibernateError){
             hibernateError.printStackTrace();
             session = null;
+            logger.error("创建Session失败！");
         }
         return session;
     }
@@ -53,7 +55,7 @@ public abstract class Dao<Entity> {
         return list;
     }
 
-    public boolean save(Entity data){
+    protected boolean save(Entity data){
         boolean result = false;
         Session session = getSession();
         Transaction t = session.getTransaction();
@@ -64,6 +66,7 @@ public abstract class Dao<Entity> {
         } catch (Exception e) {
             e.printStackTrace();
             rollback(t);
+            result = false;
         } finally {
             closeSession(session);
         }
@@ -71,17 +74,18 @@ public abstract class Dao<Entity> {
     }
 
     /**
-     * 更新数据中的数据（修改）
+     * 使用hql语句对数据进行修改或删除
      * @param hql hql语句
      * @param para 匹配条件
      * @return 返回操作的行数
      */
-    protected <T> int executeUpdate(String hql,T... para){
+    @SafeVarargs
+    protected final <T> int executeUpdate(String hql, T... para){
         Session session = getSession();
         Transaction t = session.getTransaction();
         int result = -1;
         try{
-            Query<Entity> query = session.createQuery(hql);
+            Query query = session.createQuery(hql);
             if(para != null && para.length > 0) {
                 int i = 0;
                 for (T p : para) {
@@ -115,14 +119,18 @@ public abstract class Dao<Entity> {
 
     }
 
+    /**
+     * 使用hql进行删除操作
+     * @param hql
+     * @param id 删除条件
+     * @return
+     */
     protected boolean delete(String hql,String id){
         boolean result = false;
         Session session = getSession();
         Transaction t = session.getTransaction();
         try {
-            Query query = session.createQuery(hql);
-            query.setParameter(0,id);
-            query.executeUpdate();
+            session.createQuery(hql).setParameter(0,id).executeUpdate();
             t.commit();
             result = true;
         } catch (Exception e) {
@@ -134,6 +142,35 @@ public abstract class Dao<Entity> {
         return result;
     }
 
+    /**
+     * 面向对象的删除操作
+     * 通过实体删除
+     * @param entity
+     * @return
+     */
+    protected boolean deleteByEntity(Entity entity){
+        Session session = getSession();
+        Transaction transaction = session.getTransaction();
+        boolean result = false;
+        try{
+            session.delete(entity);
+            transaction.commit();
+            result = true;
+        }catch (Exception e){
+            e.printStackTrace();
+            rollback(transaction);
+            result = false;
+        }finally {
+            closeSession(session);
+        }
+        return result;
+    }
+
+    /**
+     * 查询表中所有字段注释
+     * @param tableName
+     * @return
+     */
     public List<String> getComments(String tableName){
         StringBuilder hql = new StringBuilder();
         hql.append("select column_comment from INFORMATION_SCHEMA.COLUMNS WHERE table_name=?0")

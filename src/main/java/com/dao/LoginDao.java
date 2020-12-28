@@ -12,8 +12,8 @@ import java.util.List;
 public class LoginDao extends Dao<LoginEntity>{
 
     public boolean login(String userName,String password){
-        result = false;
-        hql = new StringBuilder();
+        boolean result = false;
+        StringBuilder hql = new StringBuilder();
         hql.append("from ").append(LoginEntity.class.getName());
         hql.append(" where uId like ?0 AND uPass like ?1");
         try {
@@ -35,11 +35,10 @@ public class LoginDao extends Dao<LoginEntity>{
      */
     @Override
     public boolean delete(String id){
-        result = false;
-        hql = new StringBuilder();
-        hql.append("delete ").append(LoginEntity.class.getName()).append(
-                " where uId like ?0");
-        int number = executeUpdate(hql.toString(),id);
+        boolean result = false;
+        String hql = "delete " + LoginEntity.class.getName() +
+                " where uId like ?0";
+        int number = executeUpdate(hql,id);
         if(number > 0){
             result = true;
         }
@@ -49,12 +48,12 @@ public class LoginDao extends Dao<LoginEntity>{
     /**
      * 读取数据库中所有的数据
      *
-     * @return
+     * @return 返回用户账号信息
      */
     @Override
     public List<LoginEntity> getList() {
         List<LoginEntity> list = null;
-        hql = new StringBuilder("from ");
+        StringBuilder hql = new StringBuilder("from ");
         hql.append(LoginEntity.class.getName());
         try{
             list = getQuery(hql.toString());
@@ -106,8 +105,8 @@ public class LoginDao extends Dao<LoginEntity>{
      * @return 成功返回true，失败返回false
      */
     public boolean updatePass(String id,String oldPass,String newPass){
-        result = false;
-        hql = new StringBuilder();
+        boolean result = false;
+        StringBuilder hql = new StringBuilder();
         hql.append("update ").append(LoginEntity.class.getName()).append(
                 " set pass=?0").append(" where id=?1").append(" AND pass=?2");
         try{

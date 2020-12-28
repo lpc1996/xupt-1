@@ -1,10 +1,13 @@
 package com.dao;
 
 import com.entity.CollegeEntity;
-import com.entity.DepartmentEntity;
 
 import java.util.List;
 
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class CollegeDao extends Dao<CollegeEntity> {
 
     /**
@@ -31,7 +34,7 @@ public class CollegeDao extends Dao<CollegeEntity> {
      */
     @Override
     public List<CollegeEntity> getList() {
-        List<CollegeEntity> list = null;
+        List<CollegeEntity> list;
         StringBuilder hql = new StringBuilder();
         hql.append("from ").append(CollegeEntity.class.getName());
         try {
@@ -69,7 +72,7 @@ public class CollegeDao extends Dao<CollegeEntity> {
      */
     @Override
     public boolean insert(CollegeEntity data) {
-        boolean result = false;
+        boolean result;
         try {
             save(data);
             result = true;
@@ -81,7 +84,7 @@ public class CollegeDao extends Dao<CollegeEntity> {
     }
 
     public List<Object[]> getIdAndName(){
-        List<Object[]> list = null;
+        List<Object[]> list;
         StringBuilder hql = new StringBuilder();
         hql.append("select id,name from ").append(CollegeEntity.class.getName());
         list = getQuery(hql.toString());
@@ -90,8 +93,7 @@ public class CollegeDao extends Dao<CollegeEntity> {
 
     @Override
     public List<String> getComments(){
-        List<String> list = getComments("college");
-        return list;
+        return getComments("college");
     }
 
 }

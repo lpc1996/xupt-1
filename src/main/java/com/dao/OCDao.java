@@ -3,6 +3,10 @@ package com.dao;
 import com.entity.OfferingCoursesEntity;
 import java.util.List;
 
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class OCDao extends Dao<OfferingCoursesEntity> {
     /**
      * 将传入的参数转换成hql delete删除语句并执行
@@ -28,9 +32,7 @@ public class OCDao extends Dao<OfferingCoursesEntity> {
      */
     @Override
     public List<OfferingCoursesEntity> getList() {
-        StringBuilder hql = new StringBuilder();
-        hql.append("from ").append(OfferingCoursesEntity.class.getName());
-        List<OfferingCoursesEntity> list = getQuery(hql.toString());
+        List<OfferingCoursesEntity> list = getQuery("from " + OfferingCoursesEntity.class.getName());
         return list;
     }
 
@@ -49,7 +51,7 @@ public class OCDao extends Dao<OfferingCoursesEntity> {
                 append(" set id=?0,courseId=?1,teacherId=?2,begin=?3,schoolYearId=?4,schoolTremId=?5,")
                 .append("semesterId=?6,maxNum=?7 where id=?8");
         if(executeUpdate(hql.toString(),data.getId(),data.getCourseId(),data.getTeacherId(),data.getBegin()
-        ,data.getSchoolYearId(),data.getSchoolTremId(),data.getSemesterId(),data.getMaxNum(),id) == 1){
+        ,data.getSchoolYearId(),data.getSchoolTremId(),data.getSemesterId(),data.getMaxNum(),id) == 1) {
             result = true;
         }
         return result;
@@ -73,15 +75,12 @@ public class OCDao extends Dao<OfferingCoursesEntity> {
      */
     @Override
     public List<String> getComments() {
-        List<String> list = getComments("offering_courses");
-        return list;
+        return getComments("offering_courses");
     }
 
     public List<Object[]> getIdAndName(){
-        List<Object[]> list = null;
-        StringBuilder hql = new StringBuilder();
-        hql.append("select id,name from ").append(OfferingCoursesEntity.class.getName());
-        list = getQuery(hql.toString());
+        List<Object[]> list;
+        list = getQuery("select id,name from " + OfferingCoursesEntity.class.getName());
         return list;
     }
 }

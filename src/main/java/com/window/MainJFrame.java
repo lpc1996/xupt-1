@@ -22,6 +22,7 @@ public class MainJFrame extends JFrame {
     private StJDialog stJDialog;
     private CourseJDialog courseJDialog;
     private OCJDialog ocJDialog;
+    private TeamJDialog teamJDialog;
 
     public MainJFrame() {
         setTitle("教务管理系统");
@@ -37,6 +38,7 @@ public class MainJFrame extends JFrame {
         JMenuBar bar = new JMenuBar();
         bar.add(createPersonalCenter());
         bar.add(createEAMJMenu());
+        bar.add(createCollegesJMenu());
 
         return bar;
     }
@@ -115,13 +117,6 @@ public class MainJFrame extends JFrame {
         JMenu EAMJMenu = new JMenu("教务信息管理");
         EAMJMenu.add(createStudentManageJMenu());
         EAMJMenu.add(createTeacherManageItem());
-        EAMJMenu.add(createCollegeItem());
-        EAMJMenu.add(createDepartmentItem());
-        EAMJMenu.add(createMajorItem());
-        EAMJMenu.add(createSYItem());
-        EAMJMenu.add(createSTItem());
-        EAMJMenu.add(createCourseItem());
-        EAMJMenu.add(createOCItem());
 
         return EAMJMenu;
     }
@@ -154,6 +149,19 @@ public class MainJFrame extends JFrame {
             }
         });
         return teacherItem;
+    }
+
+    private JMenu createCollegesJMenu(){
+        JMenu collegesJMenu = new JMenu("院系设置");
+        collegesJMenu.add(createCollegeItem());
+        collegesJMenu.add(createDepartmentItem());
+        collegesJMenu.add(createMajorItem());
+        collegesJMenu.add(createSYItem());
+        collegesJMenu.add(createSTItem());
+        collegesJMenu.add(createCourseItem());
+        collegesJMenu.add(createOCItem());
+        collegesJMenu.add(createTeamItem());
+        return collegesJMenu;
     }
 
     private JMenuItem createCollegeItem(){
@@ -249,15 +257,24 @@ public class MainJFrame extends JFrame {
 
     private JMenuItem createOCItem(){
         JMenuItem item = new JMenuItem("课程班管理");
-        item.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(ocJDialog == null || !ocJDialog.isDisplayable()) {
-                    ocJDialog = new OCJDialog();
-                }
-                repaint();
-                ocJDialog.setVisible(true);
+        item.addActionListener(e -> {
+            if(ocJDialog == null || !ocJDialog.isDisplayable()) {
+                ocJDialog = new OCJDialog();
             }
+            repaint();
+            ocJDialog.setVisible(true);
+        });
+        return item;
+    }
+
+    private JMenuItem createTeamItem(){
+        JMenuItem item = new JMenuItem("班级信息管理");
+        item.addActionListener(e->{
+            if (teamJDialog == null || !teamJDialog.isDisplayable()) {
+                teamJDialog = new TeamJDialog();
+            }
+            repaint();
+            teamJDialog.setVisible(true);
         });
         return item;
     }

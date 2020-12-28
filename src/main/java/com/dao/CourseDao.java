@@ -1,8 +1,15 @@
 package com.dao;
 
 import com.entity.CourseEntity;
+
 import java.util.List;
 
+import static java.util.Collections.*;
+
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class CourseDao extends Dao<CourseEntity> {
     /**
      * 将传入的参数转换成hql delete删除语句并执行
@@ -12,11 +19,7 @@ public class CourseDao extends Dao<CourseEntity> {
      */
     @Override
     public boolean delete(String id) {
-        boolean result;
-        StringBuilder hql = new StringBuilder();
-        hql.append("delete ").append(CourseEntity.class.getName()).append(" where id=?0");
-        result = delete(hql.toString(),id);
-        return result;
+        return delete("delete " + CourseEntity.class.getName() + " where id=?0", id);
     }
 
     /**
@@ -26,11 +29,11 @@ public class CourseDao extends Dao<CourseEntity> {
      */
     @Override
     public List<CourseEntity> getList() {
-        List<CourseEntity> list = null;
+        List list = null;
         StringBuilder hql = new StringBuilder();
         hql.append(" from ").append(CourseEntity.class.getName());
         try {
-            list = getQuery(hql.toString());
+            list = unmodifiableList(getQuery(hql.toString()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,16 +73,13 @@ public class CourseDao extends Dao<CourseEntity> {
     }
 
     public List<Object[]> getIdAndName(){
-        List<Object[]> list = null;
-        StringBuilder hql = new StringBuilder();
-        hql.append("select id,name from ").append(CourseEntity.class.getName());
-        list = getQuery(hql.toString());
+        List<Object[]> list;
+        list = getQuery("select id,name from " + CourseEntity.class.getName());
         return list;
     }
 
     @Override
     public List<String> getComments(){
-        List<String> list = getComments("course");
-        return list;
+        return getComments("course");
     }
 }

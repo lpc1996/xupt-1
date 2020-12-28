@@ -4,6 +4,11 @@ import java.util.Objects;
 
 @javax.persistence.Entity
 @javax.persistence.Table(name = "college", schema = "xupt")
+
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class CollegeEntity {
     private String id;
     private String name;
@@ -42,11 +47,7 @@ public class CollegeEntity {
         if (!Objects.equals(id, that.id)) {
             return false;
         }
-        if (!Objects.equals(name, that.name)) {
-            return false;
-        }
-
-        return true;
+        return Objects.equals(name, that.name);
     }
 
     @Override

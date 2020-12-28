@@ -4,6 +4,10 @@ import com.entity.MajorEntity;
 
 import java.util.List;
 
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class MajorDao extends Dao<MajorEntity> {
     /**
      * 将传入的参数转换成hql delete删除语句并执行
@@ -29,9 +33,7 @@ public class MajorDao extends Dao<MajorEntity> {
      */
     @Override
     public List<MajorEntity> getList() {
-        StringBuilder hql = new StringBuilder();
-        hql.append("from ").append(MajorEntity.class.getName());
-        List<MajorEntity> list = getQuery(hql.toString());
+        List<MajorEntity> list = getQuery("from " + MajorEntity.class.getName());
         return list;
     }
 
@@ -77,13 +79,13 @@ public class MajorDao extends Dao<MajorEntity> {
      */
     @Override
     public List<String> getComments() {
-        List<String> list = getComments("major");
-        return list;
+        return getComments("major");
     }
 
     public List<Object[]> getIdAndName(){
-        List<Object[]> list = null;
-        StringBuilder hql = new StringBuilder();
+        List<Object[]> list;
+        StringBuilder hql;
+        hql = new StringBuilder();
         hql.append("select id,name from ").append(MajorEntity.class.getName());
         list = getQuery(hql.toString());
         return list;

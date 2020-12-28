@@ -1,10 +1,13 @@
 package com.dao;
 
 import com.entity.SchoolTremEntity;
-import com.entity.SchoolYearEntity;
 
 import java.util.List;
 
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class STDao extends Dao<SchoolTremEntity> {
     /**
      * 将传入的参数转换成hql delete删除语句并执行
@@ -15,9 +18,7 @@ public class STDao extends Dao<SchoolTremEntity> {
     @Override
     public boolean delete(String id) {
         boolean result;
-        StringBuilder hql = new StringBuilder();
-        hql.append("delete ").append(SchoolTremEntity.class.getName()).append(" where id=?0");
-        result = delete(hql.toString(),id);
+        result = delete("delete " + SchoolTremEntity.class.getName() + " where id=?0",id);
         return result;
     }
 
@@ -52,7 +53,6 @@ public class STDao extends Dao<SchoolTremEntity> {
         StringBuilder hql = new StringBuilder();
         hql.append("update ").append(SchoolTremEntity.class.getName()).append(" st set st.id=?0,st.name=?1,")
                 .append("st.begin=?2,st.end=?3,st.schoolYear=?4 where st.id=?5");
-        System.out.println(hql.toString());
         if(executeUpdate(hql.toString(),data.getId(),data.getName(),data.getBegin(),data.getEnd(),data.getSchoolYear(),id) == 1){
             result = true;
         }
@@ -84,15 +84,12 @@ public class STDao extends Dao<SchoolTremEntity> {
      */
     @Override
     public List<String> getComments() {
-        List<String> list = getComments("school_trem");
-        return list;
+        return getComments("school_trem");
     }
 
-    public List<Object[]> getIdAndName(){
-        List<Object[]> list = null;
-        StringBuilder hql = new StringBuilder();
-        hql.append("select id,name from ").append(SchoolTremEntity.class.getName());
-        list = getQuery(hql.toString());
+    public List getIdAndName(){
+        List list;
+        list = getQuery("select id,name from " + SchoolTremEntity.class.getName());
         return list;
     }
 }

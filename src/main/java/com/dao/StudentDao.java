@@ -1,10 +1,13 @@
 package com.dao;
 
-import com.entity.BaseInfoEntity;
 import com.entity.StudentEntity;
 
 import java.util.List;
 
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/16
+ */
 public class StudentDao extends Dao<StudentEntity> {
 
     /**
@@ -15,10 +18,8 @@ public class StudentDao extends Dao<StudentEntity> {
      */
     @Override
     public boolean delete(String id) {
-        boolean result = false;
-        StringBuilder hql = new StringBuilder();
-        hql.append("delete ").append(StudentEntity.class.getName()).append(" where id=?0");
-        result = delete(hql.toString(),id);
+        boolean result;
+        result = delete("delete " + StudentEntity.class.getName() + " where id=?0",id);
         return result;
     }
 
@@ -70,7 +71,7 @@ public class StudentDao extends Dao<StudentEntity> {
      */
     @Override
     public boolean insert(StudentEntity data) {
-        boolean result = false;
+        boolean result;
         try{
             save(data);
             result = true;
@@ -82,7 +83,6 @@ public class StudentDao extends Dao<StudentEntity> {
 
     @Override
     public List<String> getComments(){
-        List<String> list = getComments("student");
-        return list;
+        return getComments("student");
     }
 }

@@ -8,20 +8,19 @@ import com.entity.StudentEntity;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author 濃霧-遠方
+ * @date 2020/07/17
+ */
 public class StudentJDialog extends Window<StudentEntity>{
-    private List<StudentEntity> studentList;
-    private List<BaseInfoEntity> baseInfoList;
-    private Dimension operationSize;
-    private OperationPane<StudentEntity> studentOperation;
-    private OperationPane<BaseInfoEntity> baseInfoOperation;
+    private final Dimension operationSize;
+    private final OperationPane<StudentEntity> studentOperation;
+    private final OperationPane<BaseInfoEntity> baseInfoOperation;
 
     public StudentJDialog(){
         super(new Dimension(1000,500),"学生信息管理",true);
@@ -43,15 +42,15 @@ public class StudentJDialog extends Window<StudentEntity>{
     @Override
     protected void initData(){
         StudentDao studentDao = new StudentDao();
-        studentList = studentDao.getList();
+        List<StudentEntity> studentList = studentDao.getList();
         BaseInfoDao baseInfoDao = new BaseInfoDao();
-        baseInfoList = baseInfoDao.getList("student");
+        List<BaseInfoEntity> baseInfoList = baseInfoDao.getList("student");
         List<String> baseComments = baseInfoDao.getComments();
         baseInfoOperation.setList(baseInfoList,baseComments);
         studentOperation.setList(studentList,studentDao.getComments());
         String[] title = {baseComments.get(1)};
-        DefaultTableModel model = new DefaultTableModel(title,studentList.size());
-        for(int i=0; i<studentList.size(); i++){
+        DefaultTableModel model = new DefaultTableModel(title, studentList.size());
+        for(int i = 0; i< studentList.size(); i++){
             model.setValueAt(studentList.get(i).getId()+"",i,0);
         }
         setTableModel(model);
@@ -67,29 +66,27 @@ public class StudentJDialog extends Window<StudentEntity>{
 
     @Override
     protected OperationPane<StudentEntity> createOperation(){
-        OperationPane<StudentEntity> studentOperation = new OperationPane<StudentEntity>(operationSize) {
+        return new OperationPane<>(operationSize) {
             private JComboBox<String> departmentBox;
             private JComboBox<String> collegeBox;
             private JComboBox<String> educationBox;
             private JComboBox<String> typeBox;
             private JComboBox<String> cultureBox;
-            private JComboBox classBox;
-            private DateChooser dateChooser;
+            private JComboBox<String> classBox;
             private JTextField yearText;
-            private JComboBox gradeBox;
-            private JComboBox majorBox;
+            private JComboBox<String> gradeBox;
+            private JComboBox<String> majorBox;
 
             @Override
             public void InitData(String id) {
-                for(int i=0; i<list.size(); i++){
-                    StudentEntity studentEntity = list.get(i);
-                    if(studentEntity.getId().equals(id)){
+                for (StudentEntity studentEntity : list) {
+                    if (studentEntity.getId().equals(id)) {
                         yearText.setText(studentEntity.getYear().toString());
-                        collegeBox.setSelectedItem(equals(studentEntity.getCollege(),collegeBox));
-                        departmentBox.setSelectedItem(equals(studentEntity.getDepartment(),departmentBox));
-                        majorBox.setSelectedItem(equals(studentEntity.getMajor(),majorBox));
-                        gradeBox.setSelectedItem(equals(studentEntity.getGrade(),gradeBox));
-                        classBox.setSelectedItem(equals(studentEntity.getClazz(),classBox));
+                        collegeBox.setSelectedItem(equals(studentEntity.getCollege(), collegeBox));
+                        departmentBox.setSelectedItem(equals(studentEntity.getDepartment(), departmentBox));
+                        majorBox.setSelectedItem(equals(studentEntity.getMajor(), majorBox));
+                        gradeBox.setSelectedItem(equals(studentEntity.getGrade(), gradeBox));
+                        classBox.setSelectedItem(equals(studentEntity.getClazz(), classBox));
                         cultureBox.setSelectedItem(studentEntity.getCultureLevel());
                         typeBox.setSelectedItem(studentEntity.getStudentType());
                         educationBox.setSelectedItem(studentEntity.getEducation());
@@ -135,40 +132,40 @@ public class StudentJDialog extends Window<StudentEntity>{
             protected void InitPane() {
                 createJLabel(comments.size()-1);
                 yearText = new JTextField();
-                dateChooser = DateChooser.getInstance("yyyy-MM-dd");
+                DateChooser dateChooser = DateChooser.getInstance("yyyy-MM-dd");
                 dateChooser.register(yearText);
                 yearText.setPreferredSize(fieldSize);
                 add(labList.get(0));
                 add(yearText);
-                collegeBox = new JComboBox<String>();
+                collegeBox = new JComboBox<>();
                 collegeBox.setPreferredSize(fieldSize);
                 add(labList.get(1));
                 add(collegeBox);
-                departmentBox = new JComboBox<String>();
+                departmentBox = new JComboBox<>();
                 departmentBox.setPreferredSize(fieldSize);
                 add(labList.get(2));
                 add(departmentBox);
-                majorBox = new JComboBox();
+                majorBox = new JComboBox<>();
                 majorBox.setPreferredSize(fieldSize);
                 add(labList.get(3));
                 add(majorBox);
-                gradeBox = new JComboBox();
+                gradeBox = new JComboBox<>();
                 gradeBox.setPreferredSize(fieldSize);
                 add(labList.get(4));
                 add(gradeBox);
-                classBox = new JComboBox();
+                classBox = new JComboBox<>();
                 classBox.setPreferredSize(fieldSize);
                 add(labList.get(5));
                 add(classBox);
-                cultureBox = new JComboBox<String>();
+                cultureBox = new JComboBox<>();
                 cultureBox.setPreferredSize(fieldSize);
                 add(labList.get(6));
                 add(cultureBox);
-                typeBox = new JComboBox<String>();
+                typeBox = new JComboBox<>();
                 typeBox.setPreferredSize(fieldSize);
                 add(labList.get(7));
                 add(typeBox);
-                educationBox = new JComboBox<String>();
+                educationBox = new JComboBox<>();
                 educationBox.setPreferredSize(fieldSize);
                 add(labList.get(8));
                 add(educationBox);
@@ -183,33 +180,33 @@ public class StudentJDialog extends Window<StudentEntity>{
                 }
                 collegeBox.removeAllItems();
                 List list = new CollegeDao().getList();
-                for(int i=0; i<list.size(); i++){
-                    CollegeEntity collegeEntity = (CollegeEntity) list.get(i);
-                    collegeBox.addItem(collegeEntity.getId()+" "+collegeEntity.getName());
+                for (Object o : list) {
+                    CollegeEntity collegeEntity = (CollegeEntity) o;
+                    collegeBox.addItem(collegeEntity.getId() + " " + collegeEntity.getName());
                 }
                 departmentBox.removeAllItems();
                 list = new DepartmentDao().getIdAndName();
-                for(int i=0; i<list.size(); i++){
-                    Object[] departmentEntity = (Object[]) list.get(i);
-                    departmentBox.addItem(departmentEntity[0]+" "+departmentEntity[1]);
+                for (Object o : list) {
+                    Object[] departmentEntity = (Object[]) o;
+                    departmentBox.addItem(departmentEntity[0] + " " + departmentEntity[1]);
                 }
                 majorBox.removeAllItems();
                 list = new MajorDao().getIdAndName();
-                for(int i=0; i<list.size(); i++){
-                    Object[] obj = (Object[]) list.get(i);
-                    majorBox.addItem(obj[0]+" "+obj[1]);
+                for (Object o : list) {
+                    Object[] obj = (Object[]) o;
+                    majorBox.addItem(obj[0] + " " + obj[1]);
                 }
                 gradeBox.removeAllItems();
                 list = new SemesterDao().getIdAndName();
-                for(int i=0; i<list.size(); i++){
-                    Object[] obj = (Object[]) list.get(i);
-                    gradeBox.addItem(obj[0]+" "+obj[1]);
+                for (Object o : list) {
+                    Object[] obj = (Object[]) o;
+                    gradeBox.addItem(obj[0] + " " + obj[1]);
                 }
                 classBox.removeAllItems();
                 list = new TeamDao().getIdAndName();
-                for(int i=0; i<list.size(); i++){
-                    Object[] obj = (Object[]) list.get(i);
-                    classBox.addItem(obj[0]+" "+obj[1]);
+                for (Object o : list) {
+                    Object[] obj = (Object[]) o;
+                    classBox.addItem(obj[0] + " " + obj[1]);
                 }
 
                 cultureBox.removeAllItems();
@@ -236,7 +233,6 @@ public class StudentJDialog extends Window<StudentEntity>{
                 setNull();
             }
         };
-        return studentOperation;
     }
 
     public static void main(String[] argv){
@@ -246,59 +242,51 @@ public class StudentJDialog extends Window<StudentEntity>{
 
     @Override
     protected void createInsertAction() {
-        setInsertAction(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                BaseInfoEntity baseInfoEntity = baseInfoOperation.getData();
-                StudentEntity studentEntity = studentOperation.getData();
-                studentEntity.setId(baseInfoEntity.getuId());
-                if(baseInfoEntity.getuId().length() == 0){
-                    JOptionPane.showMessageDialog(null,"请输入要添加的信息！");
-                    return;
-                }
-                BaseInfoDao baseInfoDao = new BaseInfoDao();
-                StudentDao studentDao = new StudentDao();
-                if(baseInfoDao.insert(baseInfoEntity) && studentDao.insert(studentEntity)){
-                    JOptionPane.showMessageDialog(null,"添加成功");
-                }else{
-                    JOptionPane.showMessageDialog(null,"添加失败");
-                }
-                reload();
+        setInsertAction(e -> {
+            BaseInfoEntity baseInfoEntity = baseInfoOperation.getData();
+            StudentEntity studentEntity = studentOperation.getData();
+            studentEntity.setId(baseInfoEntity.getuId());
+            if(baseInfoEntity.getuId().length() == 0){
+                JOptionPane.showMessageDialog(null,"请输入要添加的信息！");
+                return;
             }
+            BaseInfoDao baseInfoDao = new BaseInfoDao();
+            StudentDao studentDao = new StudentDao();
+            if(baseInfoDao.insert(baseInfoEntity) && studentDao.insert(studentEntity)){
+                JOptionPane.showMessageDialog(null,"添加成功");
+            }else{
+                JOptionPane.showMessageDialog(null,"添加失败");
+            }
+            reload();
         });
     }
 
     @Override
     protected void createUpdateAction() {
-        setUpdateAction(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int index = getSelectRow();
-                if(index == -1){
-                    JOptionPane.showMessageDialog(null,"请选中一行数据并进行修改");
-                    return;
-                }
-                String id = getValueAt(index)+"";
-                BaseInfoEntity baseInfoEntity = baseInfoOperation.getData();
-                StudentEntity studentEntity = studentOperation.getData();
-                studentEntity.setId(baseInfoEntity.getuId());
-                BaseInfoDao baseInfoDao = new BaseInfoDao();
-                StudentDao studentDao = new StudentDao();
-                if(baseInfoDao.update(id,baseInfoEntity) && studentDao.update(id,studentEntity)){
-                    JOptionPane.showMessageDialog(null,"修改成功");
-                }else{
-                    JOptionPane.showMessageDialog(null,"修改失败");
-                }
-                reload();
+        setUpdateAction(e -> {
+            int index = getSelectRow();
+            if(index == -1){
+                JOptionPane.showMessageDialog(null,"请选中一行数据并进行修改");
+                return;
             }
+            String id = getValueAt(index)+"";
+            BaseInfoEntity baseInfoEntity = baseInfoOperation.getData();
+            StudentEntity studentEntity = studentOperation.getData();
+            studentEntity.setId(baseInfoEntity.getuId());
+            BaseInfoDao baseInfoDao = new BaseInfoDao();
+            StudentDao studentDao = new StudentDao();
+            if(baseInfoDao.update(id,baseInfoEntity) && studentDao.update(id,studentEntity)){
+                JOptionPane.showMessageDialog(null,"修改成功");
+            }else{
+                JOptionPane.showMessageDialog(null,"修改失败");
+            }
+            reload();
         });
     }
 
     @Override
     protected void createDeleteAction() {
-        setDeleteAction(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        setDeleteAction(e-> {
             int index = getSelectRow();
             if(index == -1){
                 JOptionPane.showMessageDialog(null,"请选中一行数据");
@@ -312,7 +300,6 @@ public class StudentJDialog extends Window<StudentEntity>{
                 reload();
             }else{
                 JOptionPane.showMessageDialog(null,"删除失败");
-            }
             }
         });
     }
