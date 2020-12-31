@@ -68,7 +68,7 @@ public class TeamDao extends Dao<TeamEntity> {
      */
     @Override
     public List<String> getComments() {
-        return getComments("team");
+        return super.getComments("team");
     }
 
     public List<Object[]> getIdAndName(){

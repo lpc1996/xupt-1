@@ -125,7 +125,7 @@ public class MajorJDialog extends Window<MajorEntity> {
                     return;
                 }
                 MajorDao majorDao = new MajorDao();
-                if(majorDao.save(major)){
+                if(majorDao.insert(major)){
                     JOptionPane.showMessageDialog(null,"添加成功");
                 }else{
                     JOptionPane.showMessageDialog(null,"添加失败");

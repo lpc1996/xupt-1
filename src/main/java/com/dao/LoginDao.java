@@ -21,7 +21,6 @@ public class LoginDao extends Dao<LoginEntity>{
             if(list.size() == 1){
                 result = true;
             }
-            System.out.println(list.size());
         } catch (Exception e) {
             e.printStackTrace();
         }

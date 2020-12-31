@@ -147,7 +147,7 @@ public class StJDialog extends Window<SchoolTremEntity> {
                     return;
                 }
                 STDao stDao = new STDao();
-                if(stDao.save(st)){
+                if(stDao.insert(st)){
                     JOptionPane.showMessageDialog(null,"添加成功");
                 }else{
                     JOptionPane.showMessageDialog(null,"添加失败");

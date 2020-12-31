@@ -2,6 +2,8 @@ package com.window;
 
 import com.dao.*;
 import com.entity.TeamEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,14 +17,19 @@ public class TeamJDialog extends Window<TeamEntity> {
 
     private final Dimension operationSize;
     private final OperationPane<TeamEntity> teamOption;
+    public static final Logger logger = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
 
     TeamJDialog(){
-        super(new Dimension(1000,500),"班级信息管理",false);
+        super(new Dimension(800,500),"班级信息管理",false);
         operationSize = new Dimension(getWidth()-150-30,getHeight()-140);
         teamOption = createOperation();
         initData();
         teamOption.InitPane();
         setOperationPane("班级信息",teamOption);
+
+        createInsertAction();
+        createUpdateAction();
+        createDeleteAction();
     }
     /**
      * @return
@@ -44,7 +51,7 @@ public class TeamJDialog extends Window<TeamEntity> {
                     if(teamEntity.getId().equals(id)){
                         idField.setText(teamEntity.getId());
                         nameField.setText(teamEntity.getName());
-                        numberField.setText(teamEntity.getName()+"");
+                        numberField.setText(teamEntity.getNumber()+"");
                         collegeBox.setSelectedItem(equals(teamEntity.getCollegeId(),collegeBox));
                         departmentBox.setSelectedItem(equals(teamEntity.getDepartmentId(),departmentBox));
                         majorBox.setSelectedItem(equals(teamEntity.getMajorId(),majorBox));
@@ -116,34 +123,34 @@ public class TeamJDialog extends Window<TeamEntity> {
                 java.util.List<String> comments = new TeamDao().getComments();
                 java.util.List<JLabel> labList = createJLabel(comments);
                 idField = new JTextField();
-                idField.setPreferredSize(fieldSize);
-                add(labList.get(0));
-                add(idField);
+                idField.setPreferredSize(fieldSize1);
                 nameField = new JTextField();
-                nameField.setPreferredSize(fieldSize);
-                add(labList.get(1));
-                add(nameField);
+                nameField.setPreferredSize(fieldSize1);
                 numberField = new JTextField();
-                numberField.setPreferredSize(fieldSize);
-                add(labList.get(2));
-                add(numberField);
+                numberField.setPreferredSize(fieldSize1);
                 collegeBox = new JComboBox<>();
-                collegeBox.setPreferredSize(fieldSize);
-                add(labList.get(3));
-                add(collegeBox);
+                collegeBox.setPreferredSize(fieldSize1);
                 departmentBox = new JComboBox<>();
-                departmentBox.setPreferredSize(fieldSize);
-                add(labList.get(4));
-                add(departmentBox);
+                departmentBox.setPreferredSize(fieldSize1);
                 majorBox = new JComboBox<>();
-                majorBox.setPreferredSize(fieldSize);
-                add(labList.get(5));
-                add(majorBox);
+                majorBox.setPreferredSize(fieldSize1);
                 semesterBox = new JComboBox<>();
-                semesterBox.setPreferredSize(fieldSize);
+                semesterBox.setPreferredSize(fieldSize1);
+
+                add(labList.get(2));
+                add(idField);
+                add(labList.get(4));
+                add(nameField);
+                add(labList.get(5));
+                add(numberField);
+                add(labList.get(0));
+                add(collegeBox);
+                add(labList.get(1));
+                add(departmentBox);
+                add(labList.get(3));
+                add(majorBox);
                 add(labList.get(6));
                 add(semesterBox);
-
                 initBox();
             }
 
@@ -169,6 +176,8 @@ public class TeamJDialog extends Window<TeamEntity> {
                 for(Object[] o:list){
                     semesterBox.addItem(o[0]+" "+o[1]);
                 }
+
+                setNull();
             }
         };
         return option;
@@ -179,7 +188,18 @@ public class TeamJDialog extends Window<TeamEntity> {
      */
     @Override
     protected void createInsertAction() {
-
+        setInsertAction(e->{
+            TeamEntity team = teamOption.getData();
+            if(team != null){
+                TeamDao teamDao = new TeamDao();
+                if (teamDao.insert(team)){
+                    JOptionPane.showMessageDialog(null,"添加成功");
+                }else{
+                    JOptionPane.showMessageDialog(null,"添加失败");
+                }
+            }
+            reload();
+        });
     }
 
     /**
@@ -187,7 +207,9 @@ public class TeamJDialog extends Window<TeamEntity> {
      */
     @Override
     protected void createUpdateAction() {
+        setUpdateAction(e->{
 
+        });
     }
 
     /**
@@ -195,11 +217,13 @@ public class TeamJDialog extends Window<TeamEntity> {
      */
     @Override
     protected void createDeleteAction() {
+        setDeleteAction(e->{
 
+        });
     }
 
     /**
-     *
+     * 导入数据
      */
     @Override
     protected void initData() {
@@ -217,10 +241,13 @@ public class TeamJDialog extends Window<TeamEntity> {
     }
 
     /**
-     *
+     *重新载入数据，并刷新面板
      */
     @Override
     protected void reload() {
+        initData();
+        teamOption.InitPane();
 
+        repaint();
     }
 }

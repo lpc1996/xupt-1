@@ -150,7 +150,7 @@ public class CourseJDialog extends Window<CourseEntity> {
                     return;
                 }
                 CourseDao courseDao = new CourseDao();
-                if(courseDao.save(course)){
+                if(courseDao.insert(course)){
                     JOptionPane.showMessageDialog(null,"添加成功");
                 }else{
                     JOptionPane.showMessageDialog(null,"添加失败");

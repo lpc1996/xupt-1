@@ -185,7 +185,7 @@ public class OCJDialog extends Window<OfferingCoursesEntity> {
                     return;
                 }
                 OCDao ocDao = new OCDao();
-                if(ocDao.save(oc)){
+                if(ocDao.insert(oc)){
                     JOptionPane.showMessageDialog(null,"添加成功");
                 }else{
                     JOptionPane.showMessageDialog(null,"添加失败");
