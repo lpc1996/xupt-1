@@ -19,7 +19,7 @@ import java.util.List;
  * @author 濃霧-遠方
  * @date 2020/12/31
  */
-abstract class BaseDao {
+public class BaseDao {
     public static final Logger logger = LogManager.getLogger();
 
     /**
